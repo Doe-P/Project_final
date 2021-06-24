@@ -30,6 +30,9 @@ import members_retireReport from "@/views/reports/member-retirement-report.vue"
 import receive_Report from "@/views/reports/receive-report.vue"
 import activityReport from "@/views/reports/activity-report.vue"
 import certificateReport from "@/views/reports/certificate-report.vue"
+import register_view from "@/views/registers/register-view.vue"
+import register_create from "@/views/registers/register-create.vue"
+import register_edit from "@/views/registers/register-edit.vue"
 
 Vue.use(VueRouter);
 
@@ -183,6 +186,21 @@ const routes = [
   path:"/certificate-report",
   name:"certificate-report",
   component:certificateReport
+ },
+ {
+   path:"/register-view",
+   name:"register-view",
+   component:register_view
+ },
+ {
+  path:"/register-create",
+  name:"register-create",
+  component:register_create
+ },
+ {
+  path:"/register-edit",
+  name:"register-edit",
+  component:register_edit
  },
   {
     path: "/",

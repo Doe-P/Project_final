@@ -128,7 +128,7 @@
             <v-list-item-icon>
               <v-icon medium>account_box</v-icon>
             </v-list-item-icon>
-            <v-list-item-title> ຕັ້ງຄ່າ </v-list-item-title>
+            <v-list-item-title @click="register">ສະໝັກຜູ້ໃຊ້</v-list-item-title>
           </v-list-item>
         </v-list-item-group>
       </v-list>
@@ -263,6 +263,12 @@ export default {
        this.$store.dispatch({
         type: "doClickshow",
       });
+    },
+    register(){
+        this.$store.dispatch({
+        type: "doClickshow",
+      });
+      this.$router.push("/register-view");
     }
   },
 };
