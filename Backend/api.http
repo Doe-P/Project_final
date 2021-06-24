@@ -1,0 +1,54 @@
+
+@host = http://localhost:5000
+
+GET {{host}} HTTP/1.1
+
+### get educationlevel by id 
+GET {{host}}/api/v1/education-levels/lv004
+
+### get member by id
+GET {{host}}/api/v1/members/fnns1114-17
+
+// get all educationlevel
+GET http://localhost:5000/api/v1/education-levels
+
+// create educationlevel
+POST http://localhost:5000/api/v1/education-levels
+
+// delete educationlevel
+DELETE http://localhost:5000/api/v1/education-levels/lv006
+
+// get item educationlevel
+GET http://localhost:5000/api/v1/getItem/education-levels
+
+// update educationlevel
+PUT http://localhost:5000/api/v1/education-levels/lv006
+
+        ==========================================
+// get all foundations
+GET http://localhost:5000/api/v1/foundations
+
+// create new foundations
+POST http://localhost:5000/api/v1/foundations
+
+// get foundations by id
+GET http://localhost:5000/api/v1/foundations/f005
+
+// update foundations
+PUT http://localhost:5000/api/v1/foundations/f005
+
+// delete foundations
+DELETE http://localhost:5000/api/v1/foundations/f005
+
+// get item foundations
+GET http://localhost:5000/api/v1/getItem/foundations
+
+        =======================================
+// get all typemembers
+GET http://localhost:5000/api/v1/type-members
+
+// get typemembers by id
+GET http://localhost:5000/api/v1/type-members/tmb002
+
+// create typemembers
+POST http://localhost:5000/api/v1/type-members
