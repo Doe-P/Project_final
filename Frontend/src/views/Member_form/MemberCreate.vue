@@ -9,598 +9,582 @@
                 ຟອມເພີ່ມຂໍ້ມູນພະນັກງານ
               </v-toolbar-title>
             </v-toolbar>
-            <v-form class="content" @submit.prevent="saveData_Members" v-model="valid">
-              <v-row class="mx-10">
-                <!-- section data introl -->
-                <v-col cols="6">
-                  <v-text-field
-                    type="text"
-                    box
-                    name="name"
-                    id="name"
-                    label="ຊື່ສະມາຊິກ"
-                    v-model="txt_Membername"
-                    required
-                    :rules="[
-                      required('ຊື່ສະມາຊິກ'),
-                      minLength('ຊື່ສະມາຊິກ', 2),
-                      maxLength('ຊື່ສະມາຊິກ', 20),
-                    ]"
-                    :counter="20"
-                  ></v-text-field>
-                </v-col>
-                <v-col cols="6">
-                  <v-text-field
-                    type="text"
-                    box
-                    name="surname"
-                    id="surname"
-                    label="ນາມສະກຸນ"
-                    v-model="txt_surname"
-                    required
-                    :rules="[
-                      required('ນາມສະກຸນ'),
-                      minLength('ນາມສະກຸນ', 2),
-                      maxLength('ນາມສະກຸນ', 20),
-                    ]"
-                    :counter="20"
-                  ></v-text-field>
-                </v-col>
-                <!-- Gender -->
-                <v-col cols="6">
-                  <v-radio-group v-model="gender" required :rules="[required('ເພດ')]" row>
-                    <label>ເພດ:</label>
-                    <span class="ml-10"></span>
-                    <v-radio
-                      label="ຍິງ"
-                      value="female"
-                      name="female"
-                      color="primary"
+            <v-card-text class="justify-center">
+              <v-form
+                class="content"
+                @submit.prevent="saveData_Members"
+                v-model="valid"
+              >
+                <v-row justify="center" class="mx-7">
+                  <v-col cols="3">
+                    <span class="sub-text">ຊື່ແລະນາມສະກຸນ:</span>
+                  </v-col>
+                  <v-col cols="9" class="my-3">
+                    <v-text-field
+                      type="text"
+                      box
+                      name="name"
+                      id="name"
+                      label="ຊື່ສະມາຊິກ"
+                      v-model="txt_Membername"
                       required
-                    ></v-radio>
-                    <v-radio
-                      label="ຊາຍ"
-                      value="male"
-                      name="male"
-                      color="primary"
+                      :rules="[
+                        required('ຊື່ສະມາຊິກ'),
+                        minLength('ຊື່ສະມາຊິກ', 2),
+                        maxLength('ຊື່ສະມາຊິກ', 20),
+                      ]"
+                      :counter="20"
+                    ></v-text-field>
+                    <v-text-field
+                      type="text"
+                      box
+                      name="surname"
+                      id="surname"
+                      label="ນາມສະກຸນ"
+                      v-model="txt_surname"
                       required
-                    ></v-radio>
-                  </v-radio-group>
-                </v-col>
-                <!-- section Birthday -->
-                <v-col cols="6" class="mt-0">
-                  <template>
-                    <v-menu
-                      ref="menu"
-                      v-model="menu"
-                      :close-on-content-click="false"
-                      transition="scale-transition"
-                      offset-y
+                      :rules="[
+                        required('ນາມສະກຸນ'),
+                        minLength('ນາມສະກຸນ', 2),
+                        maxLength('ນາມສະກຸນ', 20),
+                      ]"
+                      :counter="20"
+                    ></v-text-field>
+                    <v-radio-group
+                      v-model="gender"
+                      required
+                      :rules="[required('ເພດ')]"
+                      row
                     >
-                      <template v-slot:activator="{ on, attrs }">
-                        <v-text-field
-                          v-model="format_Date"
-                          label="ວັນເດືອນປີເກີດ"
-                          :rules="[required('ວັນເດືອນປີເກີດ')]"
-                          prepend-icon="mdi-calendar"
-                          readonly
-                          @blur="date = parseDate(formatDate)"
-                          v-bind="attrs"
-                          v-on="on"
-                        ></v-text-field>
-                      </template>
-                      <v-date-picker
-                        ref="picker"
-                        v-model="date"
-                        :max="new Date().toISOString().substr(0, 10)"
-                        min="1950-01-01"
-                        @change="save"
+                      <label>ເພດ:</label>
+                      <span class="ml-10"></span>
+                      <v-radio
+                        label="ຍິງ"
+                        value="female"
+                        name="female"
+                        color="primary"
+                        required
+                      ></v-radio>
+                      <v-radio
+                        label="ຊາຍ"
+                        value="male"
+                        name="male"
+                        color="primary"
+                        required
+                      ></v-radio>
+                    </v-radio-group>
+                    <template>
+                      <v-menu
+                        ref="menu"
+                        v-model="menu"
+                        :close-on-content-click="false"
+                        transition="scale-transition"
+                        offset-y
                       >
-                      </v-date-picker>
-                    </v-menu>
-                  </template>
-                </v-col>
-              </v-row>
-              <v-row class="mx-10">
-                <v-col cols="12">
-                  <v-divider></v-divider>
-                </v-col>
-              </v-row>
-              <!-- section old Address -->
-              <v-row class="mx-10">
-                <v-col cols="4">
-                  <v-text-field
-                    type="text"
-                    box
-                    name="b_village"
-                    id="b_village"
-                    label="ບ້ານເກີດ"
-                    v-model="txt_bvillage"
-                    required
-                    :rules="[
-                      required('ບ້ານເກີດ'),
-                      minLength('ບ້ານເກີດ', 2),
-                      maxLength('ບ້ານເກີດ', 20),
-                    ]"
-                    :counter="20"
-                  ></v-text-field>
-                </v-col>
-                <v-col cols="4">
-                  <v-text-field
-                    type="text"
-                    box
-                    name="b_district"
-                    id="b_district"
-                    label="ເມືອງເກີດ"
-                    v-model="txt_bdistrict"
-                    required
-                    :rules="[
-                      required('ເມືອງເກີດ'),
-                      minLength('ເມືອງເກີດ', 2),
-                      maxLength('ເມືອງເກີດ', 20),
-                    ]"
-                    :counter="20"
-                  ></v-text-field>
-                </v-col>
-                <v-col cols="4">
-                  <v-text-field
-                    type="text"
-                    box
-                    name="b_province"
-                    id="b_province"
-                    label="ແຂວງເກີດ"
-                    v-model="txt_bprovince"
-                    required
-                    :rules="[
-                      required('ແຂວງເກີດ'),
-                      minLength('ແຂວງເກີດ', 5),
-                      maxLength('ແຂວງເກີດ', 20),
-                    ]"
-                    :counter="20"
-                  ></v-text-field>
-                </v-col>
-              </v-row>
-              <v-row class="mx-10">
-                <v-col cols="12">
-                  <v-divider></v-divider>
-                </v-col>
-              </v-row>
-              <!-- section now address -->
-              <v-row class="mx-10">
-                <v-col cols="4">
-                  <v-text-field
-                    type="text"
-                    box
-                    name="n_village"
-                    id="n_village"
-                    label="ບ້ານຢູ່ປະຈຸບັນ"
-                    v-model="txt_nvillage"
-                    required
-                    :rules="[
-                      required('ບ້ານຢູ່ປະຈຸບັນ'),
-                      minLength('ບ້ານຢູ່ປະຈຸບັນ', 5),
-                      maxLength('ບ້ານຢູ່ປະຈຸບັນ', 20),
-                    ]"
-                    :counter="20"
-                  ></v-text-field>
-                </v-col>
-                <v-col cols="4">
-                  <v-text-field
-                    type="text"
-                    box
-                    name="n_district"
-                    id="n_district"
-                    label="ເມືອງຢູ່ປະຈຸບັນ"
-                    v-model="txt_ndistrict"
-                    required
-                    :rules="[
-                      required('ເມືອງຢູ່ປະຈຸບັນ'),
-                      minLength('ເມືອງຢູ່ປະຈຸບັນ', 5),
-                      maxLength('ເມືອງຢູ່ປະຈຸບັນ', 20),
-                    ]"
-                    :counter="20"
-                  ></v-text-field>
-                </v-col>
-                <v-col cols="4">
-                  <v-text-field
-                    type="text"
-                    box
-                    name="n_province"
-                    id="n_province"
-                    label="ແຂວງຢູ່ປະຈຸບັນ"
-                    v-model="txt_nprovince"
-                    required
-                    :rules="[
-                      required('ແຂວງຢູ່ປະຈຸບັນ'),
-                      minLength('ແຂວງຢູ່ປະຈຸບັນ', 5),
-                      maxLength('ແຂວງຢູ່ປະຈຸບັນ', 20),
-                    ]"
-                    :counter="20"
-                  ></v-text-field>
-                </v-col>
-              </v-row>
-              <v-row class="mx-10">
-                <v-col cols="12">
-                  <v-divider></v-divider>
-                </v-col>
-              </v-row>
-              <!-- section nation ethnic religion -->
-              <v-row class="mx-10">
-                <v-col cols="4">
-                  <v-text-field
-                    type="text"
-                    box
-                    name="nation"
-                    id="nation"
-                    label="ເຊື້ອຊາດ"
-                    v-model="txt_nation"
-                    required
-                    :rules="[
-                      required('ເຊື້ອຊາດ'),
-                      minLength('ເຊື້ອຊາດ', 3),
-                      maxLength('ເຊື້ອຊາດ', 10),
-                    ]"
-                    :counter="10"
-                  ></v-text-field>
-                </v-col>
-                <v-col cols="4">
-                  <v-text-field
-                    type="text"
-                    box
-                    name="ethnic"
-                    id="ethnic"
-                    label="ຊົນເຜົ່າ"
-                    v-model="txt_ethnic"
-                    required
-                    :rules="[
-                      required('ຊົນເຜົ່າ'),
-                      minLength('ຊົນເຜົ່າ', 3),
-                      maxLength('ຊົນເຜົ່າ', 10),
-                    ]"
-                    :counter="10"
-                  ></v-text-field>
-                </v-col>
-                <v-col cols="4">
-                  <v-text-field
-                    type="text"
-                    box
-                    name="religion"
-                    id="religion"
-                    label="ສາສະໜາ"
-                    v-model="txt_religion"
-                    required
-                    :rules="[
-                      required('ສາສະໜາ'),
-                      minLength('ສາສະໜາ', 3),
-                      maxLength('ສາສະໜາ', 10),
-                    ]"
-                    :counter="10"
-                  ></v-text-field>
-                </v-col>
-              </v-row>
-              <!-- Data start to organize -->
-              <v-row class="mx-10">
-                <v-col cols="4">
-                  <v-text-field
-                    type="Number"
-                    box
-                    name="tel"
-                    id="tel"
-                    label="ເບີໂທລະສັບ"
-                    v-model="txt_tel"
-                    required
-                    :rules="[
-                      required('ເບີໂທລະສັບ'),
-                      minLength('ເບີໂທລະສັບ', 10),
-                      maxLength('ເບີໂທລະສັບ', 10),
-                    ]"
-                    :counter="10"
-                     @keypress.native="isNumberonly($event)"
-                  ></v-text-field>
-                </v-col>
-                <v-col cols="4">
-                  <template>
-                    <v-menu
-                      ref="menu_y"
-                      v-model="menu_y"
-                      :close-on-content-click="false"
-                      transition="scale-transition"
-                      offset-y
-                    >
-                      <template v-slot:activator="{ on, attrs }">
-                        <v-text-field
-                          v-model="format_Date_y"
-                          label="ວັນເດືອນປີເຂົ້າຊາວໝຸ່ມ"
-                          :rules="[required('ວັນເດືອນປີເຂົ້າຊາວໝຸ່ມ')]"
-                          prepend-icon="mdi-calendar"
-                          readonly
-                          @blur="date_y = parseDate_y(format_Date_y)"
-                          v-bind="attrs"
-                          v-on="on"
-                        ></v-text-field>
-                      </template>
-                      <v-date-picker
-                        ref="picker"
-                        v-model="date_y"
-                        :max="new Date().toISOString().substr(0, 10)"
-                        min="1950-01-01"
-                        @change="save"
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-text-field
+                            v-model="format_Date"
+                            label="ວັນເດືອນປີເກີດ"
+                            :rules="[required('ວັນເດືອນປີເກີດ')]"
+                            prepend-icon="mdi-calendar"
+                            readonly
+                            @blur="date = parseDate(formatDate)"
+                            v-bind="attrs"
+                            v-on="on"
+                          ></v-text-field>
+                        </template>
+                        <v-date-picker
+                          class="content"
+                          ref="picker"
+                          v-model="date"
+                          :max="new Date().toISOString().substr(0, 10)"
+                          min="1950-01-01"
+                          locale="lao"
+                        >
+                        </v-date-picker>
+                      </v-menu>
+                    </template>
+                    <v-text-field
+                      type="Number"
+                      box
+                      name="tel"
+                      id="tel"
+                      label="ເບີໂທລະສັບ"
+                      v-model="txt_tel"
+                      required
+                      :rules="[
+                        required('ເບີໂທລະສັບ'),
+                        minLength('ເບີໂທລະສັບ', 10),
+                        maxLength('ເບີໂທລະສັບ', 10),
+                      ]"
+                      :counter="10"
+                      @keypress.native="isNumberonly($event)"
+                    ></v-text-field>
+                  </v-col>
+                </v-row>
+                <v-row class="mx-10">
+                  <v-col cols="12">
+                    <v-divider></v-divider>
+                  </v-col>
+                </v-row>
+                <v-row class="mx-10" justify="center">
+                  <v-col cols="3">
+                    <span class="sub-text">ບ້ານເມືອງແຂວງເກີດ:</span>
+                  </v-col>
+                  <v-col cols="9" class="my-3">
+                    <v-text-field
+                      type="text"
+                      box
+                      name="b_village"
+                      id="b_village"
+                      label="ບ້ານເກີດ"
+                      v-model="txt_bvillage"
+                      required
+                      :rules="[
+                        required('ບ້ານ'),
+                        minLength('ບ້ານ', 2),
+                        maxLength('ບ້ານ', 20),
+                      ]"
+                      :counter="20"
+                    ></v-text-field>
+                    <v-text-field
+                      type="text"
+                      box
+                      name="b_district"
+                      id="b_district"
+                      label="ເມືອງ"
+                      v-model="txt_bdistrict"
+                      required
+                      :rules="[
+                        required('ເມືອງ'),
+                        minLength('ເມືອງ', 2),
+                        maxLength('ເມືອງ', 20),
+                      ]"
+                      :counter="20"
+                    ></v-text-field>
+                    <v-text-field
+                      type="text"
+                      box
+                      name="b_province"
+                      id="b_province"
+                      label="ແຂວງ"
+                      v-model="txt_bprovince"
+                      required
+                      :rules="[
+                        required('ແຂວງ'),
+                        minLength('ແຂວງ', 5),
+                        maxLength('ແຂວງ', 20),
+                      ]"
+                      :counter="20"
+                    ></v-text-field>
+                  </v-col>
+                </v-row>
+                <v-row class="mx-10">
+                  <v-col cols="12">
+                    <v-divider></v-divider>
+                  </v-col>
+                </v-row>
+                <!-- section now address -->
+                <v-row class="mx-10" justify="center">
+                  <v-col cols="3">
+                    <span class="sub-text">ທີ່ຢູ່ປະຈຸບັນ:</span>
+                  </v-col>
+                  <v-col cols="9" class="my-3">
+                    <v-text-field
+                      type="text"
+                      box
+                      name="n_village"
+                      id="n_village"
+                      label="ບ້ານ"
+                      v-model="txt_nvillage"
+                      required
+                      :rules="[
+                        required('ບ້ານ'),
+                        minLength('ບ້ານ', 5),
+                        maxLength('ບ້ານ', 20),
+                      ]"
+                      :counter="20"
+                    ></v-text-field>
+                    <v-text-field
+                      type="text"
+                      box
+                      name="n_district"
+                      id="n_district"
+                      label="ເມືອງ"
+                      v-model="txt_ndistrict"
+                      required
+                      :rules="[
+                        required('ເມືອງ'),
+                        minLength('ເມືອງ', 5),
+                        maxLength('ເມືອງ', 20),
+                      ]"
+                      :counter="20"
+                    ></v-text-field>
+                    <v-text-field
+                      type="text"
+                      box
+                      name="n_province"
+                      id="n_province"
+                      label="ແຂວງຢູ່ປະຈຸບັນ"
+                      v-model="txt_nprovince"
+                      required
+                      :rules="[
+                        required('ແຂວງ'),
+                        minLength('ແຂວງ', 2),
+                        maxLength('ແຂວງ', 20),
+                      ]"
+                      :counter="20"
+                    ></v-text-field>
+                  </v-col>
+                </v-row>
+                <v-row class="mx-10">
+                  <v-col cols="12">
+                    <v-divider></v-divider>
+                  </v-col>
+                </v-row>
+                <!-- section nation ethnic religion -->
+                <v-row class="mx-10" justify="center">
+                  <v-col cols="3">
+                    <span class="sub-text">ເຊື້ອຊາດແລະຊົນເຜົ່າ</span>
+                  </v-col>
+                  <v-col cols="9" class="my-3">
+                    <v-text-field
+                      type="text"
+                      box
+                      name="nation"
+                      id="nation"
+                      label="ເຊື້ອຊາດ"
+                      v-model="txt_nation"
+                      required
+                      :rules="[
+                        required('ເຊື້ອຊາດ'),
+                        minLength('ເຊື້ອຊາດ', 3),
+                        maxLength('ເຊື້ອຊາດ', 10),
+                      ]"
+                      :counter="10"
+                    ></v-text-field>
+                    <v-text-field
+                      type="text"
+                      box
+                      name="ethnic"
+                      id="ethnic"
+                      label="ຊົນເຜົ່າ"
+                      v-model="txt_ethnic"
+                      required
+                      :rules="[
+                        required('ຊົນເຜົ່າ'),
+                        minLength('ຊົນເຜົ່າ', 3),
+                        maxLength('ຊົນເຜົ່າ', 10),
+                      ]"
+                      :counter="10"
+                    ></v-text-field>
+                    <v-radio-group v-model="select_riligion">
+                      <span class="mb-3">ສາດສະໜາ:</span>
+                      <v-radio label="ພຸດ" value="ພຸດ"></v-radio>
+                      <v-radio label="ຄຣິດ" value="ຄຣິດ"></v-radio>
+                      <v-radio label="ໝຸດສະລິມ" value="ໝຸດສະລິມ"></v-radio>
+                    </v-radio-group>
+                  </v-col>
+                </v-row>
+                <v-row class="mx-10">
+                  <v-col cols="12">
+                    <v-divider></v-divider>
+                  </v-col>
+                </v-row>
+                <!-- Data start to organize -->
+                <v-row class="mx-10" justify="center">
+                  <v-col cols="3">
+                    <span class="sub-text">ວັນເດືອນປີເຂົ້າອົງການຈັດຕັ້ງ</span>
+                  </v-col>
+                  <v-col cols="9" class="my-3">
+                    <template>
+                      <v-menu
+                        ref="menu_y"
+                        v-model="menu_y"
+                        :close-on-content-click="false"
+                        transition="scale-transition"
+                        offset-y
                       >
-                      </v-date-picker>
-                    </v-menu>
-                  </template>
-                </v-col>
-                <v-col cols="4">
-                  <template>
-                    <v-menu
-                      ref="menu_w"
-                      v-model="menu_w"
-                      :close-on-content-click="false"
-                      transition="scale-transition"
-                      offset-y
-                    >
-                      <template v-slot:activator="{ on, attrs }">
-                        <v-text-field
-                          v-model="format_Date_w"
-                          label="ວັນເດືອນປີເຂົ້າແມ່ຍິງ"
-                          :rules="[required('ວັນເດືອນປີເຂົ້າແມ່ຍິງ')]"
-                          prepend-icon="mdi-calendar"
-                          readonly
-                          @blur="date_w = parseDate_y(format_Date_w)"
-                          v-bind="attrs"
-                          v-on="on"
-                        ></v-text-field>
-                      </template>
-                      <v-date-picker
-                        ref="picker"
-                        v-model="date_w"
-                        :max="new Date().toISOString().substr(0, 10)"
-                        min="1950-01-01"
-                        @change="save"
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-text-field
+                            v-model="format_Date_y"
+                            label="ວັນເດືອນປີເຂົ້າຊາວໝຸ່ມ"
+                            :rules="[required('ວັນເດືອນປີເຂົ້າຊາວໝຸ່ມ')]"
+                            prepend-icon="mdi-calendar"
+                            readonly
+                            @blur="date_y = parseDate_y(format_Date_y)"
+                            v-bind="attrs"
+                            v-on="on"
+                          ></v-text-field>
+                        </template>
+                        <v-date-picker
+                          ref="picker"
+                          v-model="date_y"
+                          :max="new Date().toISOString().substr(0, 10)"
+                          min="1950-01-01"
+                          @change="save"
+                        >
+                        </v-date-picker>
+                      </v-menu>
+                    </template>
+                    <template>
+                      <v-menu
+                        ref="menu_w"
+                        v-model="menu_w"
+                        :close-on-content-click="false"
+                        transition="scale-transition"
+                        offset-y
                       >
-                      </v-date-picker>
-                    </v-menu>
-                  </template>
-                </v-col>
-              </v-row>
-              <v-row class="mx-10">
-                <v-col cols="4">
-                  <template>
-                    <v-menu
-                      ref="menu_k"
-                      v-model="menu_k"
-                      :close-on-content-click="false"
-                      transition="scale-transition"
-                      offset-y
-                    >
-                      <template v-slot:activator="{ on, attrs }">
-                        <v-text-field
-                          v-model="format_Date_k"
-                          :rules="[required('ວັນເດືອນປີເຂົ້າກຳມະບານ')]"
-                          label="ວັນເດືອນປີເຂົ້າກຳມະບານ"
-                          prepend-icon="mdi-calendar"
-                          readonly
-                          @blur="date_k = parseDate_k(format_Date_k)"
-                          v-bind="attrs"
-                          v-on="on"
-                        ></v-text-field>
-                      </template>
-                      <v-date-picker
-                        ref="picker"
-                        v-model="date_k"
-                        :max="new Date().toISOString().substr(0, 10)"
-                        min="1950-01-01"
-                        @change="save"
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-text-field
+                            v-show="gender=='female'"
+                            v-model="format_Date_w"
+                            label="ວັນເດືອນປີເຂົ້າແມ່ຍິງ"
+                            :rules="[required('ວັນເດືອນປີເຂົ້າແມ່ຍິງ')]"
+                            prepend-icon="mdi-calendar"
+                            readonly
+                            @blur="date_w = parseDate_y(format_Date_w)"
+                            v-bind="attrs"
+                            v-on="on"
+                          ></v-text-field>
+                        </template>
+                        <v-date-picker
+                          ref="picker"
+                          v-model="date_w"
+                          :max="new Date().toISOString().substr(0, 10)"
+                          min="1950-01-01"
+                          @change="save"
+                        >
+                        </v-date-picker>
+                      </v-menu>
+                    </template>
+                    <template>
+                      <v-menu
+                        ref="menu_k"
+                        v-model="menu_k"
+                        :close-on-content-click="false"
+                        transition="scale-transition"
+                        offset-y
                       >
-                      </v-date-picker>
-                    </v-menu>
-                  </template>
-                </v-col>
-                <v-col cols="4">
-                  <template>
-                    <v-menu
-                      ref="menu_ps"
-                      v-model="menu_ps"
-                      :close-on-content-click="false"
-                      transition="scale-transition"
-                      offset-y
-                    >
-                      <template v-slot:activator="{ on, attrs }">
-                        <v-text-field
-                          v-model="format_Date_ps"
-                          :rules="[required('ວັນເດືອນປີເຂົ້າພັກສຳຮອງ')]"
-                          label="ວັນເດືອນປີເຂົ້າພັກສຳຮອງ"
-                          prepend-icon="mdi-calendar"
-                          readonly
-                          @blur="date_ps = parseDate_ps(format_Date_ps)"
-                          v-bind="attrs"
-                          v-on="on"
-                        ></v-text-field>
-                      </template>
-                      <v-date-picker
-                        ref="picker"
-                        v-model="date_ps"
-                        :max="new Date().toISOString().substr(0, 10)"
-                        min="1950-01-01"
-                        @change="save"
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-text-field
+                            v-model="format_Date_k"
+                            :rules="[required('ວັນເດືອນປີເຂົ້າກຳມະບານ')]"
+                            label="ວັນເດືອນປີເຂົ້າກຳມະບານ"
+                            prepend-icon="mdi-calendar"
+                            readonly
+                            @blur="date_k = parseDate_k(format_Date_k)"
+                            v-bind="attrs"
+                            v-on="on"
+                          ></v-text-field>
+                        </template>
+                        <v-date-picker
+                          ref="picker"
+                          v-model="date_k"
+                          :max="new Date().toISOString().substr(0, 10)"
+                          min="1950-01-01"
+                          @change="save"
+                        >
+                        </v-date-picker>
+                      </v-menu>
+                    </template>
+                    <template>
+                      <v-menu
+                        ref="menu_ps"
+                        v-model="menu_ps"
+                        :close-on-content-click="false"
+                        transition="scale-transition"
+                        offset-y
                       >
-                      </v-date-picker>
-                    </v-menu>
-                  </template>
-                </v-col>
-                <v-col cols="4">
-                  <template>
-                    <v-menu
-                      ref="menu_p"
-                      v-model="menu_p"
-                      :close-on-content-click="false"
-                      transition="scale-transition"
-                      offset-y
-                    >
-                      <template v-slot:activator="{ on, attrs }">
-                        <v-text-field
-                          v-model="format_Date_p"
-                          :rules="[required('ວັນເດືອນປີເຂົ້າພັກສົມບູນ')]"
-                          label="ວັນເດືອນປີເຂົ້າພັກສົມບູນ"
-                          prepend-icon="mdi-calendar"
-                          readonly
-                          @blur="date_p = parseDate_p(format_Date_p)"
-                          v-bind="attrs"
-                          v-on="on"
-                        ></v-text-field>
-                      </template>
-                      <v-date-picker
-                        ref="picker"
-                        v-model="date_p"
-                        :max="new Date().toISOString().substr(0, 10)"
-                        min="1950-01-01"
-                        @change="save"
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-text-field
+                            v-model="format_Date_ps"
+                            :rules="[required('ວັນເດືອນປີເຂົ້າພັກສຳຮອງ')]"
+                            label="ວັນເດືອນປີເຂົ້າພັກສຳຮອງ"
+                            prepend-icon="mdi-calendar"
+                            readonly
+                            @blur="date_ps = parseDate_ps(format_Date_ps)"
+                            v-bind="attrs"
+                            v-on="on"
+                          ></v-text-field>
+                        </template>
+                        <v-date-picker
+                          ref="picker"
+                          v-model="date_ps"
+                          :max="new Date().toISOString().substr(0, 10)"
+                          min="1950-01-01"
+                          @change="save"
+                        >
+                        </v-date-picker>
+                      </v-menu>
+                    </template>
+                    <template>
+                      <v-menu
+                        ref="menu_p"
+                        v-model="menu_p"
+                        :close-on-content-click="false"
+                        transition="scale-transition"
+                        offset-y
                       >
-                      </v-date-picker>
-                    </v-menu>
-                  </template>
-                </v-col>
-              </v-row>
-              <v-row class="mx-10" align="center">
-                <v-col cols="4">
-                  <v-select
-                    class="combo_select"
-                    :items="section_items"
-                    :rules="[required('ຈຸ')]"
-                    v-model="selected_section_Item"
-                    label="ເລືອກຈຸ"
-                    dense
-                  ></v-select>
-                </v-col>
-                <v-col cols="4">
-                  <v-select
-                    :items="typeMember_items"
-                    :rules="[required('ປະເພດສະມາຊິກ')]"
-                    v-model="selected_typeMember_Item"
-                    label="ເລືອກປະເພດສະມາຊິກ"
-                    dense
-                  ></v-select>
-                </v-col>
-                <v-col cols="4">
-                  <v-select
-                    :items="level_items"
-                    :rules="[required('ລະດັບການສືກສາ')]"
-                    v-model="selecte_level_Item"
-                    label="ເລືອກລະດັບການສືກສາ"
-                    dense
-                  ></v-select>
-                </v-col>
-              </v-row>
-              <v-row class="mx-10">
-                <v-col cols="4">
-                  <v-text-field
-                    type="text"
-                    box
-                    name="reponsible"
-                    id="reponsible"
-                    label="ໜ້າທີ່ຮັບຜິດຊອບ"
-                    v-model="txt_reponsible"
-                    required
-                    :rules="[
-                      required('ໜ້າທີ່ຮັບຜິດຊອບ'),
-                      minLength('ໜ້າທີ່ຮັບຜິດຊອບ', 5),
-                      maxLength('ໜ້າທີ່ຮັບຜິດຊອບ', 20),
-                    ]"
-                    :counter="20"
-                  ></v-text-field>
-                </v-col>
-                <v-col cols="4">
-                  <v-text-field
-                    type="text"
-                    box
-                    name="langluge"
-                    id="langluge"
-                    label="ພາສາທີ່ໄດ້"
-                    v-model="txt_langluge"
-                    required
-                    :rules="[
-                      required('ພາສາທີ່ໄດ້'),
-                      minLength('ພາສາທີ່ໄດ້', 5),
-                      maxLength('ພາສາທີ່ໄດ້', 30),
-                    ]"
-                    :counter="30"
-                  ></v-text-field>
-                </v-col>
-                <v-col cols="4" class="mt-4">
-                  <v-select
-                    :items="blood_items"
-                    :rules="[required('ໝວດເລືອດ')]"
-                    v-model="selected_blood_Item"
-                    label="ໝວດເລືອດ"
-                    dense
-                  ></v-select>
-                </v-col>
-              </v-row>
-              <v-row class="mx-10">
-                <v-col cols="6">
-                  <template>
-                    <v-menu
-                      ref="menu_date_nuol"
-                      v-model="menu_date_nuol"
-                      :close-on-content-click="false"
-                      transition="scale-transition"
-                      offset-y
-                    >
-                      <template v-slot:activator="{ on, attrs }">
-                        <v-text-field
-                          v-model="format_Date_start_nuol"
-                          :rules="[required('ວັນເດືອນປີເຂົ້າສັງກັດຊາວໝຸ່ມ ມຊ')]"
-                          label="ວັນເດືອນປີເຂົ້າສັງກັດຊາວໝຸ່ມ ມຊ"
-                          prepend-icon="mdi-calendar"
-                          readonly
-                          @blur="
-                            date_start_nuol = parseDate_start_nuol(
-                              format_Date_start_nuol
-                            )
-                          "
-                          v-bind="attrs"
-                          v-on="on"
-                        ></v-text-field>
-                      </template>
-                      <v-date-picker
-                        ref="picker"
-                        v-model="date_start_nuol"
-                        :max="new Date().toISOString().substr(0, 10)"
-                        min="1950-01-01"
-                        @change="save"
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-text-field
+                            v-model="format_Date_p"
+                            :rules="[required('ວັນເດືອນປີເຂົ້າພັກສົມບູນ')]"
+                            label="ວັນເດືອນປີເຂົ້າພັກສົມບູນ"
+                            prepend-icon="mdi-calendar"
+                            readonly
+                            @blur="date_p = parseDate_p(format_Date_p)"
+                            v-bind="attrs"
+                            v-on="on"
+                          ></v-text-field>
+                        </template>
+                        <v-date-picker
+                          ref="picker"
+                          v-model="date_p"
+                          :max="new Date().toISOString().substr(0, 10)"
+                          min="1950-01-01"
+                          @change="save"
+                        >
+                        </v-date-picker>
+                      </v-menu>
+                    </template>
+                    <template>
+                      <v-menu
+                        ref="menu_date_nuol"
+                        v-model="menu_date_nuol"
+                        :close-on-content-click="false"
+                        transition="scale-transition"
+                        offset-y
                       >
-                      </v-date-picker>
-                    </v-menu>
-                  </template>
-                </v-col>
-                <v-col cols="6" class="mt-4 combo_select">
-                  <v-select
-                    :items="status_items"
-                    :rules="[required('ສະຖານະຂອງສະມາຊິກ')]"
-                    v-model="selected_status_Item"
-                    label="ສະຖານະຂອງສະມາຊິກ"
-                    dense
-                  ></v-select>
-                </v-col>
-              </v-row>
-              <v-row class="mx-10">
-                <v-spacer></v-spacer>
-                <v-btn
-                  @click="cancelData_member"
-                  color="btn_cancel"
-                  class="mb-5"
-                  dark
-                  >ຍົກເລີກ</v-btn
-                >
-                <v-btn
-                  type="submit"
-                  color="btn_save"
-                  class="mb-5 ml-5"
-                  :disabled="!valid"
-                  >ບັນທຶກ</v-btn
-                >
-              </v-row>
-            </v-form>
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-text-field
+                            v-model="format_Date_start_nuol"
+                            :rules="[
+                              required('ວັນເດືອນປີເຂົ້າສັງກັດຊາວໝຸ່ມ ມຊ'),
+                            ]"
+                            label="ວັນເດືອນປີເຂົ້າສັງກັດຊາວໝຸ່ມ ມຊ"
+                            prepend-icon="mdi-calendar"
+                            readonly
+                            @blur="
+                              date_start_nuol = parseDate_start_nuol(
+                                format_Date_start_nuol
+                              )
+                            "
+                            v-bind="attrs"
+                            v-on="on"
+                          ></v-text-field>
+                        </template>
+                        <v-date-picker
+                          ref="picker"
+                          v-model="date_start_nuol"
+                          :max="new Date().toISOString().substr(0, 10)"
+                          min="1950-01-01"
+                          @change="save"
+                        >
+                        </v-date-picker>
+                      </v-menu>
+                    </template>
+                  </v-col>
+                </v-row>
+                <v-row class="mx-10">
+                  <v-col cols="12">
+                    <v-divider></v-divider>
+                  </v-col>
+                </v-row>
+                <v-row class="mx-10" justify="center">
+                  <v-col cols="3">
+                    <span class="sub-text">ສັງກັດແລະກ່ຽວກັບ</span>
+                  </v-col>
+                  <v-col cols="9" class="my-3">
+                    <v-select
+                      class="combo_select my-5"
+                      :items="section_items"
+                      :rules="[required('ຈຸ')]"
+                      v-model="selected_section_Item"
+                      label="ເລືອກຈຸ"
+                      dense
+                    ></v-select>
+                    <v-select
+                      class="my-5"
+                      :items="typeMember_items"
+                      :rules="[required('ປະເພດສະມາຊິກ')]"
+                      v-model="selected_typeMember_Item"
+                      label="ເລືອກປະເພດສະມາຊິກ"
+                      dense
+                    ></v-select>
+                    <v-select
+                      class="my-5"
+                      :items="level_items"
+                      :rules="[required('ລະດັບການສືກສາ')]"
+                      v-model="selecte_level_Item"
+                      label="ເລືອກລະດັບການສືກສາ"
+                      dense
+                    ></v-select>
+                    <v-select
+                      :items="reponsibles"
+                      v-model="select_reponsible"
+                      label="ໜ້າທີ່ຮັບຜິດຊອບ"
+                      :rules="[required('ໜ້າທີ່ຮັບຜິດຊອບ')]"
+                    ></v-select>
+                    <v-container>
+                      <span class="sub-text">ພາສາທີ່ໄດ້</span>
+                      <v-checkbox
+                        label="ອັງກິດ"
+                        v-model="select_lenguage"
+                        value="ອັງກິດ"
+                      ></v-checkbox>
+                      <v-checkbox
+                        label="ຈີນ"
+                        v-model="select_lenguage"
+                        value="ຈີນ"
+                      ></v-checkbox>
+                      <v-text-field
+                        name="name"
+                        label="ອຶ່ນໆ"
+                        id="id"
+                        v-model="select_lenguage_other"
+                      ></v-text-field>
+                    </v-container>
+                    <v-select
+                      :items="blood_items"
+                      :rules="[required('ໝວດເລືອດ')]"
+                      v-model="selected_blood_Item"
+                      label="ໝວດເລືອດ"
+                      dense
+                    ></v-select>
+                    <v-text-field
+                      name="name"
+                      label="ສະຖານະສະມາຊິກ"
+                      id="id"
+                      value="xxx"
+                      readonly
+                    ></v-text-field>
+                  </v-col>
+                </v-row>
+                <v-row class="mx-10">
+                  <v-col cols="12">
+                    <v-divider></v-divider>
+                  </v-col>
+                </v-row>
+                <v-row class="mx-10">
+                  <v-spacer></v-spacer>
+                  <v-btn
+                    @click="cancelData_member"
+                    color="error"
+                    class="mb-5"
+                    dark
+                    >ຍົກເລີກ</v-btn
+                  >
+                  <v-btn
+                    type="submit"
+                    color="btn_save"
+                    class="mb-5 ml-5"
+                    :disabled="!valid"
+                    >ບັນທຶກ</v-btn
+                  >
+                </v-row>
+              </v-form>
+            </v-card-text>
           </v-card>
         </v-col>
       </v-row>
@@ -636,14 +620,19 @@ export default {
           (v && v.length <= maxlength) ||
           `${propertyType}ຕ້ອງໜ້ອຍກວ່າຫຼືເທົ່າກັບ ${maxlength}`;
       },
-      radioRule(){
-         return(v) => (v && v != true) || 'ກະລຸນາເລືອກເພດກ່ອນ';
+      radioRule() {
+        return (v) => (v && v != true) || "ກະລຸນາເລືອກເພດກ່ອນ";
       },
       // valid form
       valid: false,
       show_alert: false,
       timeout: 2000,
       message: "Hello",
+      select_riligion: "ພຸດ",
+      select_lenguage: ["ອັງກິດ"],
+      reponsibles: ["ນັກສຶກສາ", "ອາຈານ"],
+      gender: "female",
+     // isShow_woman_date: true,
       //Birthday
       date: new Date().toISOString().substr(0, 10),
       menu: false,
@@ -750,7 +739,7 @@ export default {
     },
   },
   methods: {
-     //Number On ly
+    //Number On ly
     isNumberonly(evt) {
       evt = evt ? evt : window.event;
       var charCode = evt.which ? evt.which : evt.keyCode;
@@ -881,13 +870,18 @@ export default {
   font-family: "boonhome-400";
   font-weight: 10px;
 }
-.content{
-   font-family: "boonhome-400";
-  font-weight: 10px;
+.content {
+  font-family: "boonhome-400";
+  font-weight: 14px;
 }
-.text-header-dialog{
+.text-header-dialog {
   font-family: "boonhome-400";
   font-weight: normal;
   font-size: 18px;
+}
+.sub-text {
+  font-family: "boonhome-400";
+  font-size: 18px;
+  font-weight: bold;
 }
 </style>
