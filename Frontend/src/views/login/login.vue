@@ -3,7 +3,7 @@
     <template>
       <v-app>
         <v-row class="justify-center my-10">
-          <v-card height="470" width="300">
+          <v-card height="400" width="300">
             <v-card-title primary-title class="title justify-center">
               <v-avatar size="120">
                 <img src="@/assets/images/logo.png" />
@@ -43,17 +43,10 @@
                   counter
                   :rules="passwordRule"
                 ></v-text-field>
-                <v-select
-                  class="text-input"
-                  :items="found_items"
-                  v-model="selected_found_Item"
-                  single-line
-                  label="ຮາກຖານ"
-                  dense
-                  prepend-icon="control_camera"
-                ></v-select>
-                <v-btn  class="text-input" text color="primary">ລືມລະຫັດຜ່ານ</v-btn>
-                 <v-btn type="submit"  class="text-input ml-10" color="primary">ເຂົ້າລະບົບ</v-btn>
+               <v-card-actions class="justify-space-between">
+                   <v-btn  class="text-input" text color="primary">ລືມລະຫັດຜ່ານ</v-btn>
+                 <v-btn type="submit"  class="text-input" color="primary">ເຂົ້າສູ່ລະບົບ</v-btn>
+               </v-card-actions>
               </v-form>
             </v-card-text>
           </v-card>
