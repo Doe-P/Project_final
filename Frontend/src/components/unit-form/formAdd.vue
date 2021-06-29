@@ -11,13 +11,17 @@
         >
           <v-card>
             <v-toolbar color="primary" height="45" dark>
-            <v-toolbar-title class="text-header-dialog">
-             ເພີ່ມຂໍ້ມູນໜ່ວຍ
-            </v-toolbar-title>
+              <v-toolbar-title class="text-header-dialog">
+                ເພີ່ມຂໍ້ມູນໜ່ວຍ
+              </v-toolbar-title>
             </v-toolbar>
             <v-card-text>
               <v-container>
-                <v-form class="table-content" v-model="valid">
+                <v-form
+                  class="table-content"
+                  v-model="valid"
+                  @submit.prevent="submit_form"
+                >
                   <v-text-field
                     label="ລະຫັດໜ່ວຍ"
                     :value="this.$store.getters.getCustomID"
@@ -71,7 +75,7 @@
                       </v-date-picker>
                     </v-menu>
                   </template>
-                   <v-radio-group v-model="statusSelected" row>
+                  <v-radio-group v-model="statusSelected" row>
                     <v-radio
                       label="ບັນຈຸ"
                       value="ບັນຈຸ"
@@ -103,6 +107,7 @@
 </template>
 
 <script>
+import axios from "axios";
 export default {
   name: "Formadd",
   data() {
@@ -126,16 +131,19 @@ export default {
       },
       // valid form
       valid: false,
-      statusSelected:"ບັນຈຸ"
+      myfoundnames: [],
+      // keet data foundations (id , name) all
+      get_foundationAll: [],
+      get_fund_id: "",
+      //------
+      txt_unitname: null,
+      statusSelected: "ບັນຈຸ",
+      found_name: null,
     };
   },
   mounted() {
-     this.$store.dispatch({
-      type: "doCustomID",
-      id: "",
-      str: "U0001",
-    });
-    alert(this.$store.getters.getCustomID);
+    this.getdata_found_selection();
+    this.getMaxID();
   },
   watch: {
     unit_date() {
@@ -166,6 +174,86 @@ export default {
         type: "clickShow_unit_formAdd",
       });
     },
+    //get foundations name from api
+    async getdata_found_selection() {
+      try {
+        let response = await axios.get(
+          "http://localhost:5000/api/v1/getItem/foundations"
+        );
+        this.get_foundationAll = response.data;
+        for (let i = 0; i <= this.get_foundationAll.length; i++) {
+          this.myfoundnames.push(this.get_foundationAll[i].fund_name);
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    // save date
+    async submit_form() {
+      for (let i = 0; i <= this.get_foundationAll.length; i++) {
+        let fname = this.get_foundationAll[i].fund_name;
+        if (String(this.found_name).valueOf() == String(fname).valueOf()) {
+          this.get_fund_id = this.get_foundationAll[i].fund_id;
+          try {
+            await axios
+              .post("http://localhost:5000/api/v1/units", {
+                unit_id: this.$store.getters.getCustomID,
+                unit_name: this.txt_unitname,
+                fund_id: this.get_fund_id,
+                date_unit: this.unit_date,
+                status_unit: this.statusSelected,
+              })
+              .then(() => {
+                this.close_form_add();
+                 this.Msg_done("ບັນທຶກຂໍ້ມູນສຳເລັດ");
+              });
+          } catch (err) {
+            console.log(err);
+            this.Msg_fail("ບັນທຶກຂໍ້ມູນບໍ່ສຳເລັດ");
+            this.close_form_add();
+          }
+        }
+      }
+    },
+    // get Max ID
+    async getMaxID() {
+      try {
+        await axios
+          .get("http://localhost:5000/api/v1/Units-MaxID")
+          .then((response) => {
+            const getid = response.data.id;
+            this.$store.dispatch({
+              type: "doCustomID",
+              id: getid,
+              str: "U0001",
+            });
+          });
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    // message done
+    Msg_done(text) {
+      // Message show
+      this.$store.dispatch({
+        type: "doClick_myMsg",
+        mshow: true,
+        mcolor: "success",
+        micon: "check_circle",
+        message: text,
+      });
+    },
+    //message fail
+    Msg_fail(text) {
+      // Message show
+      this.$store.dispatch({
+        type: "doClick_myMsg",
+        mshow: true,
+        mcolor: "error",
+        micon: "error",
+        message: text,
+      });
+    },
   },
 };
 </script>
@@ -180,7 +268,7 @@ export default {
   font-family: "boonhome-400";
   font-weight: 30px;
 }
-.text-header-dialog{
+.text-header-dialog {
   font-family: "boonhome-400";
   font-weight: normal;
   font-size: 18px;

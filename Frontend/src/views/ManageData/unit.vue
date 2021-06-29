@@ -28,10 +28,17 @@
               ></v-text-field>
               <v-spacer></v-spacer>
               <v-tooltip bottom>
-                <template v-slot:activator="{on, attrs}">
-                   <v-btn v-on="on" v-bind="attrs" @click="open_form_add" small fab color="primary">
-                <v-icon>add</v-icon>
-              </v-btn>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn
+                    v-on="on"
+                    v-bind="attrs"
+                    @click="open_form_add"
+                    small
+                    fab
+                    color="primary"
+                  >
+                    <v-icon>add</v-icon>
+                  </v-btn>
                 </template>
                 <span class="text-tooltip">ເພີ່ມຂໍ້ມູນໜ່ວຍ</span>
               </v-tooltip>
@@ -41,13 +48,13 @@
             <tr class="table-content">
               <td>{{ item.unit_id }}</td>
               <td>{{ item.unit_name }}</td>
-              <td>{{ item.found_name }}</td>
-              <td>{{ item.unit_date }}</td>
-              <td>{{ item.unit_status }}</td>
+              <td>{{ item.fund_name }}</td>
+              <td>{{ item.date_unit | formatDate }}</td>
+              <td>{{ item.status_unit }}</td>
               <td>
                 <v-icon small @click="edit_unit_item">edit</v-icon>
                 <span class="ma-1"></span>
-                <v-icon small @click="delete_unit_item">delete</v-icon>
+                <v-icon small @click="getID_delete(item.unit_id)">delete</v-icon>
               </td>
             </tr>
           </template>
@@ -57,35 +64,39 @@
       <formAdd />
       <!-- Form edit unit -->
       <formEdit />
-         <!-- Dialog confirm delete data -->
+      <!-- Dialog confirm delete data -->
       <template>
-       <v-row justify="center">
-         <v-dialog
-          v-model="confirm_dialog"
-          persistent
-          max-width="400"
-          transition="dialog-transition"
-        >
-         <template>
-            <v-card>
-            <v-toolbar color="primary" height="45" dark>
-              <v-toolbar-title class="header-message">
-                <v-icon>info</v-icon>
-                ຂໍ້ຄວາມ
-              </v-toolbar-title>
-            </v-toolbar>
-            <v-card-text class="text-center mt-5 text-message"> ທ່ານຕ້ອງການລົບຂໍ້ມູນນີ້ຫຼືບໍ່? </v-card-text>
-            <v-card-actions class="justify-space-between text-message-btn">
-              <v-btn text @click="confirm_dialog = false" color="error"
-                >ຍົກເລີກ</v-btn
-              >
-              <v-spacer></v-spacer>
-              <v-btn text color="primary" @click="message_confirm=true">ຕົກລົງ</v-btn>
-            </v-card-actions>
-          </v-card>
-         </template>
-        </v-dialog>
-       </v-row>
+        <v-row justify="center">
+          <v-dialog
+            v-model="confirm_dialog"
+            persistent
+            max-width="400"
+            transition="dialog-transition"
+          >
+            <template>
+              <v-card>
+                <v-toolbar color="primary" height="45" dark>
+                  <v-toolbar-title class="header-message">
+                    <v-icon>info</v-icon>
+                    ຂໍ້ຄວາມ
+                  </v-toolbar-title>
+                </v-toolbar>
+                <v-card-text class="text-center mt-5 text-message">
+                  ທ່ານຕ້ອງການລົບຂໍ້ມູນນີ້ຫຼືບໍ່?
+                </v-card-text>
+                <v-card-actions class="justify-space-between text-message-btn">
+                  <v-btn text @click="confirm_dialog = false" color="error"
+                    >ຍົກເລີກ</v-btn
+                  >
+                  <v-spacer></v-spacer>
+                  <v-btn text color="primary" @click="delete_unit_item"
+                    >ຕົກລົງ</v-btn
+                  >
+                </v-card-actions>
+              </v-card>
+            </template>
+          </v-dialog>
+        </v-row>
       </template>
     </v-container>
   </div>
@@ -94,6 +105,7 @@
 <script>
 import formAdd from "@/components/unit-form/formAdd.vue";
 import formEdit from "@/components/unit-form/formEdit.vue";
+import axios from "axios";
 export default {
   name: "Section",
   components: {
@@ -106,27 +118,33 @@ export default {
       form_edit_dialog: false,
       searchData: null,
       myfoundnames: [],
-      myData_unit: [
-        {
-          unit_id: 11,
-          unit_name: "aa",
-          found_name: "aa",
-          unit_date: "1/2/1200",
-          unit_status: "dd",
-        }
-      ],
+      myData_unit: [],
+      id_delete:"",
       headers: [
         { text: "ລະຫັດໜ່ວຍ", align: "Left", value: "unit_id" },
         { text: "ຊື່ໜ່ວຍ", value: "unit_name", sortable: true },
-        { text: "ຊື່ຮາກຖານ", value: "found_name", sortable: true },
-        { text: "ວັນເດືອນປີຂະຫຍາຍໜ່ວຍ", value: "unit_date", sortable: false },
-        { text: "ສະຖານະໜ່ວຍ", value: "unit_status", sortable: false },
+        { text: "ຊື່ຮາກຖານ", value: "fund_name", sortable: true },
+        { text: "ວັນເດືອນປີຂະຫຍາຍໜ່ວຍ", value: "date_unit", sortable: false },
+        { text: "ສະຖານະໜ່ວຍ", value: "status_unit", sortable: false },
         { text: "Actions", value: "actions", sortable: false },
       ],
     };
   },
   mounted() {},
-
+  created() {
+    this.getData_Units();
+  },
+  
+  watch: {
+    reload_Data() {
+      this.getData_Units();
+    },
+  },
+  computed: {
+    reload_Data() {
+      return this.getData_Units();
+    },
+  },
   methods: {
     //edit data section
     edit_unit_item() {
@@ -134,8 +152,9 @@ export default {
         type: "clickShow_unit_formEdit",
       });
     },
-    delete_unit_item() {
+    getID_delete(id) {
       this.confirm_dialog = true;
+      this.id_delete= id;
     },
     //open form add
     open_form_add() {
@@ -143,6 +162,52 @@ export default {
         type: "clickShow_unit_formAdd",
       });
     },
+    // get unit data from api
+    async getData_Units() {
+      try {
+        let response = await axios.get("http://localhost:5000/api/v1/units");
+        this.myData_unit = response.data;
+      } catch (err) {
+        console.log(err);
+        this.Msg_fail("ມີບັນຫາຂັດຂ້ອງໃນການສະແດງຂໍ້ມູນ");
+      }
+    },
+    // message done
+    Msg_done(text) {
+      // Message show
+      this.$store.dispatch({
+        type: "doClick_myMsg",
+        mshow: true,
+        mcolor: "success",
+        micon: "check_circle",
+        message: text,
+      });
+    },
+    //message fail
+    Msg_fail(text) {
+      // Message show
+      this.$store.dispatch({
+        type: "doClick_myMsg",
+        mshow: true,
+        mcolor: "error",
+        micon: "error",
+        message: text,
+      });
+    },
+    // delete data
+  async  delete_unit_item(){
+     try{
+        await axios.delete(`http://localhost:5000/api/v1/units/${this.id_delete}`).then(()=>{
+        this.confirm_dialog=false
+        this.Msg_done("ລົບຂໍ້ມູນສຳເລັດ")
+        this.getData_Units();
+      })
+     }catch(err){
+       console.log(err);
+       this.confirm_dialog=false;
+       this.Msg_fail("ລົບຂໍ້ມູນບໍ່ສຳເລັດ")
+     }
+    }
   },
 };
 </script>
@@ -151,7 +216,7 @@ export default {
 .table-header,
 .text-header {
   font-family: "boonhome-400";
-  font-weight:bold;
+  font-weight: bold;
   color: #0779e4;
 }
 .text-search {
@@ -162,7 +227,7 @@ export default {
   font-family: "boonhome-400";
   font-weight: 15px;
 }
-.header-col{
+.header-col {
   font-family: "boonhome-400";
   font-weight: 15px;
   font-size: 30px;
@@ -172,13 +237,13 @@ export default {
   font-family: "boonhome-400";
   font-weight: 30px;
 }
-.text-message{
- font-family: "boonhome-400";
+.text-message {
+  font-family: "boonhome-400";
   font-weight: normal;
   font-size: 18px;
 }
-.text-tooltip{
-   font-family: "boonhome-400";
+.text-tooltip {
+  font-family: "boonhome-400";
   font-size: 14px;
 }
 </style>

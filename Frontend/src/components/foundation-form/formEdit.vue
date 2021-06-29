@@ -31,10 +31,10 @@
                     label="ຮາກຖານ"
                     :rules="[
                       required('ຊື່ຮາກຖານ'),
-                      minLength('ຊື່ຮາກຖານ', 5),
+                      minLength('ຊື່ຮາກຖານ', 3),
                       maxLength('ຊື່ຮາກຖານ', 30),
                     ]"
-                    v-model="getName"
+                    v-model="txt_foundname_edit"
                   ></v-text-field>
                   <template>
                     <v-menu
@@ -93,7 +93,6 @@
                 </v-form>
               </v-container>
             </v-card-text>
-            <span>{{getvalue}}</span>
           </v-card>
         </v-dialog>
       </v-row>
@@ -103,15 +102,16 @@
 
 <script>
 //import axios from "axios";
-//import moment from "moment";
+import moment from "moment";
+import axios from 'axios';
 export default {
-  name: "Formedit",
+  name: "foundation",
   data() {
     return {
       // form edit
       found_date_edit: new Date().toISOString().substr(0, 10),
       menu_found_date_edit: false,
-      format_found_date_edit:this.$store.getters.getfound_formEdit.date,
+      format_found_date_edit: null,
       //Valid input
       required(propertyType) {
         return (v) => (v && v.length > 0) || `ກະລຸນາປ້ອນຂໍ້ມູນ${propertyType}`;
@@ -128,13 +128,14 @@ export default {
       },
       // valid form
       valid: false,
-      statusSelected:null,
-      txt_foundname_edit:null,
+      statusSelected: null,
+      txt_foundname_edit: null,
       getFound_id: null,
+      get_item_edit: null,
     };
   },
-  mounted() {
-  },
+  created() {},
+  mounted() {},
   watch: {
     // form edit
     found_date_edit() {
@@ -142,14 +143,17 @@ export default {
         this.found_date_edit
       );
     },
-    getvalue(){
-      this.setvalue();
-    }
+    computed_ID() {
+      this.getData_byID();
+    },
   },
   computed: {
     // form edit
     computedDateFormatted_edit() {
       return this.formatfound_date_edit(this.found_date_edit);
+    },
+    computed_ID() {
+      return this.getData_byID();
     },
   },
   methods: {
@@ -173,8 +177,8 @@ export default {
         found_id: "",
       });
     },
-    // edit data
-    submit_edit() {
+    //message fail
+    Msg_fail() {
       // Message show
       this.loading = true;
       this.$store.dispatch({
@@ -186,9 +190,50 @@ export default {
       });
       this.loading = false;
     },
-    setvalue(){
-      this.txt_foundname_edit=this.$store.getters.getfound_formEdit.name;
-    }
+    //message done
+    Msg_done() {
+      // Message show
+      this.loading = true;
+      this.$store.dispatch({
+        type: "doClick_myMsg",
+        mshow: true,
+        mcolor: "success",
+        micon: "check_circle",
+        message: "ແກ້ໄຂຂໍ້ມູນສຳເລັດ",
+      });
+      this.loading = false;
+    },
+    // edit data
+   async submit_edit() {
+      try{
+        await axios.put(`http://localhost:5000/api/v1/foundations/${this.getFound_id}`,{
+        fund_name:this.txt_foundname_edit,
+        date_fund:moment(this.format_found_date_edit).format('YYYY-MM-DD'),
+        status_fund:this.statusSelected,
+        }).then(()=>{
+         this.Msg_done();
+         this.close_form();
+         this.$router.push('/foundation')
+       })
+      }catch(err){
+        console.log(err);
+        this.Msg_fail();
+        this.close_form();
+      }
+    },
+    //ດຶງໄອດີຈາກການຄລິກແກ້ໄຂໃນຕາຕາລາງ
+    get_myID() {
+      this.get_item_edit = this.$store.getters.getfound_formEdit.id;
+    },
+    // get data from api by id
+    async getData_byID() {
+      this.getFound_id = this.$store.getters.getfound_formEdit.id;
+      this.txt_foundname_edit = this.$store.getters.getfound_formEdit.name;
+      this.format_found_date_edit = moment(
+        this.$store.getters.getfound_formEdit.date
+      ).format("DD-MM-YYYY");
+      this.statusSelected = this.$store.getters.getfound_formEdit.status;
+    },
   },
 };
 </script>

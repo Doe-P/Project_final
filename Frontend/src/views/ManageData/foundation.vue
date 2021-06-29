@@ -49,14 +49,25 @@
             <tr class="table-content">
               <td>{{ item.fund_id }}</td>
               <td>{{ item.fund_name }}</td>
-              <td>{{ date_format }}</td>
+              <td>{{ item.date_fund | formatDate }}</td>
               <td>{{ item.status_fund }}</td>
               <td>
-                <v-icon small @click="edit_found_item(item.fund_id,item.fund_name,date_format,item.status_fund )"
+                <v-icon
+                  small
+                  @click="
+                    edit_found_item(
+                      item.fund_id,
+                      item.fund_name,
+                      item.date_fund,
+                      item.status_fund
+                    )
+                  "
                   >edit</v-icon
                 >
                 <span class="ma-1"></span>
-                <v-icon small @click="delete_found_item">delete</v-icon>
+                <v-icon small @click="getID_delete(item.fund_id)"
+                  >delete</v-icon
+                >
               </td>
             </tr>
           </template>
@@ -91,7 +102,7 @@
                     >ຍົກເລີກ</v-btn
                   >
                   <v-spacer></v-spacer>
-                  <v-btn text color="primary" @click="message_confirm = true"
+                  <v-btn text color="primary" @click="delete_found_item"
                     >ຕົກລົງ</v-btn
                   >
                 </v-card-actions>
@@ -108,51 +119,112 @@
 import formAdd from "@/components/foundation-form/formAdd.vue";
 import formEdit from "@/components/foundation-form/formEdit.vue";
 import axios from "axios";
-import moment from "moment";
+
 export default {
-  name: "Foundation",
+  name: "foundation",
   components: {
     formAdd,
     formEdit,
   },
   data() {
     return {
-      date_format: null,
       custom_id: "F0001",
       confirm_dialog: false,
-      message_confirm: false,
-      searchData: null,
+      get_ID: "",
+      searchData: "",
       foundation_Data: [],
       headers: [
-        { text: "ລະຫັດ", align: "Left", value: "found_id" },
-        { text: "ຊື່ຮາກຖານ", value: "found_name", sortable: true },
+        { text: "ລະຫັດ", align: "Left", value: "fund_id" },
+        { text: "ຊື່ຮາກຖານ", value: "fund_name", sortable: true },
         {
           text: "ວັນເດືອນປີຂະຫຍາຍຮາກຖານ",
-          value: "found_date",
+          value: "date_fund",
           sortable: false,
         },
-        { text: "ສະຖານະຮາກຖານ", value: "found_status", sortable: false },
+        { text: "ສະຖານະຮາກຖານ", value: "status_fund", sortable: false },
         { text: "Actions", value: "actions", sortable: false },
       ],
     };
   },
-  mounted() {
+
+  mounted() {},
+  created() {
     this.getData_foundations();
   },
+  watch: {
+    reload_data() {
+      this.getData_foundations();
+    },
+  },
+  computed: {
+   reload_data() {
+      return this.getData_foundations();
+    },
+  
+  },
   methods: {
+    async delete_found_item() {
+      try {
+        if (this.get_ID) {
+          await axios
+            .delete(`http://localhost:5000/api/v1/foundations/${this.get_ID}`)
+            .then(() => {
+              this.confirm_dialog = false;
+              this.Msg_done();
+              this.getData_foundations();
+            });
+        }else{
+           this.$store.dispatch({
+        type: "doClick_myMsg",
+        mshow: true,
+        mcolor: "error",
+        micon: "error",
+        message: "ບໍ່ພົບຂໍ້ມູນທີ່ຈະລົບ",
+      });
+        }
+      } catch (err) {
+        console.log(err);
+        this.Msg_fail();
+        this.confirm_dialog = false;
+      }
+    },
     //Click edit data
-    edit_found_item(id,name,date,status) {
+    edit_found_item(fid, name, date, status) {
+      this.$router.push({});
       this.$store.dispatch({
         type: "clickShow_found_formEdit",
-        id:id,
-        name:name,
-        date:date,
-        status:status,
+        id: fid,
+        name: name,
+        date: date,
+        status: status,
+      });
+    },
+    // message done
+    Msg_done() {
+      // Message show
+      this.$store.dispatch({
+        type: "doClick_myMsg",
+        mshow: true,
+        mcolor: "success",
+        micon: "check_circle",
+        message: "ລົບຂໍ້ມູນສຳເລັດ",
+      });
+    },
+    //message fail
+    Msg_fail() {
+      // Message show
+      this.$store.dispatch({
+        type: "doClick_myMsg",
+        mshow: true,
+        mcolor: "error",
+        micon: "error",
+        message: "ລົບຂໍ້ມູນບໍ່ສຳເລັດ",
       });
     },
     //confirm dialog delete
-    delete_found_item() {
+    getID_delete(id) {
       this.confirm_dialog = true;
+      this.get_ID = id;
     },
     // show form add
     form_add_dialog() {
@@ -166,9 +238,6 @@ export default {
           "http://localhost:5000/api/v1/foundations"
         );
         this.foundation_Data = response.data;
-        this.date_format = moment(this.foundation_Data.date_fund).format(
-          "DD-MM-YYYY"
-        );
       } catch (err) {
         console.log(err);
       }

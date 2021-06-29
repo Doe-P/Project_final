@@ -169,6 +169,9 @@ export default {
       this.$store.dispatch({
         type: "clickShow_found_formAdd",
       });
+      this.txt_foundname=null;
+      this.format_found_date=null;
+      this.foundstatus="ບັນຈຸ";
     },
     // submit form
     async submit_form() {
@@ -192,6 +195,7 @@ export default {
             });
             this.loading = false;
             this.close_form_dialog();
+            location.reload();
           });
       } catch (err) {
         console.log(err);

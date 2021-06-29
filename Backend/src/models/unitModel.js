@@ -106,3 +106,14 @@ exports.getItemUnit = (id, result) => {
         result({ kind: 'not found' }, null);    
     });
 }
+// Get largest column foundation ID
+exports.getMaxUnitId = (result) => {
+    let sql = 'SELECT MAX(unit_id) AS id FROM tb_unit';
+    dbCon.query(sql, (err, res) => {
+        if (err) {
+            console.log('Error while fetching Max unit_id' + err);
+            return result(err, null);
+        }
+        result(null, res);
+    });
+  }

@@ -84,6 +84,7 @@ router.put("/api/v1/foundations/:id", (req, res) => {
 
   const id = req.params.id;
   const data = req.body;
+  console.log(data);
   updateFoundationById(data, id, (err, result) => {
     if (err) {
       if (err.kind === "not found") {
