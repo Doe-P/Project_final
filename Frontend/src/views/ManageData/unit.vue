@@ -52,7 +52,7 @@
               <td>{{ item.date_unit | formatDate }}</td>
               <td>{{ item.status_unit }}</td>
               <td>
-                <v-icon small @click="edit_unit_item">edit</v-icon>
+                <v-icon small @click="edit_unit_item(item.unit_id)">edit</v-icon>
                 <span class="ma-1"></span>
                 <v-icon small @click="getID_delete(item.unit_id)">delete</v-icon>
               </td>
@@ -130,11 +130,9 @@ export default {
       ],
     };
   },
-  mounted() {},
-  created() {
+  mounted() {
     this.getData_Units();
   },
-  
   watch: {
     reload_Data() {
       this.getData_Units();
@@ -147,9 +145,10 @@ export default {
   },
   methods: {
     //edit data section
-    edit_unit_item() {
+    edit_unit_item(value) {
       this.$store.dispatch({
         type: "clickShow_unit_formEdit",
+        id:value,
       });
     },
     getID_delete(id) {

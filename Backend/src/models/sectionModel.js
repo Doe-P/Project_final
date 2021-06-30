@@ -84,3 +84,14 @@ exports.deleteSectionById = (id, result) => {
         result(null, res);
     });
 }
+// Get largest column foundation ID
+exports.getMaxSectId = (result) => {
+    let sql = 'SELECT MAX(sect_id) AS id FROM tb_section';
+    dbCon.query(sql, (err, res) => {
+        if (err) {
+            console.log('Error while fetching Max unit_id' + err);
+            return result(err, null);
+        }
+        result(null, res);
+    });
+  }

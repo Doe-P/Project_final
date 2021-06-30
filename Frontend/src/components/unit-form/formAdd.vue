@@ -30,11 +30,11 @@
                   <v-text-field
                     label="ຊື່ໜ່ວຍ"
                     required
-                    counter="30"
+                    counter="50"
                     :rules="[
                       required('ຊື່ໜ່ວຍ'),
                       minLength('ຊື່ໜ່ວຍ', 5),
-                      maxLength('ຊື່ໜ່ວຍ', 30),
+                      maxLength('ຊື່ໜ່ວຍ',50),
                     ]"
                     v-model="txt_unitname"
                   ></v-text-field>

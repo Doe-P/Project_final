@@ -41,7 +41,7 @@ router.get("/api/v1/units/:id", (req, res) => {
           .send({ msg: " Error retrieving unit with id " + id });
       }
     }
-    res.json(result);
+    res.json(result[0]);
   });
 });
 

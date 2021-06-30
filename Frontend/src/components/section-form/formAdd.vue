@@ -16,7 +16,11 @@
             </v-toolbar>
             <v-card-text>
               <v-container>
-                <v-form class="table-content" v-model="valid">
+                <v-form
+                  class="table-content"
+                  v-model="valid"
+                  @submit.prevent="Submit_form"
+                >
                   <v-text-field
                     label="ລະຫັດຈຸ"
                     :value="this.$store.getters.getCustomID"
@@ -33,6 +37,14 @@
                     ]"
                     v-model="txt_sectname"
                   ></v-text-field>
+                  <v-select
+                    :items="myFoundations"
+                    :rules="[required('ຮາກຖານ')]"
+                    v-model="found_name"
+                    label="ເລືອກຮາກຖານ"
+                    dense
+                    @input="get_units"
+                  ></v-select>
                   <v-select
                     :items="myUnitnames"
                     :rules="[required('ໜ່ວຍ')]"
@@ -102,6 +114,7 @@
 </template>
 
 <script>
+import axios from "axios";
 export default {
   name: "Formadd",
   data() {
@@ -125,15 +138,21 @@ export default {
       },
       // valid form
       valid: false,
-      statusSelected:"ບັນຈຸ",
+      //---------
+      myUnitnames: [],
+      getUnitnameAll: [],
+      myFoundations: [],
+      get_found_All: [],
+      //-----------
+      statusSelected: "ບັນຈຸ",
+      txt_sectname: null,
+      unit_name: null,
+      found_name: null,
     };
   },
   mounted() {
-     this.$store.dispatch({
-      type: "doCustomID",
-      id: "",
-      str: "S0001",
-    });
+    this.getMaxID();
+    this.getdata_found_selection();
   },
   watch: {
     sect_date() {
@@ -162,6 +181,112 @@ export default {
     close_form_add() {
       this.$store.dispatch({
         type: "clickShow_sect_formAdd",
+      });
+    },
+    // get Max ID
+    async getMaxID() {
+      try {
+        await axios
+          .get("http://localhost:5000/api/v1/Sections-MaxID")
+          .then((response) => {
+            const getid = response.data.id;
+            this.$store.dispatch({
+              type: "doCustomID",
+              id: getid,
+              str: "S0001",
+            });
+          });
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    // get unit name
+    async getData_Unit() {
+      for (let a = 0; a <= this.get_found_All.length; a++) {
+        if (
+          String(this.found_name).valueOf() ==
+          String(this.get_found_All[a].fund_name).valueOf()
+        ) {
+          const id = this.get_found_All[a].fund_id;
+          try {
+            let response = await axios.get(
+              `http://localhost:5000/api/v1/getItem-units/${id}`
+            );
+            this.getUnitnameAll = response.data;
+            for (let i = 0; i <= this.getUnitnameAll.length; i++) {
+              this.myUnitnames.push(this.getUnitnameAll[i].unit_name);
+            }
+          } catch (err) {
+            console.log(err);
+          }
+        }
+      }
+    },
+    // get data foundation
+    async getdata_found_selection() {
+      try {
+        let response = await axios.get(
+          "http://localhost:5000/api/v1/getItem/foundations"
+        );
+        this.get_found_All = response.data;
+        for (let i = 0; i <= this.get_found_All.length; i++) {
+          this.myFoundations.push(this.get_found_All[i].fund_name);
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    get_units() {
+      this.getData_Unit();
+    },
+    // save data
+    async Submit_form() {
+      for (let i = 0; i <= this.getUnitnameAll.length; i++) {
+        if (
+          String(this.unit_name).valueOf() ==
+          String(this.getUnitnameAll[i].unit_name).valueOf()
+        ) {
+          const id = this.getUnitnameAll[i].unit_id;
+          try {
+            await axios.post("http://localhost:5000/api/v1/sections",{
+            sect_id:this.$store.getters.getCustomID,
+            sect_name:this.txt_sectname,
+            unit_id:id,
+            date_sect:this.sect_date,
+            status_sect:this.statusSelected,
+            }).then(()=>{
+              this.close_form_add();
+              this.Msg_done("ບັນທຶກຂໍ້ມູນສຳເລັດແລ້ວ");
+              location.reload();
+            })
+          } catch (err) {
+            console.log(err);
+            this.close_form_add();
+            this.Msg_done("ບັນທຶກຂໍ້ມູນບໍ່ສຳເລັດ");
+          }
+        }
+      }
+    },
+    // message done
+    Msg_done(text) {
+      // Message show
+      this.$store.dispatch({
+        type: "doClick_myMsg",
+        mshow: true,
+        mcolor: "success",
+        micon: "check_circle",
+        message: text,
+      });
+    },
+    //message fail
+    Msg_fail(text) {
+      // Message show
+      this.$store.dispatch({
+        type: "doClick_myMsg",
+        mshow: true,
+        mcolor: "error",
+        micon: "error",
+        message: text,
       });
     },
   },

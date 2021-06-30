@@ -25,7 +25,10 @@ export default new Vuex.Store({
     // unit form add
     unit_form_add: false,
     // unit form edit
-    unit_form_edit: false,
+    unit_form_edit:{
+      isShow:false,
+      id:"",
+    },
     // member type form add
     memberType_form_add: false,
     // member type form edit
@@ -196,11 +199,13 @@ export default new Vuex.Store({
       }
     },
     // set value for unit form edit
-    setUnit_formEdit(state) {
-      if (state.unit_form_edit == true) {
-        state.unit_form_edit = false;
+    setUnit_formEdit(state,data) {
+      if (state.unit_form_edit.isShow == true) {
+        state.unit_form_edit.isShow = false;
+        state.unit_form_edit.id="";
       } else {
-        state.unit_form_edit = true;
+        state.unit_form_edit.isShow = true;
+        state.unit_form_edit.id=data;
       }
     },
     // set value for member type form edit
@@ -329,8 +334,8 @@ export default new Vuex.Store({
       commit("setUnit_formAdd");
     },
     // unit form edit action
-    clickShow_unit_formEdit({ commit }) {
-      commit("setUnit_formEdit");
+    clickShow_unit_formEdit({ commit },{id}) {
+      commit("setUnit_formEdit",id);
     },
     // member type form edit action
     clickShow_memType_formAdd({ commit }) {

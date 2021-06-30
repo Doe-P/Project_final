@@ -3,7 +3,7 @@
     <template>
       <v-row justify="center">
         <v-dialog
-          v-model="this.$store.getters.getunit_formEdit"
+          v-model="this.$store.getters.getunit_formEdit.isShow"
           persistent
           max-width="500px"
           transition="dialog-transition"
@@ -16,14 +16,18 @@
             </v-toolbar>
             <v-card-text>
               <v-container>
-                <v-form class="table-content" v-model="valid">
+                <v-form
+                  class="table-content"
+                  v-model="valid"
+                  @submit.prevent="Submit_form"
+                >
                   <v-text-field
                     label="ຊື່ໜ່ວຍ"
-                    counter="30"
+                    counter="50"
                     :rules="[
                       required('ຊື່ໜ່ວຍ'),
                       minLength('ຊື່ໜ່ວຍ', 5),
-                      maxLength('ຊື່ໜ່ວຍ', 30),
+                      maxLength('ຊື່ໜ່ວຍ', 50),
                     ]"
                     required
                     v-model="txt_unitname_edit"
@@ -69,7 +73,7 @@
                       </v-date-picker>
                     </v-menu>
                   </template>
-                 <v-radio-group v-model="statusSelected" row>
+                  <v-radio-group v-model="statusSelected" row>
                     <v-radio
                       label="ບັນຈຸ"
                       value="ບັນຈຸ"
@@ -101,6 +105,8 @@
 </template>
 
 <script>
+import axios from "axios";
+import moment from "moment";
 export default {
   name: "Formedit",
   data() {
@@ -125,10 +131,19 @@ export default {
       },
       // valid form
       valid: false,
-      statusSelected:"ບັນຈຸ",
+      //-------------------
+      statusSelected: "ບັນຈຸ",
+      txt_unitname_edit: null,
+      found_name: null,
+      //-------------
+      myfoundnames: [],
+      get_foundationAll: [],
+      select_fund_id: "",
     };
   },
-  mounted() {},
+  mounted() {
+    this.getdata_found_selection();
+  },
   watch: {
     // form edit
     unit_date_edit() {
@@ -136,11 +151,19 @@ export default {
         this.unit_date_edit
       );
     },
+    // get data unit by id
+    reload_data() {
+      this.getData_byID();
+    },
   },
   computed: {
     // form edit
     computedDateFormatted_edit() {
       return this.formatUnit_date_edit(this.unit_date_edit);
+    },
+    // loading data to text
+    reload_data() {
+      return this.getData_byID();
     },
   },
   methods: {
@@ -161,6 +184,93 @@ export default {
     close_form_edit() {
       this.$store.dispatch({
         type: "clickShow_unit_formEdit",
+        id: "",
+      });
+    },
+    //get foundations name from api
+    async getdata_found_selection() {
+      try {
+        let response = await axios.get(
+          "http://localhost:5000/api/v1/getItem/foundations"
+        );
+        this.get_foundationAll = response.data;
+        for (let i = 0; i <= this.get_foundationAll.length; i++) {
+          this.myfoundnames.push(this.get_foundationAll[i].fund_name);
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    //get data unit by id from api
+    async getData_byID() {
+      const get_unit_id = this.$store.getters.getunit_formEdit.id;
+      try {
+        await axios
+          .get(`http://localhost:5000/api/v1/units/${get_unit_id}`)
+          .then((response) => {
+            (this.txt_unitname_edit = response.data.unit_name),
+              (this.found_name = response.data.fund_name),
+              (this.format_unit_date_edit = moment(
+                response.data.date_unit
+              ).format("DD-MM-YYYY")),
+              (this.statusSelected = response.data.status_unit);
+          });
+      } catch (err) {
+        console.log(err);
+        this.close_form_edit();
+      }
+    },
+    // update data unit
+    async Submit_form() {
+      const get_unit_id = this.$store.getters.getunit_formEdit.id;
+      for (let i = 0; i <= this.get_foundationAll.length; i++) {
+        if (
+          String(this.found_name).valueOf() ==
+          String(this.get_foundationAll[i].fund_name).valueOf()
+        ) {
+          try {
+            this.select_fund_id = this.get_foundationAll[i].fund_id;
+            await axios
+              .put(`http://localhost:5000/api/v1/units/${get_unit_id}`, {
+                unit_name: this.txt_unitname_edit,
+                fund_id: this.select_fund_id,
+                date_unit: moment(this.format_unit_date_edit).format(
+                  "YYYY-MM-DD"
+                ),
+                status_unit: this.statusSelected,
+              })
+              .then(() => {
+                this.close_form_edit();
+                this.Msg_done("ແກ້ໄຂຂໍ້ມູນສຳເລັດແລ້ວ");
+              });
+          } catch (err) {
+            console.log(err);
+            this.close_form_edit();
+            this.Msg_fail("ແກ້ໄຂຂໍ້ມູນບໍ່ສຳເລັດ");
+          }
+        }
+      }
+    },
+    // message done
+    Msg_done(text) {
+      // Message show
+      this.$store.dispatch({
+        type: "doClick_myMsg",
+        mshow: true,
+        mcolor: "success",
+        micon: "check_circle",
+        message: text,
+      });
+    },
+    //message fail
+    Msg_fail(text) {
+      // Message show
+      this.$store.dispatch({
+        type: "doClick_myMsg",
+        mshow: true,
+        mcolor: "error",
+        micon: "error",
+        message: text,
       });
     },
   },
@@ -177,7 +287,7 @@ export default {
   font-family: "boonhome-400";
   font-weight: 30px;
 }
-.text-header-dialog{
+.text-header-dialog {
   font-family: "boonhome-400";
   font-weight: normal;
   font-size: 18px;
