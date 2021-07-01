@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 // import function from model
-const { insert, update, getAll, getById } = require('../models/moveModel');
+const { insert, update, getAll, getById, getMoveWhereLocate, getAllMove } = require('../models/moveModel');
 
 // Create move
 router.post('/api/v1/moves', (req, res) => {
@@ -12,17 +12,18 @@ router.post('/api/v1/moves', (req, res) => {
     // console.log(surname);
     // return res.status(200).send({msg: data})
     // Validate request
-    if (!req.body.move_id || !req.body.move_NO) {
-        return res.status(400).send({ msg: 'Content can not be empty!' })
-    } else {
-        const data = req.body;
-        insert(data, (err, result) => {
-            if (err) {
-                return res.status(500).send({ msg: 'Some error occurred while create !!!' });
-            }
-            res.json(result);
-        });
-    }
+
+    // if (!req.body.move_id || !req.body.move_NO) {
+    //     return res.status(400).send({ msg: 'Content can not be empty!' })
+    // } else {
+    const data = req.body;
+    insert(data, (err, result) => {
+        if (err) {
+            return res.status(500).send({ msg: 'Some error occurred while create !!!' });
+        }
+        res.json(result);
+    });
+    //}
 });
 
 // Update move 
@@ -57,6 +58,31 @@ router.get('/api/v1/moves/:id', (req, res) => {
             } else {
                 return res.status(500).send({ msg: 'Error retrieving move and detail with id' + id });
             }
+        }
+        res.json(result);
+    });
+});
+
+// Get move by where fund_name
+router.get('/api/v1/getMoveWhereLocate/:id', (req, res) => {
+    const locate = req.params.id;
+    getMoveWhereLocate(locate, (err, result) => {
+        if (err) {
+            if (err.kind === 'not found') {
+                return res.status(404).send({ msg: 'Not found move ' });
+            } else {
+                return res.status(500).send({ msg: 'Error retrieving move ' });
+            }
+        }
+        res.json(result);
+    });
+});
+
+// Get move all for admin
+router.get('/api/v1/getAllMoves', (req, res) => {
+    getAllMove((err, result) => {
+        if (err) {
+            return res.status(500).send({msg: 'Some error occurred while retrieving move'});
         }
         res.json(result);
     });

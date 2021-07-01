@@ -52,7 +52,7 @@
               <td>{{ item.date_sect | formatDate }}</td>
               <td>{{ item.status_sect }}</td>
               <td>
-                <v-icon small @click="edit_section_item">edit</v-icon>
+                <v-icon small @click="edit_section_item(item.sect_id,item.fund_name)">edit</v-icon>
                 <span class="ma-1"></span>
                 <v-icon small @click="getSectionID(item.sect_id)">delete</v-icon>
               </td>
@@ -145,9 +145,11 @@ export default {
   },
   methods: {
     //edit data section
-    edit_section_item() {
+    edit_section_item(value,fund_name) {
       this.$store.dispatch({
         type: "clickShow_sect_formEdit",
+        id:value,
+        name:fund_name
       });
     },
    async delete_section_item() {

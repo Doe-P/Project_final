@@ -3,7 +3,7 @@ const dbCon = require('../../config/db');
 
 // Get all sections
 exports.getSections = (result) => {
-    dbCon.query('SELECT * FROM tb_section', (err, res) => {
+    dbCon.query('SELECT tb_section.sect_id,tb_section.sect_name,tb_unit.unit_name,tb_foundation.fund_name,tb_section.date_sect,tb_section.status_sect FROM tb_section INNER JOIN tb_unit ON tb_section.unit_id=tb_unit.unit_id INNER JOIN tb_foundation ON tb_unit.fund_id = tb_foundation.fund_id', (err, res) => {
         if (err) {
             console.log('Error while fetching sections', err);
             result(err, null);

@@ -62,10 +62,12 @@
                         ></v-text-field>
                       </template>
                       <v-date-picker
+                       class="calendar"
                         ref="picker"
                         v-model="found_date"
                         :max="new Date().toISOString().substr(0, 10)"
                         min="1950-01-01"
+                        locale="lao"
                       >
                       </v-date-picker>
                     </v-menu>
@@ -249,5 +251,10 @@ export default {
   font-family: "boonhome-400";
   font-weight: normal;
   font-size: 18px;
+}
+.calendar{
+   font-family: "boonhome-400";
+  font-weight: normal;
+  font-size: 14px;
 }
 </style>

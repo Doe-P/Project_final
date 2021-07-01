@@ -5,7 +5,7 @@ const express = require('express');
 const router = express.Router();
 
 // import functions from model
-const { getType_mb, getType_mbById, insertType_mb, updateType_mbById, deleteType_mbById, getItemType_mb } = require('../models/typememberModel');
+const { getType_mb, getType_mbById, insertType_mb, updateType_mbById, deleteType_mbById, getItemType_mb,getMaxMemberTypeId } = require('../models/typememberModel');
 
 // Get all typemembers
 router.get('/api/v1/type-members', (req, res) => {
@@ -28,14 +28,14 @@ router.get('/api/v1/type-members/:id', (req, res) => {
                 return res.status(500).send({ msg: 'Error retrieving typemember with id' + id });
             }
         }
-        res.json(result);
+        res.json(result[0]);
     });
 });
 
 // Create new typemember
 router.post('/api/v1/type-members', (req, res) => {
     // Validate Request
-    if (!req.body.typemember_id || !req.body.typemember_name || !req.body.money) {
+    if (!req.body.typemember_id || !req.body.typemember || !req.body.money) {
         return res.status(400).send({ msg: 'Content can not be empty!' });
     } else {
         const data = req.body;
@@ -51,7 +51,7 @@ router.post('/api/v1/type-members', (req, res) => {
 // Update typemember
 router.put('/api/v1/type-members/:id', (req, res) => {
     // Validate Request
-    if (!req.body.typemember_name || !req.body.money) {
+    if (!req.body.typemember || !req.body.money) {
         return res.status(400).send({ msg: 'Content can not be empty!' });
     }
 
@@ -93,5 +93,14 @@ router.get('/api/v1/getItem/type-members', (req, res) => {
         res.json(result);
     });
 });
-
+router.get("/api/v1/MemberType-MaxID", (req, res) => {
+    getMaxMemberTypeId((err, result) => {
+      if (err) {
+        return res.status(500).send({
+          msg: "Some error occurred while retrieving Max foundation ID!",
+        });
+      }
+      res.json(result[0]);
+    });
+  });
 module.exports = router;

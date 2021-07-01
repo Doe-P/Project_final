@@ -94,3 +94,13 @@ exports.getItemsEduc = (result) => {
         result(null, res);   
     });
 }
+exports.getMaxDegreeId = (result) => {
+    let sql = 'SELECT MAX(level_id) AS id FROM tb_educationlevel';
+    dbCon.query(sql, (err, res) => {
+        if (err) {
+            console.log('Error while fetching Max unit_id' + err);
+            return result(err, null);
+        }
+        result(null, res);
+    });
+  }

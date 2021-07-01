@@ -40,7 +40,7 @@ router.get("/api/v1/sections/:id", (req, res) => {
           .send({ msg: "Error retrieving section with id" + id });
       }
     }
-    res.json(result);
+    res.json(result[0]);
   });
 });
 

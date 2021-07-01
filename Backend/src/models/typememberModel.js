@@ -47,8 +47,8 @@ exports.insertType_mb = (data, result) => {
 
 // Update typemember to database
 exports.updateType_mbById = (data, id, result) => {
-    const sql = 'UPDATE tb_typemember SET typemember_name = ?, money = ? WHERE typemember_id = ?';
-    dbCon.query(sql, [data.typemember_name, data.money, id], (err, res) => {
+    const sql = 'UPDATE tb_typemember SET typemember = ?, money = ? WHERE typemember_id = ?';
+    dbCon.query(sql, [data.typemember, data.money, id], (err, res) => {
         if (err) {
             console.log('Error while updating the typemember', err);
             result(err, null);
@@ -95,3 +95,13 @@ exports.getItemType_mb = (result) => {
         result(null, res);
     });
 }
+exports.getMaxMemberTypeId = (result) => {
+    let sql = 'SELECT MAX(typemember_id) AS id FROM tb_typemember';
+    dbCon.query(sql, (err, res) => {
+        if (err) {
+            console.log('Error while fetching Max unit_id' + err);
+            return result(err, null);
+        }
+        result(null, res);
+    });
+  }

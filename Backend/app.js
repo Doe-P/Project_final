@@ -60,6 +60,14 @@ app.use(educationlevel_Route);
 const typemember_Route = require('./src/routes/typememberRoute');
 app.use(typemember_Route);
 
+// import typeCertificate and use
+const typeCertificate_Route = require('./src/routes/typeCertificRoute');
+app.use(typeCertificate_Route);
+
+// import typeActivity and use
+const typeActivity_Route = require('./src/routes/typeActivRoute');
+app.use(typeActivity_Route);
+
 // import member route and use
 const member_Route = require('./src/routes/memberRoute');
 app.use(member_Route);
@@ -68,9 +76,14 @@ app.use(member_Route);
 const move_Route = require('./src/routes/moveRoute');
 app.use(move_Route);
 
+
 // import retirememt and use
 const retirememt_Route = require('./src/routes/retirementRoute');
 app.use(retirememt_Route);
+
+// import certificate and use
+const certificate_Route = require('./src/routes/certificRoute');
+app.use(certificate_Route);
 
 // server listen to the port
 app.listen(PORT, () => {

@@ -21,7 +21,11 @@ export default new Vuex.Store({
     // section form add
     sect_form_add: false,
     // section form edit
-    sect_form_edit: false,
+    sect_form_edit:{
+      isShow:false,
+      id:"",
+      name:""
+    },
     // unit form add
     unit_form_add: false,
     // unit form edit
@@ -32,7 +36,10 @@ export default new Vuex.Store({
     // member type form add
     memberType_form_add: false,
     // member type form edit
-    memberType_form_edit: false,
+    memberType_form_edit:{
+      isShow:false,
+      id:"",
+    },
     // activity form add
     act_formAdd: false,
     // activity form edit
@@ -183,11 +190,15 @@ export default new Vuex.Store({
       }
     },
     // set value for section form edit
-    setSect_formEdit(state) {
-      if (state.sect_form_edit == true) {
-        state.sect_form_edit = false;
+    setSect_formEdit(state,data) {
+      if (state.sect_form_edit.isShow == true) {
+        state.sect_form_edit.isShow = false;
+        state.sect_form_edit.id="";
+        state.sect_form_edit.name="";
       } else {
-        state.sect_form_edit = true;
+        state.sect_form_edit.isShow = true;
+        state.sect_form_edit.id=data.id;
+        state.sect_form_edit.name=data.name;
       }
     },
     // set value for unit form edit
@@ -217,11 +228,13 @@ export default new Vuex.Store({
       }
     },
     // set value for unit form edit
-    setmemType_formEdit(state) {
-      if (state.memberType_form_edit == true) {
-        state.memberType_form_edit = false;
+    setmemType_formEdit(state,id) {
+      if (state.memberType_form_edit.isShow == true) {
+        state.memberType_form_edit.isShow = false;
+        state.memberType_form_edit.id="";
       } else {
-        state.memberType_form_edit = true;
+        state.memberType_form_edit.isShow = true;
+        state.memberType_form_edit.id=id;
       }
     },
     // set value for activity form add
@@ -326,8 +339,8 @@ export default new Vuex.Store({
       commit("setSect_formAdd");
     },
     // section form edit action
-    clickShow_sect_formEdit({ commit }) {
-      commit("setSect_formEdit");
+    clickShow_sect_formEdit({ commit },{id,name}) {
+      commit("setSect_formEdit",{id,name});
     },
     // unit form edit action
     clickShow_unit_formAdd({ commit }) {
@@ -342,8 +355,8 @@ export default new Vuex.Store({
       commit("setmemType_formAdd");
     },
     // member type form edit action
-    clickShow_memType_formEdit({ commit }) {
-      commit("setmemType_formEdit");
+    clickShow_memType_formEdit({ commit },{id}) {
+      commit("setmemType_formEdit",id);
     },
     // Activity form add action
     clickShow_act_formAdd({ commit }) {

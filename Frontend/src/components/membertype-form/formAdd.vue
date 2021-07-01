@@ -9,12 +9,12 @@
       >
         <v-card>
           <v-toolbar color="primary" height="45" dark>
-          <v-toolbar-title class="text-header-dialog">
-           ເພີ່ມຂໍ້ມູນປະເພດສະມາຊິກ
-          </v-toolbar-title>
+            <v-toolbar-title class="text-header-dialog">
+              ເພີ່ມຂໍ້ມູນປະເພດສະມາຊິກ
+            </v-toolbar-title>
           </v-toolbar>
           <v-card-text class="text-content">
-            <v-form v-model="valid">
+            <v-form v-model="valid" @submit.prevent="SaveData_memberType">
               <v-text-field
                 label="ລະຫັດປະເພດສະມາຊິກ"
                 :value="this.$store.getters.getCustomID"
@@ -63,6 +63,7 @@
 </template>
 
 <script>
+import axios from "axios";
 export default {
   name: "Formadd",
   data() {
@@ -83,14 +84,13 @@ export default {
       },
       // valid form
       valid: false,
+      //----addd -----
+      txt_memType_name: null,
+      txt_memType_price: null,
     };
   },
   mounted() {
-     this.$store.dispatch({
-      type: "doCustomID",
-      id: "",
-      str: "MT0001",
-    });
+    this.getMaxID();
   },
   methods: {
     close_form_add() {
@@ -107,6 +107,62 @@ export default {
       }
       return true;
     },
+    // get Max ID
+    async getMaxID() {
+      try {
+        await axios
+          .get("http://localhost:5000/api/v1/MemberType-MaxID")
+          .then((response) => {
+            const getid = response.data.id;
+            this.$store.dispatch({
+              type: "doCustomID",
+              id: getid,
+              str: "T0001",
+            });
+          });
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    async SaveData_memberType() {
+      var price = parseInt(this.txt_memType_price);
+      try {
+        await axios.post("http://localhost:5000/api/v1/type-members", {
+          typemember_id:this.$store.getters.getCustomID,
+          typemember:this.txt_memType_name,
+          money:price
+        }).then(() => {
+          this.close_form_add();
+          this.Msg_done("ບັນທຶກຂໍ້ມູນສຳເລັດແລ້ວ");
+          location.reload();
+        });
+      } catch (err) {
+        this.close_form_add();
+        this.Msg_fail("ບັນທຶກຂໍ້ມູນບໍ່ສຳເລັດ");
+        console.log(err);
+      }
+    },
+    Msg_done(text) {
+      // Message show
+      this.$store.dispatch({
+        type: "doClick_myMsg",
+        mshow: true,
+        mcolor: "success",
+        micon: "check_circle",
+        message: text,
+      });
+    },
+    //message fail
+    Msg_fail(text) {
+      // Message show
+      this.$store.dispatch({
+        type: "doClick_myMsg",
+        mshow: true,
+        mcolor: "error",
+        micon: "error",
+        message: text,
+      });
+    },
   },
 };
 </script>
@@ -122,7 +178,7 @@ export default {
   font-family: "boonhome-400";
   font-weight: 30px;
 }
-.text-header-dialog{
+.text-header-dialog {
   font-family: "boonhome-400";
   font-weight: normal;
   font-size: 18px;

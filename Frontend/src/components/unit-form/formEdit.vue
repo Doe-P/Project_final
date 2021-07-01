@@ -64,11 +64,13 @@
                         ></v-text-field>
                       </template>
                       <v-date-picker
+                       class="calendar"
                         ref="picker"
                         v-model="unit_date_edit"
                         :max="new Date().toISOString().substr(0, 10)"
                         min="1950-01-01"
                         @change="save"
+                        locale="lao"
                       >
                       </v-date-picker>
                     </v-menu>
@@ -107,6 +109,7 @@
 <script>
 import axios from "axios";
 import moment from "moment";
+import dateformat from "dateformat";
 export default {
   name: "Formedit",
   data() {
@@ -139,6 +142,7 @@ export default {
       myfoundnames: [],
       get_foundationAll: [],
       select_fund_id: "",
+      get_id: null,
     };
   },
   mounted() {
@@ -170,7 +174,7 @@ export default {
     // form edit
     formatUnit_date_edit(date) {
       if (!date) return null;
-
+      this.get_id = dateformat(date, "yyyy-mm-dd");
       const [year, month, day] = date.split("-");
       return `${day}-${month}-${year}`;
     },
@@ -213,6 +217,7 @@ export default {
               (this.format_unit_date_edit = moment(
                 response.data.date_unit
               ).format("DD-MM-YYYY")),
+              this.get_id=dateformat(response.data.date_unit,"yyyy-mm-dd"),
               (this.statusSelected = response.data.status_unit);
           });
       } catch (err) {
@@ -234,14 +239,13 @@ export default {
               .put(`http://localhost:5000/api/v1/units/${get_unit_id}`, {
                 unit_name: this.txt_unitname_edit,
                 fund_id: this.select_fund_id,
-                date_unit: moment(this.format_unit_date_edit).format(
-                  "YYYY-MM-DD"
-                ),
+                date_unit: this.get_id,
                 status_unit: this.statusSelected,
               })
               .then(() => {
                 this.close_form_edit();
                 this.Msg_done("ແກ້ໄຂຂໍ້ມູນສຳເລັດແລ້ວ");
+                location.reload();
               });
           } catch (err) {
             console.log(err);
@@ -291,5 +295,10 @@ export default {
   font-family: "boonhome-400";
   font-weight: normal;
   font-size: 18px;
+}
+.calendar{
+   font-family: "boonhome-400";
+  font-weight: normal;
+  font-size: 14px;
 }
 </style>

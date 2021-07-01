@@ -120,6 +120,7 @@ import formAdd from "@/components/foundation-form/formAdd.vue";
 import formEdit from "@/components/foundation-form/formEdit.vue";
 import axios from "axios";
 
+
 export default {
   name: "foundation",
   components: {
@@ -147,7 +148,8 @@ export default {
     };
   },
 
-  mounted() {},
+  mounted() {
+  },
   created() {
     this.getData_foundations();
   },

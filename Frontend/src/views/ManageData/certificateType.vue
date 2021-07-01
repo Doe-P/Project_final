@@ -46,12 +46,12 @@
 
             <template v-slot:item="{ item }">
               <tr class="table-content">
-                <td>{{ item.certi_id }}</td>
-                <td>{{ item.certi_name }}</td>
+                <td>{{ item.typeCerti_id }}</td>
+                <td>{{ item.typeCerti_name }}</td>
                 <td>
-                  <v-icon small @click="edit_certiType_item">edit</v-icon>
+                  <v-icon small @click="edit_certiType_item(item.typeCerti_id,item.typeCerti_name)">edit</v-icon>
                   <span class="ma-1"></span>
-                  <v-icon small @click="delete_certiType_item">delete</v-icon>
+                  <v-icon small @click="delete_certiType_item(item.typeCerti_id)">delete</v-icon>
                 </td>
               </tr>
             </template>
@@ -72,7 +72,7 @@
                 </v-toolbar-title>
               </v-toolbar>
               <v-card-text class="text-content">
-                <v-form v-model="valid_add">
+                <v-form v-model="valid_add" @submit.prevent="Save_Data">
                   <v-text-field
                     label="ລະຫັດປະເພດການຍ້ອງຍໍ"
                     :value="this.$store.getters.getCustomID"
@@ -85,7 +85,7 @@
                     counter="30"
                     :rules="[
                       required('ປະເພດການຍ້ອງຍໍ'),
-                      minLength('ປະເພດການຍ້ອງຍໍ', 5),
+                      minLength('ປະເພດການຍ້ອງຍໍ', 2),
                       maxLength('ປະເພດການຍ້ອງຍໍ', 30),
                     ]"
                   ></v-text-field>
@@ -120,7 +120,7 @@
                 </v-toolbar-title>
               </v-toolbar>
               <v-card-text class="text-content">
-                <v-form v-model="valid_edit">
+                <v-form v-model="valid_edit" @submit.prevent="Update_data">
                   <v-text-field
                     label="ປະເພດຍ້ອງຍໍ"
                     v-model="txt_certi_name_edit"
@@ -128,7 +128,7 @@
                     counter="30"
                     :rules="[
                       required('ປະເພດການຍ້ອງຍໍ'),
-                      minLength('ປະເພດການຍ້ອງຍໍ', 5),
+                      minLength('ປະເພດການຍ້ອງຍໍ', 2),
                       maxLength('ປະເພດການຍ້ອງຍໍ', 30),
                     ]"
                   ></v-text-field>
@@ -174,7 +174,7 @@
                     >ຍົກເລີກ</v-btn
                   >
                   <v-spacer></v-spacer>
-                  <v-btn text color="primary" @click="message_confirm = true"
+                  <v-btn text color="primary" @click="confirm_delete"
                     >ຕົກລົງ</v-btn
                   >
                 </v-card-actions>
@@ -188,6 +188,7 @@
 </template>
 
 <script>
+import axios from "axios"
 export default {
   name: "certificatetype",
   data() {
@@ -196,10 +197,10 @@ export default {
       form_add_dialog: false,
       form_edit_dialog: false,
       searchData: null,
-      myData_certificateType: [{ certi_id: 1 }],
+      myData_certificateType: [],
       headers: [
-        { text: "ລະຫັດປະເພດຍ້ອງຍໍ", align: "Left", value: "certi_id" },
-        { text: "ຊື່ປະເພດຍ້ອງຍໍ", value: "certi_name", sortable: false },
+        { text: "ລະຫັດປະເພດຍ້ອງຍໍ", align: "Left", value: "typeCerti_id" },
+        { text: "ຊື່ປະເພດຍ້ອງຍໍ", value: "typeCerti_name", sortable: false },
         { text: "Actions", value: "action", sortable: false },
       ],
       //Valid input
@@ -219,23 +220,121 @@ export default {
       // valid form
       valid_add: false,
       valid_edit: false,
+      txt_certi_name:null,
+      txt_certi_name_edit:null,
+      get_id:null,
+      delete_id:null,
     };
   },
   mounted() {
-        this.$store.dispatch({
-      type: "doCustomID",
-      id: "",
-      str: "CT0001",
-    });
+     this.getMaxID();
+     this.getData_All();
   },
   methods: {
     //edit data education level
-    edit_certiType_item() {
+    edit_certiType_item(id,type) {
       this.form_edit_dialog = true;
+      this.get_id=id;
+      this.txt_certi_name_edit=type;
     },
     //delete data education level
-    delete_certiType_item() {
+    delete_certiType_item(id) {
       this.confirm_dialog = true;
+      this.delete_id=id;
+    },
+       // get max id 
+     async getMaxID() {
+      try {
+        await axios
+          .get("http://localhost:5000/api/v1/certificateType-MaxID")
+          .then((response) => {
+            const getid = response.data.id;
+            this.$store.dispatch({
+              type: "doCustomID",
+              id: getid,
+              str: "C0001",
+            });
+          });
+      } catch (err) {
+        console.log(err);
+      }
+    },
+   async getData_All(){
+     try{
+      let response = await axios.get("http://localhost:5000/api/v1/typecertificate");
+      this.myData_certificateType=response.data;
+     }catch(err){
+       console.log(err);
+     }
+    },
+    // save data 
+   async Save_Data(){
+      try{
+        await axios.post("http://localhost:5000/api/v1/typeCertificate",{
+         typeCerti_id:this.$store.getters.getCustomID,
+         typeCerti_name:this.txt_certi_name
+        }).then(()=>{
+          this.form_add_dialog=false;
+          this.Msg_done("ບັນທຶກຂໍ້ມູນສຳເລັດແລ້ວ");
+          location.reload();
+        })
+      }catch(err){
+        this.form_add_dialog=false;
+        this.Msg_fail("ບັນທຶກຂໍ້ມູນບໍ່ສຳເລັດ");
+        console.log(err);
+      }
+    },
+    // Update data
+  async  Update_data(){
+       try{
+        await axios.put(`http://localhost:5000/api/v1/typeCertificate/${this.get_id}`,{
+         typeCerti_name:this.txt_certi_name_edit,
+        }).then(()=>{
+          this.form_edit_dialog=false;
+          this.Msg_done("ແກ້ໄຂຂໍ້ມູນສຳເລັດແລ້ວ");
+          location.reload();
+        })
+       }catch(err){
+         this.form_edit_dialog=false;
+         this.Msg_fail("ແກ້ໄຂຂໍ້ມູນບໍ່ສຳເລັດ");
+         console.log(err);
+       }
+    },
+     // delete data
+   async  confirm_delete(){
+        try{
+         await axios.delete(`http://localhost:5000/api/v1/typeCertificate/${this.delete_id}`).then(()=>{
+          this.confirm_dialog=false;
+          this.Msg_done("ລົບຂໍ້ມູນສຳເລັດແລ້ວ");
+          location.reload();
+         })
+        }catch(err){
+          this.confirm_dialog=false;
+          this.Msg_fail("ລົບຂໍ້ມູນບໍ່ສຳເລັດ");
+          console.log(err);
+        }
+     },
+     // message done
+    Msg_done(text) {
+      // Message show
+      this.$store.dispatch({
+        type: "doClick_myMsg",
+        mshow: true,
+        mcolor: "success",
+        micon: "check_circle",
+        message: text,
+      });
+    },
+    //message fail
+    Msg_fail(text) {
+      // Message show
+      this.$store.dispatch({
+        type: "doClick_myMsg",
+        mshow: true,
+        mcolor: "error",
+        micon: "error",
+        message: text,
+      });
     },
   },
 };
