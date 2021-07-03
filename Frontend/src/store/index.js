@@ -11,34 +11,34 @@ export default new Vuex.Store({
     // foundation form add
     found_form_add: false,
     // foundation form edit
-    found_form_edit:{
-      id:null,
-      name:null,
-      date:null,
-      status:null,
-      isShow:false,
+    found_form_edit: {
+      id: null,
+      name: null,
+      date: null,
+      status: null,
+      isShow: false,
     },
     // section form add
     sect_form_add: false,
     // section form edit
-    sect_form_edit:{
-      isShow:false,
-      id:"",
-      name:""
+    sect_form_edit: {
+      isShow: false,
+      id: "",
+      name: "",
     },
     // unit form add
     unit_form_add: false,
     // unit form edit
-    unit_form_edit:{
-      isShow:false,
-      id:"",
+    unit_form_edit: {
+      isShow: false,
+      id: "",
     },
     // member type form add
     memberType_form_add: false,
     // member type form edit
-    memberType_form_edit:{
-      isShow:false,
-      id:"",
+    memberType_form_edit: {
+      isShow: false,
+      id: "",
     },
     // activity form add
     act_formAdd: false,
@@ -68,6 +68,11 @@ export default new Vuex.Store({
     formEdit_certificate: false,
     //auto id
     custom_id: null,
+    get_users: {
+      user_name: "",
+      user_status: "",
+      user_foundation: "",
+    },
   },
   getters: {
     //get auto id
@@ -144,6 +149,10 @@ export default new Vuex.Store({
     getAct_formEdit(state) {
       return state.act_formEdit;
     },
+    //get data user
+    getData_user(state) {
+      return state.get_users;
+    },
   },
   mutations: {
     setShowmenu(state) {
@@ -166,19 +175,19 @@ export default new Vuex.Store({
       }
     },
     //set value for show foundation form edit
-    setfound_formEdit(state,data) {
-      if (state.found_form_edit.isShow== true) {
+    setfound_formEdit(state, data) {
+      if (state.found_form_edit.isShow == true) {
         state.found_form_edit.isShow = false;
-        state.found_form_edit.id=null;
-        state.found_form_edit.name=null;
-        state.found_form_edit.date=null;
-        state.found_form_edit.status=null;
+        state.found_form_edit.id = null;
+        state.found_form_edit.name = null;
+        state.found_form_edit.date = null;
+        state.found_form_edit.status = null;
       } else {
         state.found_form_edit.isShow = true;
-        state.found_form_edit.id=data.id;
-        state.found_form_edit.name=data.name;
-        state.found_form_edit.date=data.date;
-        state.found_form_edit.status=data.status;
+        state.found_form_edit.id = data.id;
+        state.found_form_edit.name = data.name;
+        state.found_form_edit.date = data.date;
+        state.found_form_edit.status = data.status;
       }
     },
     // set value for section form add
@@ -190,15 +199,15 @@ export default new Vuex.Store({
       }
     },
     // set value for section form edit
-    setSect_formEdit(state,data) {
+    setSect_formEdit(state, data) {
       if (state.sect_form_edit.isShow == true) {
         state.sect_form_edit.isShow = false;
-        state.sect_form_edit.id="";
-        state.sect_form_edit.name="";
+        state.sect_form_edit.id = "";
+        state.sect_form_edit.name = "";
       } else {
         state.sect_form_edit.isShow = true;
-        state.sect_form_edit.id=data.id;
-        state.sect_form_edit.name=data.name;
+        state.sect_form_edit.id = data.id;
+        state.sect_form_edit.name = data.name;
       }
     },
     // set value for unit form edit
@@ -210,13 +219,13 @@ export default new Vuex.Store({
       }
     },
     // set value for unit form edit
-    setUnit_formEdit(state,data) {
+    setUnit_formEdit(state, data) {
       if (state.unit_form_edit.isShow == true) {
         state.unit_form_edit.isShow = false;
-        state.unit_form_edit.id="";
+        state.unit_form_edit.id = "";
       } else {
         state.unit_form_edit.isShow = true;
-        state.unit_form_edit.id=data;
+        state.unit_form_edit.id = data;
       }
     },
     // set value for member type form edit
@@ -228,13 +237,13 @@ export default new Vuex.Store({
       }
     },
     // set value for unit form edit
-    setmemType_formEdit(state,id) {
+    setmemType_formEdit(state, id) {
       if (state.memberType_form_edit.isShow == true) {
         state.memberType_form_edit.isShow = false;
-        state.memberType_form_edit.id="";
+        state.memberType_form_edit.id = "";
       } else {
         state.memberType_form_edit.isShow = true;
-        state.memberType_form_edit.id=id;
+        state.memberType_form_edit.id = id;
       }
     },
     // set value for activity form add
@@ -291,28 +300,71 @@ export default new Vuex.Store({
       var now = Date.now();
       var datefor = moment(now).format("DDMMYYYY");
       if (getID) {
-        var split_getID = getID.split('-')
-        let strid=split_getID[0].substr(1,split_getID[0].toString().length)
+        var split_getID = getID.split("-");
+        let strid = split_getID[0].substr(1, split_getID[0].toString().length);
         var conID = parseInt(strid) + 1;
         switch (conID.toString().length) {
           case 1:
-            state.custom_id = split_getID[0].substring(0, split_getID[0].length-conID.toString().length) + conID + "-" + datefor;
+            state.custom_id =
+              split_getID[0].substring(
+                0,
+                split_getID[0].length - conID.toString().length
+              ) +
+              conID +
+              "-" +
+              datefor;
             break;
           case 2:
-            state.custom_id = split_getID[0].substring(0, split_getID[0].length-conID.toString().length) + conID + "-" + datefor;
+            state.custom_id =
+              split_getID[0].substring(
+                0,
+                split_getID[0].length - conID.toString().length
+              ) +
+              conID +
+              "-" +
+              datefor;
             break;
           case 3:
-            state.custom_id = split_getID[0].substring(0, split_getID[0].length-conID.toString().length) + conID + "-" + datefor;
+            state.custom_id =
+              split_getID[0].substring(
+                0,
+                split_getID[0].length - conID.toString().length
+              ) +
+              conID +
+              "-" +
+              datefor;
             break;
           case 4:
-            state.custom_id = getID.substring(0, getID.length-conID.toString().length) + conID + "-" + datefor;
+            state.custom_id =
+              getID.substring(0, getID.length - conID.toString().length) +
+              conID +
+              "-" +
+              datefor;
             break;
           default:
-            state.custom_id = split_getID[0].substring(0, split_getID[0].length-conID.toString().length) + conID + "-" + datefor;
+            state.custom_id =
+              split_getID[0].substring(
+                0,
+                split_getID[0].length - conID.toString().length
+              ) +
+              conID +
+              "-" +
+              datefor;
             break;
-        } 
+        }
       } else {
         state.custom_id = getstr + "-" + datefor;
+      }
+    },
+    set_users(state, data) {
+      if(data){
+        state.get_users.user_name = data.username;
+      state.get_users.user_status = data.userstatus;
+      state.get_users.user_foundation = data.foundation;
+      }else{
+        state.get_users.user_name = "";
+      state.get_users.user_status = "";
+      state.get_users.user_foundation = "";
       }
     },
   },
@@ -331,32 +383,32 @@ export default new Vuex.Store({
       commit("setfound_formAdd");
     },
     // action for foundation form edit
-    clickShow_found_formEdit({ commit },{id,name,date,status}) {
-      commit("setfound_formEdit",{id,name,date,status});
+    clickShow_found_formEdit({ commit }, { id, name, date, status }) {
+      commit("setfound_formEdit", { id, name, date, status });
     },
     // section form add action
     clickShow_sect_formAdd({ commit }) {
       commit("setSect_formAdd");
     },
     // section form edit action
-    clickShow_sect_formEdit({ commit },{id,name}) {
-      commit("setSect_formEdit",{id,name});
+    clickShow_sect_formEdit({ commit }, { id, name }) {
+      commit("setSect_formEdit", { id, name });
     },
     // unit form edit action
     clickShow_unit_formAdd({ commit }) {
       commit("setUnit_formAdd");
     },
     // unit form edit action
-    clickShow_unit_formEdit({ commit },{id}) {
-      commit("setUnit_formEdit",id);
+    clickShow_unit_formEdit({ commit }, { id }) {
+      commit("setUnit_formEdit", id);
     },
     // member type form edit action
     clickShow_memType_formAdd({ commit }) {
       commit("setmemType_formAdd");
     },
     // member type form edit action
-    clickShow_memType_formEdit({ commit },{id}) {
-      commit("setmemType_formEdit",id);
+    clickShow_memType_formEdit({ commit }, { id }) {
+      commit("setmemType_formEdit", id);
     },
     // Activity form add action
     clickShow_act_formAdd({ commit }) {
@@ -397,6 +449,11 @@ export default new Vuex.Store({
     doCustomID({ commit }, { id, str }) {
       commit("setCustomID", { id, str });
     },
+    // get users
+    doget_users({ commit }, { username, userstatus, foundation }) {
+      commit("set_users", { username, userstatus, foundation });
+    },
   },
+
   modules: {},
 });

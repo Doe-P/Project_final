@@ -88,7 +88,7 @@ router.get('/api/v1/members-MaxID', (req, res) => {
         if (err) {
             return res.status(500).send({ msg: 'Some error occurred while retrieving Max member ID!' })
         }
-        res.json(result);
+        res.json(result[0]);
     });
 });
 

@@ -57,7 +57,7 @@ exports.deleteMemberById = (id, result) => {
 
 // Get Largest column member ID
 exports.getMaxMemberId = (result) => {
-    let sql = 'SELECT MAX(member_id) AS max_Id FROM tb_member';
+    let sql = 'SELECT MAX(member_id) AS id FROM tb_member';
     dbCon.query(sql, (err, res) => {
         if (err) {
             console.log('Error while fetching Max member ID');

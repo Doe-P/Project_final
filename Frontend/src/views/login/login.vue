@@ -43,10 +43,14 @@
                   counter
                   :rules="passwordRule"
                 ></v-text-field>
-               <v-card-actions class="justify-space-between">
-                   <v-btn  class="text-input" text color="primary">ລືມລະຫັດຜ່ານ</v-btn>
-                 <v-btn type="submit"  class="text-input" color="primary">ເຂົ້າສູ່ລະບົບ</v-btn>
-               </v-card-actions>
+                <v-card-actions class="justify-space-between">
+                  <v-btn class="text-input" text color="primary"
+                    >ລືມລະຫັດຜ່ານ</v-btn
+                  >
+                  <v-btn type="submit" class="text-input" color="primary"
+                    >ເຂົ້າສູ່ລະບົບ</v-btn
+                  >
+                </v-card-actions>
               </v-form>
             </v-card-text>
           </v-card>
@@ -62,8 +66,6 @@ export default {
   data() {
     return {
       isshowPassword: false,
-      found_items:[],
-      selected_found_Item:null,
       account: {
         username: null,
         password: null,
@@ -79,13 +81,13 @@ export default {
   },
   mounted() {},
   methods: {
-      isLogin(){
-          this.$store.dispatch({
-            type:"doLogin",
-            status:true
-          })
-          this.$router.push('/Member');
-      }
+    isLogin() {
+      this.$store.dispatch({
+        type: "doLogin",
+        status: true,
+      });
+      this.$router.push("/Member");
+    },
   },
 };
 </script>

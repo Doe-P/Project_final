@@ -204,6 +204,8 @@ export default {
     },
     // get unit name
     async getData_Unit() {
+      this.myUnitnames=[];
+      this.unit_name=null;
       for (let a = 0; a <= this.get_found_All.length; a++) {
         if (
           String(this.found_name).valueOf() ==

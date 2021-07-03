@@ -14,6 +14,27 @@ exports.getSections = (result) => {
     });
 }
 
+//  Get all section by ID
+exports.getAllSectionById = (id, result) => {
+    dbCon.query('SELECT sect_id,sect_name FROM tb_section WHERE unit_id = ?', [id], (err, res) => {
+        if (err) {
+            console.log('Error while fetching section by id', err);
+            result(err, null);
+            return;
+        }
+
+        if (res.length) {
+            // found section
+            console.log('found section');
+            // result(null, res[0]);  // res[0] ໝາຍເຖິງຕັດ Array ອອກ
+            result(null, res);
+            return;
+        }
+        // not found section with the id
+        result({ kind: 'not found' }, null);
+    });
+}
+
 //  Get single section by ID
 exports.getSectionById = (id, result) => {
     dbCon.query('SELECT * FROM tb_section WHERE sect_id = ?', [id], (err, res) => {

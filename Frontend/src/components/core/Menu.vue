@@ -8,20 +8,20 @@
     >
       <v-list>
         <v-list-item class="justify-center">
-           <v-list-item-avatar size="100">
-          <v-img
-          max-height="100"
-          max-width="100"
-          sizes="100"
-          src="@/assets/images/logo.png"
-          >
-          </v-img>
-        </v-list-item-avatar>
+          <v-list-item-avatar size="100">
+            <v-img
+              max-height="100"
+              max-width="100"
+              sizes="100"
+              src="@/assets/images/logo.png"
+            >
+            </v-img>
+          </v-list-item-avatar>
         </v-list-item>
         <v-list-item>
           <v-list-item-content>
-            <v-list-item-title> Username </v-list-item-title>
-            <v-list-item-subtitle> Status </v-list-item-subtitle>
+            <v-list-item-title> ຊື່ຜູ້ໃຊ້:</v-list-item-title>
+            <v-list-item-subtitle> ສະຖານະ: </v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>
       </v-list>
@@ -66,16 +66,14 @@
             </v-list-item-title>
           </v-list-item>
 
-           <!-- ສະມາຊິກກະສຽ່ນ -->
+          <!-- ສະມາຊິກກະສຽ່ນ -->
           <v-list-item link>
             <v-list-item-icon>
               <v-icon medium>verified</v-icon>
             </v-list-item-icon>
-            <v-list-item-title @click="certificate">
-              ຍ້ອງຍໍ
-            </v-list-item-title>
+            <v-list-item-title @click="certificate"> ຍ້ອງຍໍ </v-list-item-title>
           </v-list-item>
-          
+
           <!-- ສະມາຊິກກະສຽ່ນ -->
           <v-list-item link>
             <v-list-item-icon>
@@ -85,7 +83,7 @@
               ສະມາຊິກພົ້ນກະສ່ຽນ
             </v-list-item-title>
           </v-list-item>
-            <!-- ສະມາຊິກຍົກຍ້າຍ -->
+          <!-- ສະມາຊິກຍົກຍ້າຍ -->
           <v-list-item link>
             <v-list-item-icon>
               <v-icon medium>timeline</v-icon>
@@ -94,7 +92,7 @@
               ສະມາຊິກຍົກຍ້າຍ
             </v-list-item-title>
           </v-list-item>
-              <!-- ຮັບເງີນສະຕິ -->
+          <!-- ຮັບເງີນສະຕິ -->
           <v-list-item link>
             <v-list-item-icon>
               <v-icon medium>payments</v-icon>
@@ -103,7 +101,7 @@
               ຮັບເງີນສະຕິ
             </v-list-item-title>
           </v-list-item>
-               <v-list-group :value="true" prepend-icon="article">
+          <v-list-group :value="true" prepend-icon="article">
             <template v-slot:activator>
               <v-list-item-title>
                 <span>ລາຍງານ</span>
@@ -171,43 +169,43 @@ export default {
           router: "/certificate-type",
         },
       ],
-      myReports:[
+      myReports: [
         {
-         title:"ລາຍງານສະມາຊິກ",
-         icons:"domain",
-         router:"/members-report"
+          title: "ລາຍງານສະມາຊິກ",
+          icons: "domain",
+          router: "/members-report",
         },
-          {
-         title:"ລາຍງານສະຖິຕິຊາວໜຸ່ມ",
-         icons:"insert_chart",
-         router:"/members-statistics-report"
+        {
+          title: "ລາຍງານສະຖິຕິຊາວໜຸ່ມ",
+          icons: "insert_chart",
+          router: "/members-statistics-report",
         },
-          {
-         title:"ລາຍງານຈຳນວນສະມາຊິກທີ່ຍົກຍ້າຍ",
-         icons:"confirmation_number",
-         router:"/member-move-report"
+        {
+          title: "ລາຍງານຈຳນວນສະມາຊິກທີ່ຍົກຍ້າຍ",
+          icons: "confirmation_number",
+          router: "/member-move-report",
         },
-          {
-         title:"ລາຍງານຈຳນວນຜູ້ພົ້ນກະສຽນ",
-         icons:"person_remove",
-         router:"/members-retirement-report"
+        {
+          title: "ລາຍງານຈຳນວນຜູ້ພົ້ນກະສຽນ",
+          icons: "person_remove",
+          router: "/members-retirement-report",
         },
-          {
-         title:"ລາຍງານການຮັບເງິນສະຕິ",
-         icons:"payments",
-         router:"/receive-report"
+        {
+          title: "ລາຍງານການຮັບເງິນສະຕິ",
+          icons: "payments",
+          router: "/receive-report",
         },
-         {
-         title:"ລາຍງານການເຄື່ອນໄຫວກິດຈະກຳ",
-         icons:"local_activity",
-         router:"/activity-report"
+        {
+          title: "ລາຍງານການເຄື່ອນໄຫວກິດຈະກຳ",
+          icons: "local_activity",
+          router: "/activity-report",
         },
-         {
-         title:"ລາຍງານການຍ້ອງຍໍ",
-         icons:"stars",
-         router:"/certificate-report"
+        {
+          title: "ລາຍງານການຍ້ອງຍໍ",
+          icons: "stars",
+          router: "/certificate-report",
         },
-      ]
+      ],
     };
   },
   mounted() {},
@@ -238,38 +236,38 @@ export default {
       });
       this.$router.push("/member-retirement");
     },
-    ClickMove(){
-       this.$store.dispatch({
+    ClickMove() {
+      this.$store.dispatch({
         type: "doClickshow",
       });
       this.$router.push("/member-move");
     },
-    ClickReceive(){
-       this.$store.dispatch({
+    ClickReceive() {
+      this.$store.dispatch({
         type: "doClickshow",
       });
       this.$router.push("/receive-money");
     },
-    certificate(){
+    certificate() {
       this.$store.dispatch({
         type: "doClickshow",
       });
       this.$router.push("/certificate-view");
     },
-    isClickmenuReport(path){
-      this.$router.push(path).catch((err)=>{
+    isClickmenuReport(path) {
+      this.$router.push(path).catch((err) => {
         console.log(err);
       });
-       this.$store.dispatch({
+      this.$store.dispatch({
         type: "doClickshow",
       });
     },
-    register(){
-        this.$store.dispatch({
+    register() {
+      this.$store.dispatch({
         type: "doClickshow",
       });
       this.$router.push("/register-view");
-    }
+    },
   },
 };
 </script>

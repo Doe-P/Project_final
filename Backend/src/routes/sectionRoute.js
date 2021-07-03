@@ -12,6 +12,7 @@ const {
   updateSectionById,
   deleteSectionById,
   getMaxSectId,
+  getAllSectionById,
 } = require("../models/sectionModel");
 
 // Get all sections
@@ -24,6 +25,22 @@ router.get("/api/v1/sections", (req, res) => {
     } else {
       res.json(result);
     }
+  });
+});
+// Get All section by id
+router.get("/api/v1/allsections/:id", (req, res) => {
+  const id = req.params.id;
+  getAllSectionById(id, (err, result) => {
+    if (err) {
+      if (err.kind === "not found") {
+        return res.status(404).send({ msg: `Not found section with id ${id}` });
+      } else {
+        return res
+          .status(500)
+          .send({ msg: "Error retrieving section with id" + id });
+      }
+    }
+    res.json(result);
   });
 });
 

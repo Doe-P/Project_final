@@ -22,7 +22,14 @@
                   <v-col cols="9" class="my-3">
                     <v-text-field
                       type="text"
-                      box
+                      name="name"
+                      id="name"
+                      label="ລະຫັດສະມາຊິກ"
+                      readonly
+                      :value="this.$store.getters.getCustomID"
+                    ></v-text-field>
+                    <v-text-field
+                      type="text"
                       name="name"
                       id="name"
                       label="ຊື່ສະມາຊິກ"
@@ -37,7 +44,6 @@
                     ></v-text-field>
                     <v-text-field
                       type="text"
-                      box
                       name="surname"
                       id="surname"
                       label="ນາມສະກຸນ"
@@ -50,24 +56,19 @@
                       ]"
                       :counter="20"
                     ></v-text-field>
-                    <v-radio-group
-                      v-model="gender"
-                      required
-                      :rules="[required('ເພດ')]"
-                      row
-                    >
+                    <v-radio-group v-model="gender" required row>
                       <label>ເພດ:</label>
                       <span class="ml-10"></span>
                       <v-radio
                         label="ຍິງ"
-                        value="female"
+                        value="ຍິງ"
                         name="female"
                         color="primary"
                         required
                       ></v-radio>
                       <v-radio
                         label="ຊາຍ"
-                        value="male"
+                        value="ຊາຍ"
                         name="male"
                         color="primary"
                         required
@@ -106,7 +107,6 @@
                     </template>
                     <v-text-field
                       type="Number"
-                      box
                       name="tel"
                       id="tel"
                       label="ເບີໂທລະສັບ"
@@ -134,7 +134,6 @@
                   <v-col cols="9" class="my-3">
                     <v-text-field
                       type="text"
-                      box
                       name="b_village"
                       id="b_village"
                       label="ບ້ານເກີດ"
@@ -149,7 +148,6 @@
                     ></v-text-field>
                     <v-text-field
                       type="text"
-                      box
                       name="b_district"
                       id="b_district"
                       label="ເມືອງ"
@@ -164,7 +162,6 @@
                     ></v-text-field>
                     <v-text-field
                       type="text"
-                      box
                       name="b_province"
                       id="b_province"
                       label="ແຂວງ"
@@ -192,7 +189,6 @@
                   <v-col cols="9" class="my-3">
                     <v-text-field
                       type="text"
-                      box
                       name="n_village"
                       id="n_village"
                       label="ບ້ານ"
@@ -207,7 +203,6 @@
                     ></v-text-field>
                     <v-text-field
                       type="text"
-                      box
                       name="n_district"
                       id="n_district"
                       label="ເມືອງ"
@@ -222,7 +217,6 @@
                     ></v-text-field>
                     <v-text-field
                       type="text"
-                      box
                       name="n_province"
                       id="n_province"
                       label="ແຂວງຢູ່ປະຈຸບັນ"
@@ -250,7 +244,6 @@
                   <v-col cols="9" class="my-3">
                     <v-text-field
                       type="text"
-                      box
                       name="nation"
                       id="nation"
                       label="ເຊື້ອຊາດ"
@@ -265,7 +258,6 @@
                     ></v-text-field>
                     <v-text-field
                       type="text"
-                      box
                       name="ethnic"
                       id="ethnic"
                       label="ຊົນເຜົ່າ"
@@ -322,133 +314,11 @@
                           v-model="date_y"
                           :max="new Date().toISOString().substr(0, 10)"
                           min="1950-01-01"
-                          @change="save"
                         >
                         </v-date-picker>
                       </v-menu>
                     </template>
-                    <template>
-                      <v-menu
-                        ref="menu_w"
-                        v-model="menu_w"
-                        :close-on-content-click="false"
-                        transition="scale-transition"
-                        offset-y
-                      >
-                        <template v-slot:activator="{ on, attrs }">
-                          <v-text-field
-                            v-show="gender=='female'"
-                            v-model="format_Date_w"
-                            label="ວັນເດືອນປີເຂົ້າແມ່ຍິງ"
-                            :rules="[required('ວັນເດືອນປີເຂົ້າແມ່ຍິງ')]"
-                            prepend-icon="mdi-calendar"
-                            readonly
-                            @blur="date_w = parseDate_y(format_Date_w)"
-                            v-bind="attrs"
-                            v-on="on"
-                          ></v-text-field>
-                        </template>
-                        <v-date-picker
-                          ref="picker"
-                          v-model="date_w"
-                          :max="new Date().toISOString().substr(0, 10)"
-                          min="1950-01-01"
-                          @change="save"
-                        >
-                        </v-date-picker>
-                      </v-menu>
-                    </template>
-                    <template>
-                      <v-menu
-                        ref="menu_k"
-                        v-model="menu_k"
-                        :close-on-content-click="false"
-                        transition="scale-transition"
-                        offset-y
-                      >
-                        <template v-slot:activator="{ on, attrs }">
-                          <v-text-field
-                            v-model="format_Date_k"
-                            :rules="[required('ວັນເດືອນປີເຂົ້າກຳມະບານ')]"
-                            label="ວັນເດືອນປີເຂົ້າກຳມະບານ"
-                            prepend-icon="mdi-calendar"
-                            readonly
-                            @blur="date_k = parseDate_k(format_Date_k)"
-                            v-bind="attrs"
-                            v-on="on"
-                          ></v-text-field>
-                        </template>
-                        <v-date-picker
-                          ref="picker"
-                          v-model="date_k"
-                          :max="new Date().toISOString().substr(0, 10)"
-                          min="1950-01-01"
-                          @change="save"
-                        >
-                        </v-date-picker>
-                      </v-menu>
-                    </template>
-                    <template>
-                      <v-menu
-                        ref="menu_ps"
-                        v-model="menu_ps"
-                        :close-on-content-click="false"
-                        transition="scale-transition"
-                        offset-y
-                      >
-                        <template v-slot:activator="{ on, attrs }">
-                          <v-text-field
-                            v-model="format_Date_ps"
-                            :rules="[required('ວັນເດືອນປີເຂົ້າພັກສຳຮອງ')]"
-                            label="ວັນເດືອນປີເຂົ້າພັກສຳຮອງ"
-                            prepend-icon="mdi-calendar"
-                            readonly
-                            @blur="date_ps = parseDate_ps(format_Date_ps)"
-                            v-bind="attrs"
-                            v-on="on"
-                          ></v-text-field>
-                        </template>
-                        <v-date-picker
-                          ref="picker"
-                          v-model="date_ps"
-                          :max="new Date().toISOString().substr(0, 10)"
-                          min="1950-01-01"
-                          @change="save"
-                        >
-                        </v-date-picker>
-                      </v-menu>
-                    </template>
-                    <template>
-                      <v-menu
-                        ref="menu_p"
-                        v-model="menu_p"
-                        :close-on-content-click="false"
-                        transition="scale-transition"
-                        offset-y
-                      >
-                        <template v-slot:activator="{ on, attrs }">
-                          <v-text-field
-                            v-model="format_Date_p"
-                            :rules="[required('ວັນເດືອນປີເຂົ້າພັກສົມບູນ')]"
-                            label="ວັນເດືອນປີເຂົ້າພັກສົມບູນ"
-                            prepend-icon="mdi-calendar"
-                            readonly
-                            @blur="date_p = parseDate_p(format_Date_p)"
-                            v-bind="attrs"
-                            v-on="on"
-                          ></v-text-field>
-                        </template>
-                        <v-date-picker
-                          ref="picker"
-                          v-model="date_p"
-                          :max="new Date().toISOString().substr(0, 10)"
-                          min="1950-01-01"
-                          @change="save"
-                        >
-                        </v-date-picker>
-                      </v-menu>
-                    </template>
-                    <template>
+                     <template>
                       <v-menu
                         ref="menu_date_nuol"
                         v-model="menu_date_nuol"
@@ -479,7 +349,130 @@
                           v-model="date_start_nuol"
                           :max="new Date().toISOString().substr(0, 10)"
                           min="1950-01-01"
-                          @change="save"
+                        >
+                        </v-date-picker>
+                      </v-menu>
+                    </template>
+                    <template>
+                      <v-menu
+                        ref="menu_w"
+                        v-model="menu_w"
+                        :close-on-content-click="false"
+                        transition="scale-transition"
+                        offset-y
+                      >
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-text-field
+                            v-show="gender == 'ຍິງ'"
+                            v-model="format_Date_w"
+                            label="ວັນເດືອນປີເຂົ້າແມ່ຍິງ"
+                            :rules="[required('ວັນເດືອນປີເຂົ້າແມ່ຍິງ')]"
+                            prepend-icon="mdi-calendar"
+                            readonly
+                            @blur="date_w = parseDate_y(format_Date_w)"
+                            v-bind="attrs"
+                            v-on="on"
+                          ></v-text-field>
+                        </template>
+                        <v-date-picker
+                          ref="picker"
+                          v-model="date_w"
+                          :max="new Date().toISOString().substr(0, 10)"
+                          min="1950-01-01"
+                        >
+                        </v-date-picker>
+                      </v-menu>
+                    </template>
+                    <span class="sub-text">ອົງການຈັດຕັ້ງອື່ນ</span>
+                    <v-checkbox label="ກຳມະບານ" v-model="isKamaban" value="ກຳມະບານ"></v-checkbox>
+                    <template>
+                      <v-menu
+                        ref="menu_k"
+                        v-model="menu_k"
+                        :close-on-content-click="false"
+                        transition="scale-transition"
+                        offset-y
+                      >
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-text-field
+                            v-show="isKamaban=='ກຳມະບານ'"
+                            v-model="format_Date_k"
+                            :rules="[required('ວັນເດືອນປີເຂົ້າກຳມະບານ')]"
+                            label="ວັນເດືອນປີເຂົ້າກຳມະບານ"
+                            prepend-icon="mdi-calendar"
+                            readonly
+                            @blur="date_k = parseDate_k(format_Date_k)"
+                            v-bind="attrs"
+                            v-on="on"
+                          ></v-text-field>
+                        </template>
+                        <v-date-picker
+                          ref="picker"
+                          v-model="date_k"
+                          :max="new Date().toISOString().substr(0, 10)"
+                          min="1950-01-01"
+                        >
+                        </v-date-picker>
+                      </v-menu>
+                    </template>
+                     <v-checkbox label="ສັງກັດພັກ(ສຳຮອງ)" v-model="isParty_reserve" value="ສັງກັດພັກສຳຮອງ"></v-checkbox>
+                    <template>
+                      <v-menu
+                        ref="menu_ps"
+                        v-model="menu_ps"
+                        :close-on-content-click="false"
+                        transition="scale-transition"
+                        offset-y
+                      >
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-text-field
+                           v-show="isParty_reserve=='ສັງກັດພັກສຳຮອງ'"
+                            v-model="format_Date_ps"
+                            :rules="[required('ວັນເດືອນປີເຂົ້າພັກສຳຮອງ')]"
+                            label="ວັນເດືອນປີເຂົ້າພັກສຳຮອງ"
+                            prepend-icon="mdi-calendar"
+                            readonly
+                            @blur="date_ps = parseDate_ps(format_Date_ps)"
+                            v-bind="attrs"
+                            v-on="on"
+                          ></v-text-field>
+                        </template>
+                        <v-date-picker
+                          ref="picker"
+                          v-model="date_ps"
+                          :max="new Date().toISOString().substr(0, 10)"
+                          min="1950-01-01"
+                        >
+                        </v-date-picker>
+                      </v-menu>
+                    </template>
+                       <v-checkbox label="ສັງກັດພັກ(ສົມບູນ)" v-model="isParty_full" value="ສັງກັດພັກສົມບູນ" v-show="isParty_reserve=='ສັງກັດພັກສຳຮອງ'"></v-checkbox>
+                    <template>
+                      <v-menu
+                        ref="menu_p"
+                        v-model="menu_p"
+                        :close-on-content-click="false"
+                        transition="scale-transition"
+                        offset-y
+                      >
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-text-field
+                           v-show="isParty_full=='ສັງກັດພັກສົມບູນ'"
+                            v-model="format_Date_p"
+                            :rules="[required('ວັນເດືອນປີເຂົ້າພັກສົມບູນ')]"
+                            label="ວັນເດືອນປີເຂົ້າພັກສົມບູນ"
+                            prepend-icon="mdi-calendar"
+                            readonly
+                            @blur="date_p = parseDate_p(format_Date_p)"
+                            v-bind="attrs"
+                            v-on="on"
+                          ></v-text-field>
+                        </template>
+                        <v-date-picker
+                          ref="picker"
+                          v-model="date_p"
+                          :max="new Date().toISOString().substr(0, 10)"
+                          min="1950-01-01"
                         >
                         </v-date-picker>
                       </v-menu>
@@ -498,11 +491,21 @@
                   <v-col cols="9" class="my-3">
                     <v-select
                       class="combo_select my-5"
+                      :items="unit_items"
+                      :rules="[required('ໜ່ວຍ')]"
+                      v-model="selected_unit_Item"
+                      label="ເລືອກໜ່ວຍ"
+                      dense
+                      @input="get_unit"
+                    ></v-select>
+                    <v-select
+                      class="combo_select my-5"
                       :items="section_items"
                       :rules="[required('ຈຸ')]"
                       v-model="selected_section_Item"
                       label="ເລືອກຈຸ"
                       dense
+                      @input="get_sectionID"
                     ></v-select>
                     <v-select
                       class="my-5"
@@ -511,6 +514,7 @@
                       v-model="selected_typeMember_Item"
                       label="ເລືອກປະເພດສະມາຊິກ"
                       dense
+                      @input="get_item_typemember"
                     ></v-select>
                     <v-select
                       class="my-5"
@@ -519,6 +523,7 @@
                       v-model="selecte_level_Item"
                       label="ເລືອກລະດັບການສືກສາ"
                       dense
+                      @input="get_item_educationlevel"
                     ></v-select>
                     <v-select
                       :items="reponsibles"
@@ -530,33 +535,33 @@
                       <span class="sub-text">ພາສາທີ່ໄດ້</span>
                       <v-checkbox
                         label="ອັງກິດ"
-                        v-model="select_lenguage"
+                        v-model="select_lenguage.english"
                         value="ອັງກິດ"
                       ></v-checkbox>
                       <v-checkbox
                         label="ຈີນ"
-                        v-model="select_lenguage"
+                        v-model="select_lenguage.chineses"
                         value="ຈີນ"
                       ></v-checkbox>
                       <v-text-field
                         name="name"
                         label="ອຶ່ນໆ"
                         id="id"
-                        v-model="select_lenguage_other"
+                        v-model="select_lenguage.others"
                       ></v-text-field>
                     </v-container>
                     <v-select
                       :items="blood_items"
                       :rules="[required('ໝວດເລືອດ')]"
-                      v-model="selected_blood_Item"
                       label="ໝວດເລືອດ"
                       dense
+                      v-model="selected_blood_Item"
                     ></v-select>
                     <v-text-field
                       name="name"
                       label="ສະຖານະສະມາຊິກ"
                       id="id"
-                      value="xxx"
+                      :value="member_status"
                       readonly
                     ></v-text-field>
                   </v-col>
@@ -568,20 +573,17 @@
                 </v-row>
                 <v-row class="mx-10">
                   <v-spacer></v-spacer>
-                  <v-btn
+                 <v-card-actions class="justify-end">
+                    <v-btn
                     @click="cancelData_member"
                     color="error"
-                    class="mb-5"
                     dark
                     >ຍົກເລີກ</v-btn
                   >
-                  <v-btn
-                    type="submit"
-                    color="btn_save"
-                    class="mb-5 ml-5"
-                    :disabled="!valid"
+                  <v-btn type="submit" :disabled="!valid" color="primary"
                     >ບັນທຶກ</v-btn
                   >
+                 </v-card-actions>
                 </v-row>
               </v-form>
             </v-card-text>
@@ -592,13 +594,15 @@
     </v-container>
     <v-snackbar v-model="show_alert" :timeout="timeout" color="primary" dark>
       {{ message }}
-      <v-btn flat color="primary" @click.native="show_alert = false">ປິດ</v-btn>
+      <v-btn color="primary" @click.native="show_alert = false">ປິດ</v-btn>
     </v-snackbar>
   </div>
 </template>
 
 <script>
 import alertmessage from "@/components/AlertMessage/alertmessage.vue";
+import axios from "axios";
+import dateformat from "dateformat"
 export default {
   name: "Membercreate",
   components: {
@@ -624,15 +628,14 @@ export default {
         return (v) => (v && v != true) || "ກະລຸນາເລືອກເພດກ່ອນ";
       },
       // valid form
-      valid: false,
+      valid: true,
       show_alert: false,
       timeout: 2000,
       message: "Hello",
-      select_riligion: "ພຸດ",
-      select_lenguage: ["ອັງກິດ"],
+      select_lenguage: { english: "ອັງກິດ", chineses: "", others: "" },
       reponsibles: ["ນັກສຶກສາ", "ອາຈານ"],
-      gender: "female",
-     // isShow_woman_date: true,
+      member_status: "ສະມາຊິກ",
+      // isShow_woman_date: true,
       //Birthday
       date: new Date().toISOString().substr(0, 10),
       menu: false,
@@ -662,22 +665,72 @@ export default {
       menu_date_nuol: false,
       format_Date_start_nuol: null,
       // Section_items array
-      section_items: ["item1", "item2", "item3"],
+      section_items: [],
       selected_section_Item: null,
+      section_items_all: [],
+      get_section_id: null,
       // TypeMember_items array
-      typeMember_items: ["item1", "item2", "item3"],
+      typeMember_items: [],
       selected_typeMember_Item: null,
       // educationLevel_items array
-      level_items: ["item1", "item2", "item3"],
+      level_items: [],
       selecte_level_Item: null,
       // Blood
       blood_items: ["A", "B", "AB", "O"],
-      selecte_blood_Item: null,
-      // Status Members
-      status_items: ["ສະມາຊິກ", "ຍົກຍ້າຍ", "ພົ້ນກະສ່ຽນ"],
+
       selecte_status_Item: null,
+      //-------------
+      typeMember_item_All: [],
+      level_item_All: [],
+      get_membertype_id: null,
+      get_eduLevel_id: null,
+      unit_items: [],
+      unit_items_all: [],
+      selected_unit_Item: null,
+      //--------------
+      txt_Membername: null,
+      txt_surname: null,
+      gender: "ຍິງ",
+      txt_tel: "",
+      //-----born----
+      txt_bvillage: null,
+      txt_bdistrict: null,
+      txt_bprovince: null,
+      //---- now------
+      txt_nvillage: null,
+      txt_ndistrict: null,
+      txt_nprovince: null,
+      //-----ເຊື່້ອຊາດ, ຊົນເຜົ່າ ແລະ ສາດສະໜາ
+      txt_nation: null,
+      select_riligion: "ພຸດ",
+      txt_ethnic: null,
+      //----
+      select_reponsible: null,
+      getSect_id: null,
+      found_id: "F0001-30062021",
+      selected_blood_Item: "",
+      //----- format date for database
+      birthdate_format:null,
+      youthdate_format:null,
+      womendate_format:null,
+      kamabandate_format:null,
+      psdate_format:null,
+      pdate_format:null,
+      startnuol_format:null,
+      //---------
+      isKamaban:null,
+      isParty_reserve:null,
+      isParty_full:null,
     };
   },
+  mounted() {
+    this.get_users();
+    this.getMaxID();
+    this.get_TypeMember_selection();
+    this.get_educationLevel();
+    this.getUnit_items();
+  },
+
   watch: {
     date() {
       this.format_Date = this.formatDate(this.date);
@@ -751,49 +804,49 @@ export default {
     //
     formatDate(date) {
       if (!date) return null;
-
+      this.birthdate_format=dateformat(date,"yyyy-mm-dd");
       const [year, month, day] = date.split("-");
       return `${day}-${month}-${year}`;
     },
     // Method Young
     formatDate_y(date) {
       if (!date) return null;
-
+       this.youthdate_format=dateformat(date,"yyyy-mm-dd");
       const [year, month, day] = date.split("-");
       return `${day}-${month}-${year}`;
     },
     // method women
     formatDate_w(date) {
       if (!date) return null;
-
+      this.womendate_format=dateformat(date,"yyyy-mm-dd");
       const [year, month, day] = date.split("-");
       return `${day}-${month}-${year}`;
     },
     // method kammaban
     formatDate_k(date) {
       if (!date) return null;
-
+      this.kamabandate_format=dateformat(date,"yyyy-mm-dd");
       const [year, month, day] = date.split("-");
       return `${day}-${month}-${year}`;
     },
     // method ເຂົ້າພັກສຳຮອງ
     formatDate_ps(date) {
       if (!date) return null;
-
+       this.psdate_format=dateformat(date,"yyyy-mm-dd");
       const [year, month, day] = date.split("-");
       return `${day}-${month}-${year}`;
     },
     // method ເຂົ້າພັກສົມບູນ
     formatDate_p(date) {
       if (!date) return null;
-
+      this.pdate_format=dateformat(date,"yyyy-mm-dd");
       const [year, month, day] = date.split("-");
       return `${day}-${month}-${year}`;
     },
     // method ເຂົ້າສັງກັດ ມຊ
     formatDate_start_nuol(date) {
       if (!date) return null;
-
+      this.startnuol_format=dateformat(date,"yyyy-mm-dd");
       const [year, month, day] = date.split("-");
       return `${day}-${month}-${year}`;
     },
@@ -847,15 +900,274 @@ export default {
     },
 
     // Section Manage Data
-    saveData_Members() {
-      this.show_alert = true;
-      this.$router.push("/Member");
+    async saveData_Members() {
+      const getlanguage = this.select_lenguage.english+","+this.select_lenguage.chineses+","+this.select_lenguage.others;
+      try {
+        if (
+          this.txt_Membername &&
+          this.txt_surname &&
+          this.gender &&
+          this.txt_tel &&
+          this.format_Date &&
+          this.txt_bvillage &&
+          this.txt_bdistrict &&
+          this.txt_bprovince &&
+          this.txt_nvillage &&
+          this.txt_ndistrict &&
+          this.txt_nprovince &&
+          this.txt_nation &&
+          this.txt_ethnic &&
+          this.select_riligion &&
+          this.format_Date_p &&
+          this.format_Date_y &&
+          this.format_Date_k &&
+          this.format_Date_ps &&
+          this.format_Date_start_nuol &&
+          this.selected_section_Item &&
+          this.selected_typeMember_Item &&
+          this.selecte_level_Item &&
+          this.select_reponsible &&
+          this.select_lenguage &&
+          this.selected_blood_Item &&
+          this.member_status 
+        ) {
+          if(String(this.gender).valueOf()=="ຍິງ" && this.format_Date_w){
+           await axios.post("http://localhost:5000/api/v1/members",{
+              member_id:this.$store.getters.getCustomID,
+              member_name:this.txt_Membername,
+              surname:this.txt_surname,
+              gender:this.gender,
+              birthday:this.birthdate_format,
+              bvillage:this.txt_bvillage,
+              bdistrict:this.txt_bdistrict,
+              bprovince:this.txt_bprovince,
+              nvillage:this.txt_nvillage,
+              ndistrict:this.txt_ndistrict,
+              nprovince:this.txt_nprovince,
+              nation:this.txt_nation,
+              ethnic:this.txt_ethnic,
+              religion:this.select_riligion,
+              tell:parseInt(this.txt_tel),
+              date_Y:this.youthdate_format,
+              date_W:this.womendate_format,
+              date_K:this.kamabandate_format,
+              date_PS:this.psdate_format,
+              date_P:this.pdate_format,
+              sect_id:this.getSect_id,
+              typemember_id:this.get_membertype_id,
+              level_id:this.get_eduLevel_id,
+              responsible:this.select_reponsible,
+              language:getlanguage,
+              blood:this.selected_blood_Item,
+              date_start:this.startnuol_format,
+              status:this.member_status
+           }).then(()=>{
+              this.cancelData_member();
+              this.Msg_done("ບັນທຶກຂໍ້ມູນສຳເລັດແລ້ວ")
+           })
+          }else{
+            await axios.post("http://localhost:5000/api/v1/members",{
+             member_id:this.$store.getters.getCustomID,
+              member_name:this.txt_Membername,
+              surname:this.txt_surname,
+              gender:this.gender,
+              birthday:this.birthdate_format,
+              bvillage:this.txt_bvillage,
+              bdistrict:this.txt_bdistrict,
+              bprovince:this.txt_bprovince,
+              nvillage:this.txt_nvillage,
+              ndistrict:this.txt_ndistrict,
+              nprovince:this.txt_nprovince,
+              nation:this.txt_nation,
+              ethnic:this.txt_ethnic,
+              religion:this.select_riligion,
+              tell:parseInt(this.txt_tel),
+              date_Y:this.youthdate_format,
+              date_K:this.kamabandate_format,
+              date_PS:this.psdate_format,
+              date_P:this.pdate_format,
+              sect_id:this.getSect_id,
+              typemember_id:this.get_membertype_id,
+              level_id:this.get_eduLevel_id,
+              responsible:this.select_reponsible,
+              language:getlanguage,
+              blood:this.selected_blood_Item,
+              date_start:this.startnuol_format,
+              status:this.member_status
+           }).then(()=>{
+              this.cancelData_member();
+              this.Msg_done("ບັນທຶກຂໍ້ມູນສຳເລັດແລ້ວ")
+           })
+          }
+        }else{
+          this.Msg_fail("ຂໍ້ມູນສະມາຊິກບໍ່ຄົບຖ້ວນ ກະລຸນາກວດສອບຄືນໃໝ່")
+        }
+      } catch (err) {
+        this.cancelData_member();
+        this.Msg_fail("ບັນທຶກຂໍ້ມູນບໍ່ສຳເລັດ")
+        console.log(err);
+      }
     },
 
     //Cancel form
     cancelData_member() {
+      location.reload();
       this.$router.push("/Member");
     },
+    // get Max ID
+    async getMaxID() {
+      try {
+        await axios
+          .get("http://localhost:5000/api/v1/members-MaxID")
+          .then((response) => {
+            const getid = response.data.id;
+            this.$store.dispatch({
+              type: "doCustomID",
+              id: getid,
+              str: "M0001",
+            });
+          });
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    // message done
+    Msg_done(text) {
+      // Message show
+      this.$store.dispatch({
+        type: "doClick_myMsg",
+        mshow: true,
+        mcolor: "success",
+        micon: "check_circle",
+        message: text,
+      });
+    },
+    //message fail
+    Msg_fail(text) {
+      // Message show
+      this.$store.dispatch({
+        type: "doClick_myMsg",
+        mshow: true,
+        mcolor: "error",
+        micon: "error",
+        message: text,
+      });
+    },
+    async get_TypeMember_selection() {
+      try {
+        await axios
+          .get("http://localhost:5000/api/v1/type-members")
+          .then((response) => {
+            this.typeMember_item_All = response.data;
+            for (let i = 0; i <= this.typeMember_item_All.length; i++) {
+              this.typeMember_items.push(
+                this.typeMember_item_All[i].typemember
+              );
+            }
+          });
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    //get id member type
+    async get_item_typemember() {
+      for (let i = 0; i <= this.typeMember_item_All.length; i++) {
+        if (
+          String(this.selected_typeMember_Item).valueOf() ==
+          String(this.typeMember_item_All[i].typemember).valueOf()
+        ) {
+          this.get_membertype_id = this.typeMember_item_All[i].typemember_id;
+        }
+      }
+    },
+    async get_educationLevel() {
+      try {
+        await axios
+          .get("http://localhost:5000/api/v1/education-levels")
+          .then((response) => {
+            this.level_item_All = response.data;
+            for (let i = 0; i <= this.level_item_All.length; i++) {
+              this.level_items.push(this.level_item_All[i].level_name);
+            }
+          });
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    get_item_educationlevel() {
+      for (let i = 0; i <= this.level_item_All.length; i++) {
+        if (
+          String(this.selecte_level_Item).valueOf() ==
+          String(this.level_item_All[i].level_name).valueOf()
+        ) {
+          this.get_eduLevel_id = this.level_item_All[i].level_id;
+        }
+      }
+    },
+    //get unit items from api
+    async getUnit_items() {
+      const found_id = this.$store.getters.getData_user.user_foundation;
+      try {
+        await axios
+          .get(`http://localhost:5000/api/v1/getItem-units/${found_id}`)
+          .then((response) => {
+            this.unit_items_all = response.data;
+            for (let i = 0; i <= this.unit_items_all.length; i++) {
+              this.unit_items.push(this.unit_items_all[i].unit_name);
+            }
+          });
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    async get_unit() {
+       this.section_items=[];
+       this.selected_section_Item=null;
+      if (this.selected_unit_Item) {
+        for (let i = 0; i <= this.unit_items_all.length; i++) {
+          if (
+            String(this.selected_unit_Item).valueOf() ==
+            String(this.unit_items_all[i].unit_name).valueOf()
+          ) {
+           
+            const id = this.unit_items_all[i].unit_id;
+            try {
+              await axios
+                .get(`http://localhost:5000/api/v1/allsections/${id}`)
+                .then((response) => {
+                  this.section_items_all = response.data;
+                  for (let a = 0; a <= this.section_items_all.length; a++) {
+                    this.section_items.push(
+                      this.section_items_all[a].sect_name
+                    );
+                  }
+                });
+            } catch (err) {
+              console.log(err);
+            }
+          }
+        }
+      }
+    },
+    async get_sectionID() {
+      for (let i = 0; i <= this.section_items_all.length; i++) {
+        if (
+          String(this.selected_section_Item).valueOf() ==
+          String(this.section_items_all[i].sect_name).valueOf()
+        ) {
+          this.getSect_id = this.section_items_all[i].sect_id;
+        }
+      }
+    },
+    get_users() {
+      this.$store.dispatch({
+        type: "doget_users",
+        username: "dodo",
+        userstatus: "admin",
+        foundation: this.found_id,
+      });
+    },
+    
   },
 };
 </script>
