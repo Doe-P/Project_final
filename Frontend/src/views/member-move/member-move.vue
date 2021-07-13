@@ -2,11 +2,11 @@
   <div id="move">
     <v-container fluid>
       <v-row justify="center" class="my-5 mx-10">
-        <v-col lg="6" md="6" sm="12" cols="12">
+         <v-col lg="6" md="6" sm="12" cols="12">
           <MemberCard
             id="card"
             title="ສະມາຊິກຍົກຍ້າຍທັງໝົດ"
-            subtitle="100"
+            :subtitle="getCount_all"
             bg_color="primary"
             avatar_ic="groups"
           />
@@ -15,7 +15,7 @@
           <MemberCard
             id="card"
             title="ສະມາຊິກຍິງຍົກຍ້າຍທັງໝົດ"
-            subtitle="10"
+            :subtitle="getCount_female"
             bg_color="primary"
             avatar_ic="people"
           />
@@ -24,7 +24,7 @@
           <v-data-table
             :headers="headers"
             :items="myData_move"
-            loading="true"
+            :loading="value"
             loading-text="ກຳລັງໂຫຼດ.."
             :search="search_move"
             class="header"
@@ -63,22 +63,21 @@
             <template v-slot:item="{ item }">
               <tr>
                 <td>{{ item.move_id }}</td>
-                <td>{{ item.moveNO }}</td>
-                <td>{{ item.move_Year }}</td>
+                <td>{{ item.move_NO }}</td>
+                <td>{{ item.m_Year }}</td>
                 <td>{{ item.reason }}</td>
-                <td>{{ item.amount_move }}</td>
                 <td>{{ item.locate }}</td>
                 <td>{{ item.sign_by }}</td>
-                <td>{{ item.date_move }}</td>
+                <td>{{ item.date_move |formatDate }}</td>
                 <td>
                   <v-tooltip bottom>
                     <template v-slot:activator="{ on, attrs }">
                       <v-icon
-                        @click="edit_Item_move"
+                        @click="edit_Item_move(item.move_id)"
                         small
                         v-on="on"
                         v-bind="attrs"
-                        >edit</v-icon
+                        >update</v-icon
                       >
                     </template>
                     <span class="text-tooltip">ແກ້ໄຂຂໍ້ມູນການຍົກຍ້າຍ</span>
@@ -87,9 +86,10 @@
                   <v-tooltip bottom>
                     <template v-slot:activator="{ on, attrs }">
                       <v-icon
+                        small
                         v-on="on"
                         v-bind="attrs"
-                        @click="$router.push('/member-move-detail')"
+                        @click="$router.push({name:'member-move-detail',params:{id:item.move_id}})"
                         >table_view</v-icon
                       >
                     </template>
@@ -101,54 +101,123 @@
           </v-data-table>
         </v-card>
         <moveformAdd />
+        <moveformEdit/>
       </v-row>
     </v-container>
   </div>
 </template>
 
 <script>
-import MemberCard from "@/components/cards/MemberCard.vue";
+import MemberCard from "@/components/cards/MemberCard.vue"
 import moveformAdd from "@/components/member-move-form/move-formAdd.vue";
+import moveformEdit from "@/components/member-move-form/move-formEdit.vue";
+import axios from 'axios';
 export default {
   name: "move",
   components: {
-    MemberCard,
     moveformAdd,
+    moveformEdit,
+    MemberCard
   },
   data() {
     return {
       headers: [
         { text: "ລະຫັດຍົກຍ້າຍ", align: "Left", value: "move_id" },
-        { text: "ເລກທີໃບຍົກຍ້າຍ", value: "ON_move", sortable: false },
-        { text: "ສົກຮຽນ", value: "move_year", sortable: true },
-        { text: "ເຫດຜົນ", value: "move_reason", sortable: false },
-        { text: "ຈຳນວນສະມາຊິກ", value: "move_amount", sortable: false },
-        { text: "ອອກທີ່", value: "move_locate", sortable: false },
-        { text: "ອອກໂດຍ", value: "move_BY", sortable: true },
+        { text: "ເລກທີໃບຍົກຍ້າຍ", value: "move_NO", sortable: false },
+        { text: "ສົກຮຽນ", value: "m_year", sortable: true },
+        { text: "ເຫດຜົນ", value: "reason", sortable: false },
+        { text: "ອອກທີ່", value: "locate", sortable: false },
+        { text: "ອອກໂດຍ", value: "sign_by", sortable: true },
         { text: "ວັນທີຍົກຍ້າຍ", value: "move_date", sortable: false },
         { text: "Actions", value: "action", sortable: false },
       ],
       search_move: "",
       myData_move: [{ move_id: 1 }],
+      user_status:"admin",
+      value:true,
+      getCount_all:0,
+      getCount_female:0,
     };
   },
   mounted(){
-   alert(this.uuidv4());
+    this.getData_move();
+    this.CountAll_membermove();
+    this.CountFemale_membermove();
   },
   methods: {
+   async getData_move(){
+     this.myData_move=[];
+      this.user_status="admin";
+     try{
+      if(this.user_status=="admin"){
+      let response = await axios.get("http://localhost:5000/api/v1/moves");
+      this.myData_move=response.data;
+      this.value=false;
+      }else{
+      let response = await axios.get("http://localhost:5000/api/v1/moves");
+      this.myData_move=response.data;
+      this.value=false;
+      }
+     }catch(err){
+       console.log(err);
+     }
+    },
     openFormadd(){
       this.$store.dispatch({
         type:"doClickmoveFormadd",
         val:true,
       })
     },
-    edit_Item_move() {},
-    uuidv4() {
-  return 'xxxx'.replace(/[xy]/g, function(c) {
-    var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
-    return v.toString(16);
-  });
-}
+    edit_Item_move(id) {
+       this.$store.dispatch({
+        type:"doClickmoveFormEdit",
+        val:true,
+        move_id:id
+      })
+    },
+    // get count all member move for admin
+   async CountAll_membermove(){
+    const user_status= 'admin'
+    const get_found="F0001-30062021"
+      if(user_status=="admin"){
+         try{
+         await axios.get("http://localhost:5000/api/v1/countAll").then((response)=>{
+           this.getCount_all=parseInt(response.data.amount);
+         })
+       }catch(err){
+         console.log(err);
+       }
+      }else{
+         try{
+         await axios.get(`http://localhost:5000/api/v1/countAll-foundation/${get_found}`).then((response)=>{
+           this.getCount_all=parseInt(response.data.amount);
+         })
+       }catch(err){
+         console.log(err);
+       }
+      }
+    },
+     async CountFemale_membermove(){
+    const user_status= 'admin'
+    const get_found="F0001-30062021"
+      if(user_status=="admin"){
+         try{
+         await axios.get("http://localhost:5000/api/v1/countfemale").then((response)=>{
+           this.getCount_female=parseInt(response.data.amount);
+         })
+       }catch(err){
+         console.log(err);
+       }
+      }else{
+         try{
+         await axios.get(`http://localhost:5000/api/v1/countfemale-found//${get_found}`).then((response)=>{
+           this.getCount_female=parseInt(response.data.amount);
+         })
+       }catch(err){
+         console.log(err);
+       }
+      }
+    },
   },
 };
 </script>

@@ -1,13 +1,13 @@
 <template>
   <div id="MemberRetirement">
     <v-app>
-      <v-container>
-        <v-row justify="center" class="my-5">
+      <v-container fluid>
+        <v-row justify="center" class="my-5 mx-5">
           <v-col lg="6" md="6" sm="12" cols="12">
             <MemberCard
               id="card"
-              title="ສະມາຊິກພົ້ນກະສ່ຽນທັງໝົດ"
-              subtitle="100"
+              title="ສະມາຊິກພົ້ນກະສຽນທັງໝົດ"
+              :subtitle="getCount_allmember"
               bg_color="primary"
               avatar_ic="groups"
             />
@@ -16,12 +16,12 @@
             <MemberCard
               id="card"
               title="ສະມາຊິກຍິງທັງໝົດ"
-              subtitle="10"
+              :subtitle="getCount_femalemember"
               bg_color="primary"
               avatar_ic="people"
             />
           </v-col>
-          <v-card width="1000" class="my-3">
+          <v-card width="100%" class="my-3">
             <v-data-table
               :headers="headers"
               :items="myData_menberRetire"
@@ -33,7 +33,7 @@
               <template v-slot:top>
                 <v-toolbar>
                   <v-toolbar-title>
-                    <span class="text-header">ຂໍ້ມູນສະມາຊິກພົ້ນກະສ່ຽນ</span>
+                    <span class="text-header">ຂໍ້ມູນສະມາຊິກພົ້ນກະສຽນ</span>
                   </v-toolbar-title>
                   <v-divider class="px-2 mr-2" inset vertical></v-divider>
                   <v-text-field
@@ -63,29 +63,107 @@
               </template>
               <template v-slot:item="{ item }">
                 <tr>
-                  <td>{{ item.mem_name }}</td>
+                  <td>{{ item.retire_id }}</td>
+                  <td>{{ item.member_name }}</td>
+                  <td>{{ item.surname }}</td>
+                  <td>{{ item.gender }}</td>
+                  <td>{{ item.age }}</td>
+                  <td>{{ item.typemember }}</td>
+                  <td>{{ item.sect_name }}</td>
+                  <td>{{ item.unit_name }}</td>
+                  <td>{{ item.fund_name }}</td>
+                  <td>{{ item.date_retire|formatDate }}</td>
+                  <td>
+                    <v-tooltip bottom>
+                      <template v-slot:activator="{on,attrs}">
+                        <v-icon small v-on="on" v-bind="attrs" @click="edit_item_retire(item.retire_id)">update</v-icon>
+                      </template>
+                      <span class="text-tooltip">ແກ້ໄຂຂໍ້ມູນ</span>
+                    </v-tooltip>
+                  </td>
                 </tr>
               </template>
             </v-data-table>
           </v-card>
         </v-row>
       </v-container>
+      <formRetireEdit/>
     </v-app>
   </div>
 </template>
 
 <script>
+import formRetireEdit from "@/components/retirement-form/retirementEdit.vue"
 import MemberCard from "@/components/cards/MemberCard.vue";
+import axios from 'axios';
 export default {
   name: "MemberRetirement",
   components: {
     MemberCard,
+    formRetireEdit
   },
   data() {
-    return {};
+    return {
+      headers:[
+        {text:"ເລກທີໃບພົ້ນກະສຽນ",align:"Left",value:"retire_id",sortable:false},
+        {text:"ຊື່",align:"Left",value:"member_name",sortable:false},
+        {text:"ນາມສະກຸນ",align:"Left",value:"surname",sortable:false},
+        {text:"ເພດ",align:"Left",value:"gender",sortable:false},
+        {text:"ອາຍຸ",align:"Left",value:"age",sortable:false},
+        {text:"ປະເພດສະມາຊິກ",align:"Left",value:"typemember",sortable:true},
+        {text:"ຈຸ",align:"Left",value:"sect_name",sortable:true},
+        {text:"ໜ່ວຍ",align:"Left",value:"unit_name",sortable:true},
+        {text:"ຮາກຖານ",align:"Left",value:"fund_name",sortable:true},
+         {text:"ວັນທີພົ້ນກະສຽນ",align:"Left",value:"action",sortable:false},
+        {text:"Actions",align:"Left",value:"action",sortable:false},
+      ],
+      myData_menberRetire:[],
+      member_retire_search:null,
+      //-------
+      getCount_allmember:null,
+      getCount_femalemember:null,
+    };
   },
-  mounted() {},
-  methods: {},
+  mounted() {
+    this.getData_retirements();
+    this.Count_allmember();
+    this.Count_femalemember();
+  },
+  methods: {
+    async getData_retirements(){
+      try{
+        let response = await axios.get("http://localhost:5000/api/v1/retirements");
+        this.myData_menberRetire=response.data;
+      }catch(err){
+        console.log(err);
+      }
+    },
+    async Count_allmember(){
+       try{
+        await axios.get("http://localhost:5000/api/v1/count-allmembers-retire").then((response)=>{
+          this.getCount_allmember=response.data.count_member;
+        })
+       }catch(err){
+         console.log(err);
+       }
+    },
+     async Count_femalemember(){
+       try{
+        await axios.get("http://localhost:5000/api/v1/count-femalemembers-retire").then((response)=>{
+          this.getCount_femalemember=response.data.count_member;
+        })
+       }catch(err){
+         console.log(err);
+       }
+    },
+    edit_item_retire(id){
+     this.$store.dispatch({
+        type:"doClick_retireEdit",
+        showForm:true,
+        retire_id:id
+      });
+    }
+  },
 };
 </script>
 

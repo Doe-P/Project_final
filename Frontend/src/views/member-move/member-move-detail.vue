@@ -1,7 +1,25 @@
 <template>
   <div>
     <v-container fluid>
-      <v-row justify="center" class="my-5 mx-10">
+      <v-row class="my-5 mx-10">
+         <v-col lg="6" md="6" sm="12" cols="12">
+          <MemberCard
+            id="card"
+            title="ສະມາຊິກຍົກຍ້າຍທັງໝົດ"
+            :subtitle="getCount_all"
+            bg_color="primary"
+            avatar_ic="groups"
+          />
+         </v-col>
+         <v-col lg="6" md="6" sm="12" cols="12">
+          <MemberCard
+            id="card"
+            title="ສະມາຊິກຍົກຍ້າຍຍິງທັງໝົດ"
+            :subtitle="getCount_female"
+            bg_color="primary"
+            avatar_ic="groups"
+          />
+         </v-col>
         <v-card width="100%">
           <v-data-table
             :headers="headers"
@@ -9,7 +27,8 @@
             class="elevation-1 table-content"
             select-all
             item-key="id"
-            loading="true"
+            :loading="load_data"
+            loading-text="ກຳລັງໂຫຼດຂໍ້ມູນ...."
             :search="search_moveDetail"
           >
             <template v-slot:top>
@@ -42,31 +61,74 @@
 </template>
 
 <script>
+import MemberCard from "@/components/cards/MemberCard.vue"
+import axios from 'axios';
 export default {
   name: "MemberMoveDetail",
-
+  components: { MemberCard },
   data() {
     return {
         search_moveDetail:"",
+        moveDetail:[],
+        load_data:true,
+        getCount_all:0,
+        getCount_female:0,
         headers:[
-             {text:"ລຳດັບ",value:"moveNO",sortable:false},
-            {text:"ລະຫັດ",value:"member_id",sortable:false},
+            {text:"ລະຫັດຍົກຍ້າຍ",value:"move_id",sortable:false},
+            {text:"ເລກທີໃບຍົກຍ້າຍ",value:"move_NO",sortable:false},
             {text:"ຊື່",value:"member_name",sortable:false},
-            {text:"ນາມສະກຸນ",value:"member_surname",sortable:false},
-            {text:"ເພດ",value:"member_gender",sortable:true},
-            {text:"ເລກທີໃບຍົກຍ້າຍ",value:"member_NO",sortable:false},
-             {text:"ເຫດຜົນ",value:"moveReason",sortable:false},
-              {text:"ສົກປີ",value:"move_Year",sortable:false},
-               {text:"ໜ່ວຍ",value:"unit",sortable:true},
-                {text:"ຈຸ",value:"section",sortable:true},
-                 {text:"ຮາກຖານ",value:"foundation",sortable:true},
+            {text:"ນາມສະກຸນ",value:"surname",sortable:false},
+            {text:"ເພດ",value:"gender",sortable:true},
+              {text:"ສົກປີ",value:"m_Year",sortable:false},
+               {text:"ຈຸ",value:"sect_name",sortable:true},
+               {text:"ໜ່ວຍ",value:"unit_name",sortable:true},
+                 {text:"ຮາກຖານ",value:"fund_name",sortable:true},
         ]
     };
   },
 
-  mounted() {},
+  mounted() {
+    this.getMember_movedetail();
+     this.CountAll_move();
+      this.Countfemale_move();
+  },
 
-  methods: {},
+  methods: {
+      //count all
+   async CountAll_move(){
+     const id =this.$route.params.id;
+      try{
+        await axios.get(`http://localhost:5000/api/v1/countAll/${id}`).then((response)=>{
+          this.getCount_all=parseInt(response.data.amount);
+        })
+      }catch(err){
+        console.log(err);
+      }
+    },
+     //count female
+   async Countfemale_move(){
+     const id =this.$route.params.id;
+      try{
+        await axios.get(`http://localhost:5000/api/v1/countfemale/${id}`).then((response)=>{
+          this.getCount_female=parseInt(response.data.amount)
+        })
+      }catch(err){
+        console.log(err);
+      }
+    },
+    // get member move detail by id
+   async getMember_movedetail(){
+     const id=this.$route.params.id
+      try{
+       await axios.get(`http://localhost:5000/api/v1/move/getmove-detail/${id}`).then((response)=>{
+         this.moveDetail=response.data;
+         this.load_data=false;
+       })
+      }catch(err){
+        console.log(err);
+      }
+    },
+  },
 };
 </script>
 
@@ -78,6 +140,6 @@ export default {
 }
 .table-content {
   font-family: "boonhome-400";
-  font-size: 14px;
+  font-size: 10px;
 }
 </style>

@@ -70,7 +70,7 @@ exports.getMaxMemberId = (result) => {
 
 // Get all member
 exports.getMember = (result) => {
-    let sql = 'SELECT * FROM tb_member';
+    let sql = 'SELECT tb_member.member_id,tb_member.member_name,tb_member.surname,tb_member.gender,tb_educationlevel.level_name,tb_member.date_Y,tb_member.date_start,tb_typemember.typemember,tb_section.sect_name,tb_unit.unit_name,tb_foundation.fund_id,tb_foundation.fund_name,tb_member.status FROM tb_member INNER JOIN tb_educationlevel ON tb_member.level_id=tb_educationlevel.level_id INNER JOIN tb_typemember ON tb_member.typemember_id=tb_typemember.typemember_id INNER JOIN tb_section ON tb_member.sect_id=tb_section.sect_id INNER JOIN tb_unit ON tb_section.unit_id=tb_unit.unit_id INNER JOIN tb_foundation ON tb_unit.fund_id=tb_foundation.fund_id';
     dbCon.query(sql, (err, res) => {
         if (err) {
             console.log('Error while fetching tb_member==>' + err);
@@ -83,7 +83,7 @@ exports.getMember = (result) => {
 
 // Get single member
 exports.getMemberById = (id, result) => {
-    let sql = 'SELECT * FROM tb_member WHERE member_id = ?';
+    let sql = 'SELECT tb_member.member_id,tb_member.member_name,tb_member.surname,tb_member.gender,tb_member.birthday, tb_member.bvillage,tb_member.bdistrict,tb_member.bprovince,tb_member.nvillage,tb_member.ndistrict,tb_member.nprovince,tb_member.nation,tb_member.ethnic,tb_member.religion,tb_member.tell,tb_member.date_Y,tb_member.date_W,tb_member.date_K,tb_member.date_PS,tb_member.date_P,tb_member.date_start,tb_foundation.fund_id,tb_unit.unit_id,tb_member.sect_id,tb_section.sect_name,tb_member.typemember_id,tb_member.level_id,tb_member.responsible,tb_member.language,tb_member.blood,tb_member.status FROM tb_member INNER JOIN tb_section ON tb_member.sect_id=tb_section.sect_id INNER JOIN tb_unit ON tb_section.unit_id=tb_unit.unit_id INNER JOIN tb_foundation ON tb_unit.fund_id=tb_foundation.fund_id WHERE tb_member.member_id=?';
     dbCon.query(sql, [id], (err, res) => {
         if (err) {
             console.log(`Error while fetching member by id:${id}` + err);
@@ -100,5 +100,77 @@ exports.getMemberById = (id, result) => {
 
         // not found member with id
         result({ kind: 'not found' }, null);
+    });
+}
+// Get member by foundation
+exports.getMemberByfound = (id, result) => {
+    let sql = 'SELECT tb_member.member_id,tb_member.member_name,tb_member.surname,tb_member.gender,tb_educationlevel.level_name,tb_member.date_Y,tb_member.date_start,tb_typemember.typemember,tb_section.sect_name,tb_unit.unit_name,tb_foundation.fund_id,tb_foundation.fund_name,tb_member.status FROM tb_member INNER JOIN tb_educationlevel ON tb_member.level_id=tb_educationlevel.level_id INNER JOIN tb_typemember ON tb_member.typemember_id=tb_typemember.typemember_id INNER JOIN tb_section ON tb_member.sect_id=tb_section.sect_id INNER JOIN tb_unit ON tb_section.unit_id=tb_unit.unit_id INNER JOIN tb_foundation ON tb_unit.fund_id=tb_foundation.fund_id WHERE tb_foundation.fund_id=?';
+    dbCon.query(sql, [id], (err, res) => {
+        if (err) {
+            console.log(`Error while fetching member by id:${id}` + err);
+            result(err, null);
+            return;
+        }
+
+        if (res.length) {
+            // found member with id
+            console.log('found member');
+            result(null, res);
+            return;
+        }
+
+        // not found member with id
+        result({ kind: 'not found' }, null);
+    });
+}
+// count all member
+exports.CountAllmember = (result) => {
+    let sql = 'SELECT COUNT(member_id) AS count_member FROM tb_member';
+    dbCon.query(sql, (err, res) => {
+        if (err) {
+            console.log('Error while fetching tb_member==>' + err);
+            result(err, null);
+            return;
+        }
+        result(null, res);
+    });
+}
+// count female member
+exports.Countfemalemember = (result) => {
+    const gender ='ຍິງ';
+    let sql = 'SELECT COUNT(member_id) AS count_member FROM tb_member WHERE gender=?';
+    dbCon.query(sql,[gender], (err, res) => {
+        if (err) {
+            console.log('Error while fetching tb_member==>' + err);
+            result(err, null);
+            return;
+        }
+        result(null, res);
+    });
+}
+// count retirement member
+exports.CountRetiremember = (result) => {
+    const status ='ພົ້ນກະສຽນ';
+    let sql = 'SELECT COUNT(member_id) AS count_member FROM tb_member WHERE status=?';
+    dbCon.query(sql,[status], (err, res) => {
+        if (err) {
+            console.log('Error while fetching tb_member==>' + err);
+            result(err, null);
+            return;
+        }
+        result(null, res);
+    });
+}
+// count move member
+exports.CountMovemember = (result) => {
+    const status ='ຍົກຍ້າຍ';
+    let sql = 'SELECT COUNT(member_id) AS count_member FROM tb_member WHERE status=?';
+    dbCon.query(sql,[status], (err, res) => {
+        if (err) {
+            console.log('Error while fetching tb_member==>' + err);
+            result(err, null);
+            return;
+        }
+        result(null, res);
     });
 }

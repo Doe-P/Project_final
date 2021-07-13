@@ -1,8 +1,8 @@
 <template>
   <div id="MemberRetirementCreate">
     <v-container fluid>
-      <v-row justify="center" class="my-5 table-header">
-        <v-card width="900">
+      <v-row justify="center" class="my-5 mx-5 table-header">
+        <v-card width="100%">
           <v-toolbar color="primary" height="45" dark>
             <v-toolbar-title> ເພີ່ມສະມາຊິກພົ້ນກະສຽນ </v-toolbar-title>
           </v-toolbar>
@@ -43,13 +43,14 @@
               <tr>
                 <td>{{ item.member_id }}</td>
                 <td>{{ item.member_name }}</td>
-                <td>{{ item.member_surname }}</td>
-                <td>{{ item.member_gender }}</td>
-                <td>{{ item.member_birthday }}</td>
-                <td>{{ item.member_age }}</td>
-                <td>{{ item.unit }}</td>
-                <td>{{ item.section }}</td>
-                <td>{{ item.foundation }}</td>
+                <td>{{ item.surname }}</td>
+                <td>{{ item.gender }}</td>
+                <td>{{ item.birthday | formatDate }}</td>
+                <td>{{ item.age }}</td>
+                <td>{{item.responsible}}</td>
+                <td>{{ item.sect_name }}</td>
+                <td>{{ item.unit_name }}</td>
+                <td>{{ item.fund_name }}</td>
                 <td>
                 <v-tooltip bottom>
                    <template v-slot:activator="{on,attrs}">
@@ -60,13 +61,11 @@
                       selectItem(
                         item.member_id,
                         item.member_name,
-                        item.member_surname
-                      )
-                    "
+                        item.surname,
+                        item.age)"
                     text
                     small
-                    color="primary"
-                  >
+                    color="primary">
                     <v-icon>add</v-icon>
                   </v-btn>
                  </template>
@@ -76,11 +75,11 @@
               </tr>
             </template>
           </v-data-table>
-          <v-container>
+          <v-card-actions class="justify-start">
              <v-btn color="primary" small @click="$router.push('/member-retirement')">
               ຍ້ອນກັບ
              </v-btn>
-          </v-container>
+          </v-card-actions>
         </v-card>
       </v-row>
      <!-- Retirement component -->
@@ -91,6 +90,7 @@
 
 <script>
 import retirementAdd from "@/components/retirement-form/retirementAdd.vue"
+import axios from 'axios';
 export default {
   name: "MemberRetirementCreate",
   components:{
@@ -99,19 +99,20 @@ export default {
   data() {
     return {
       headers: [
-        { text: "ລະຫັດ", align: "Left", value: "memRetire_id" },
-        { text: "ຊື່", value: "memRetire_name", sortable: false },
-        { text: "ນາມສະກຸນ", value: "memRetire_surname", sortable: false },
-        { text: "ເພດ", value: "memRetire_gender", sortable: true },
+        { text: "ລະຫັດ", align: "Left", value: "member_id" },
+        { text: "ຊື່", value: "member_name", sortable: false },
+        { text: "ນາມສະກຸນ", value: "surname", sortable: false },
+        { text: "ເພດ", value: "gender", sortable: true },
         {
           text: "ວັນເດືອນປີເກີດ",
-          value: "memRetire_birthday",
+          value: "birthday",
           sortable: false,
         },
-        { text: "ອາຍຸ", value: "memRetire_age", sortable: false },
-        { text: "ໜ່ວຍ", value: "memRetire_unit", sortable: true },
-        { text: "ຈຸ", value: "memRetire_section", sortable: true },
-        { text: "ຮາກຖານ", value: "memRetire_foundation", sortable: true },
+        { text: "ອາຍຸ", value: "age", sortable: false },
+        { text: "ໜ້າທີ່ຮັບຜິດຊອບ", value: "responsible", sortable: false },
+        { text: "ໜ່ວຍ", value: "unit_name", sortable: true },
+        { text: "ຈຸ", value: "sect_name", sortable: true },
+        { text: "ຮາກຖານ", value: "fund_name", sortable: true },
         { text: "ເພີ່ມ", value: "memRetire_add", sortable: false },
       ],
       myData_memRetire: [
@@ -132,20 +133,63 @@ export default {
       openForm: false,
     };
   },
-  mounted() {},
+  mounted() {
+    this.getmemberRetirement();
+  },
   methods: {
     // setvalue to form retireAdd
-    selectItem(id,name,surname){
+    selectItem(id,name,surname,age){
       this.$store.dispatch({
         type:"doClick_retire",
         showForm:true,
         member_id:id,
         member_name:name,
         member_surname:surname,
+        member_age:age
       })
+    },
+   async getmemberRetirement(){
+     const user_status='admin'
+      const fund_id=this.$store.getters.getData_user.user_foundation;
+     this.myData_memRetire=[];
+      try{
+        if(user_status=='admin'){
+         let response = await axios.get("http://localhost:5000/api/v1/membersWhere-Status-Age");
+         this.myData_memRetire=response.data;
+      }else if(user_status=='user'){
+         let response =await axios.get(`http://localhost:5000/api/v1/membersWhere-Status-Age-client/${fund_id}`);
+         this.myData_memRetire=response.data;
+      }else{
+         this.Msg_fail("ສະຖານະຜູ້ໃຊ້ລະບົບບໍ່ຖືກຕ້ອງ");
+      }
+    }catch(err){
+      console.log(err);
     }
   },
-};
+   // message done
+    Msg_done(text) {
+      // Message show
+      this.$store.dispatch({
+        type: "doClick_myMsg",
+        mshow: true,
+        mcolor: "success",
+        micon: "check_circle",
+        message: text,
+      });
+    },
+    //message fail
+    Msg_fail(text) {
+      // Message show
+      this.$store.dispatch({
+        type: "doClick_myMsg",
+        mshow: true,
+        mcolor: "error",
+        micon: "error",
+        message: text,
+      });
+    },
+}
+}
 </script>
 
 <style lang="scss" scoped>

@@ -6,7 +6,7 @@
           <v-card>
             <v-toolbar color="primary" height="45" dark class="mb-5">
               <v-toolbar-title class="text-header-dialog">
-                ຟອມເພີ່ມຂໍ້ມູນພະນັກງານ
+                ຟອມເພີ່ມຂໍ້ມູນສະມາຊິກ
               </v-toolbar-title>
             </v-toolbar>
             <v-card-text class="justify-center">
@@ -86,7 +86,7 @@
                           <v-text-field
                             v-model="format_Date"
                             label="ວັນເດືອນປີເກີດ"
-                            :rules="[required('ວັນເດືອນປີເກີດ')]"
+                            :rules="[isCheckAge(get_Year)]"
                             prepend-icon="mdi-calendar"
                             readonly
                             @blur="date = parseDate(formatDate)"
@@ -314,11 +314,13 @@
                           v-model="date_y"
                           :max="new Date().toISOString().substr(0, 10)"
                           min="1950-01-01"
+                           locale="lao"
+                          class="calender"
                         >
                         </v-date-picker>
                       </v-menu>
                     </template>
-                     <template>
+                    <template>
                       <v-menu
                         ref="menu_date_nuol"
                         v-model="menu_date_nuol"
@@ -349,6 +351,8 @@
                           v-model="date_start_nuol"
                           :max="new Date().toISOString().substr(0, 10)"
                           min="1950-01-01"
+                           locale="lao"
+                          class="calender"
                         >
                         </v-date-picker>
                       </v-menu>
@@ -366,7 +370,7 @@
                             v-show="gender == 'ຍິງ'"
                             v-model="format_Date_w"
                             label="ວັນເດືອນປີເຂົ້າແມ່ຍິງ"
-                            :rules="[required('ວັນເດືອນປີເຂົ້າແມ່ຍິງ')]"
+                            :rules="[isChecked('ວັນເດືອນປີເຂົ້າແມ່ຍິງ',gender)]"
                             prepend-icon="mdi-calendar"
                             readonly
                             @blur="date_w = parseDate_y(format_Date_w)"
@@ -379,12 +383,18 @@
                           v-model="date_w"
                           :max="new Date().toISOString().substr(0, 10)"
                           min="1950-01-01"
+                           locale="lao"
+                          class="calender"
                         >
                         </v-date-picker>
                       </v-menu>
                     </template>
                     <span class="sub-text">ອົງການຈັດຕັ້ງອື່ນ</span>
-                    <v-checkbox label="ກຳມະບານ" v-model="isKamaban" value="ກຳມະບານ"></v-checkbox>
+                    <v-checkbox
+                      label="ກຳມະບານ"
+                      v-model="isKamaban"
+                      value="ກຳມະບານ"
+                    ></v-checkbox>
                     <template>
                       <v-menu
                         ref="menu_k"
@@ -395,9 +405,9 @@
                       >
                         <template v-slot:activator="{ on, attrs }">
                           <v-text-field
-                            v-show="isKamaban=='ກຳມະບານ'"
+                            v-show="isKamaban == 'ກຳມະບານ'"
                             v-model="format_Date_k"
-                            :rules="[required('ວັນເດືອນປີເຂົ້າກຳມະບານ')]"
+                            :rules="[isChecked('ວັນເດືອນປີເຂົ້າກຳມະບານ',isKamaban)]"
                             label="ວັນເດືອນປີເຂົ້າກຳມະບານ"
                             prepend-icon="mdi-calendar"
                             readonly
@@ -411,11 +421,17 @@
                           v-model="date_k"
                           :max="new Date().toISOString().substr(0, 10)"
                           min="1950-01-01"
+                           locale="lao"
+                          class="calender"
                         >
                         </v-date-picker>
                       </v-menu>
                     </template>
-                     <v-checkbox label="ສັງກັດພັກ(ສຳຮອງ)" v-model="isParty_reserve" value="ສັງກັດພັກສຳຮອງ"></v-checkbox>
+                    <v-checkbox
+                      label="ສັງກັດພັກ(ສຳຮອງ)"
+                      v-model="isParty_reserve"
+                      value="ສັງກັດພັກສຳຮອງ"
+                    ></v-checkbox>
                     <template>
                       <v-menu
                         ref="menu_ps"
@@ -426,9 +442,9 @@
                       >
                         <template v-slot:activator="{ on, attrs }">
                           <v-text-field
-                           v-show="isParty_reserve=='ສັງກັດພັກສຳຮອງ'"
+                            v-show="isParty_reserve == 'ສັງກັດພັກສຳຮອງ'"
                             v-model="format_Date_ps"
-                            :rules="[required('ວັນເດືອນປີເຂົ້າພັກສຳຮອງ')]"
+                            :rules="[isChecked('ວັນເດືອນປີເຂົ້າພັກສຳຮອງ',isParty_reserve)]"
                             label="ວັນເດືອນປີເຂົ້າພັກສຳຮອງ"
                             prepend-icon="mdi-calendar"
                             readonly
@@ -442,11 +458,18 @@
                           v-model="date_ps"
                           :max="new Date().toISOString().substr(0, 10)"
                           min="1950-01-01"
+                           locale="lao"
+                          class="calender"
                         >
                         </v-date-picker>
                       </v-menu>
                     </template>
-                       <v-checkbox label="ສັງກັດພັກ(ສົມບູນ)" v-model="isParty_full" value="ສັງກັດພັກສົມບູນ" v-show="isParty_reserve=='ສັງກັດພັກສຳຮອງ'"></v-checkbox>
+                    <v-checkbox
+                      label="ສັງກັດພັກ(ສົມບູນ)"
+                      v-model="isParty_full"
+                      value="ສັງກັດພັກສົມບູນ"
+                      v-show="isParty_reserve == 'ສັງກັດພັກສຳຮອງ'"
+                    ></v-checkbox>
                     <template>
                       <v-menu
                         ref="menu_p"
@@ -457,9 +480,9 @@
                       >
                         <template v-slot:activator="{ on, attrs }">
                           <v-text-field
-                           v-show="isParty_full=='ສັງກັດພັກສົມບູນ'"
+                            v-show="isParty_full == 'ສັງກັດພັກສົມບູນ'"
                             v-model="format_Date_p"
-                            :rules="[required('ວັນເດືອນປີເຂົ້າພັກສົມບູນ')]"
+                            :rules="[isChecked('ວັນເດືອນປີເຂົ້າພັກສົມບູນ',isParty_full)]"
                             label="ວັນເດືອນປີເຂົ້າພັກສົມບູນ"
                             prepend-icon="mdi-calendar"
                             readonly
@@ -473,6 +496,8 @@
                           v-model="date_p"
                           :max="new Date().toISOString().substr(0, 10)"
                           min="1950-01-01"
+                          locale="lao"
+                          class="calender"
                         >
                         </v-date-picker>
                       </v-menu>
@@ -531,25 +556,32 @@
                       label="ໜ້າທີ່ຮັບຜິດຊອບ"
                       :rules="[required('ໜ້າທີ່ຮັບຜິດຊອບ')]"
                     ></v-select>
-                    <v-container>
-                      <span class="sub-text">ພາສາທີ່ໄດ້</span>
-                      <v-checkbox
-                        label="ອັງກິດ"
-                        v-model="select_lenguage.english"
-                        value="ອັງກິດ"
-                      ></v-checkbox>
-                      <v-checkbox
-                        label="ຈີນ"
-                        v-model="select_lenguage.chineses"
-                        value="ຈີນ"
-                      ></v-checkbox>
-                      <v-text-field
-                        name="name"
-                        label="ອຶ່ນໆ"
-                        id="id"
-                        v-model="select_lenguage.others"
-                      ></v-text-field>
-                    </v-container>
+                     <span class="sub-text">ພາສາຕ່າງປະເທດທີ່ອ່ານ ແລະ ຂຽນໄດ້ດີ</span>
+                    <v-combobox
+                      v-model="language_selected"
+                      :items="items"
+                      chips
+                      clearable
+                      label="ເລືອກພາສາ"
+                      multiple
+                      solo
+                      :rules="[required('ພາສາ')]"
+                    >
+                      <template
+                        v-slot:selection="{ attrs, item, select, selected }"
+                      >
+                        <v-chip
+                          v-bind="attrs"
+                          :input-value="selected"
+                          close
+                          @click="select"
+                          @click:close="remove(item)"
+                        >
+                          <strong>{{ item }}</strong
+                          >&nbsp;
+                        </v-chip>
+                      </template>
+                    </v-combobox>
                     <v-select
                       :items="blood_items"
                       :rules="[required('ໝວດເລືອດ')]"
@@ -573,17 +605,14 @@
                 </v-row>
                 <v-row class="mx-10">
                   <v-spacer></v-spacer>
-                 <v-card-actions class="justify-end">
-                    <v-btn
-                    @click="cancelData_member"
-                    color="error"
-                    dark
-                    >ຍົກເລີກ</v-btn
-                  >
-                  <v-btn type="submit" :disabled="!valid" color="primary"
-                    >ບັນທຶກ</v-btn
-                  >
-                 </v-card-actions>
+                  <v-card-actions class="justify-end">
+                    <v-btn @click="cancelData_member" color="error" dark
+                      >ຍົກເລີກ</v-btn
+                    >
+                    <v-btn type="submit" :disabled="!valid" color="primary"
+                      >ບັນທຶກ</v-btn
+                    >
+                  </v-card-actions>
                 </v-row>
               </v-form>
             </v-card-text>
@@ -602,7 +631,7 @@
 <script>
 import alertmessage from "@/components/AlertMessage/alertmessage.vue";
 import axios from "axios";
-import dateformat from "dateformat"
+import dateformat from "dateformat";
 export default {
   name: "Membercreate",
   components: {
@@ -610,6 +639,9 @@ export default {
   },
   data() {
     return {
+       language_selected: ["ອັງກິດ"],
+        items: ["ອັງກິດ", "ຈີນ","ຫວຽດນາມ","ຢີ່ປຸ່ນ","ເກົາຫຼີ"],
+        get_Year:null,
       //Valid input
       required(propertyType) {
         return (v) => (v && v.length > 0) || `ກະລຸນາປ້ອນຂໍ້ມູນ${propertyType}`;
@@ -627,12 +659,34 @@ export default {
       radioRule() {
         return (v) => (v && v != true) || "ກະລຸນາເລືອກເພດກ່ອນ";
       },
+      isChecked(propertyType,condition){
+        if(condition=='ຍິງ'){
+           return (v) => (v && v.length > 0) || `ກະລຸນາປ້ອນຂໍ້ມູນ${propertyType}`;
+        }else if(condition=='ກຳມະບານ'){
+          return (v) => (v && v.length > 0) || `ກະລຸນາປ້ອນຂໍ້ມູນ${propertyType}`;
+        }else if(condition=='ສັງກັດພັກສຳຮອງ'){
+           return (v) => (v && v.length > 0) || `ກະລຸນາປ້ອນຂໍ້ມູນ${propertyType}`;
+        }else if(condition=='ສັງກັດພັກສົມບູນ'){
+          return (v) => (v && v.length > 0) || `ກະລຸນາປ້ອນຂໍ້ມູນ${propertyType}`;
+        }else{
+          console.log("validate text on member create form err");
+        }
+      },
+      isCheckAge(birthdate){
+         var d = new Date();
+         var y=d.getFullYear();
+         var age =y-birthdate;
+         if(age>=35){
+          return  `ອາຍຸຂອງສະມາຊິກຫຼາຍກວ່າ 34 ອາຍຸຕ້ອງຢູ່ລະຫວ່າງ 15-34`; 
+         }else if(age<15){
+          return  `ອາຍຸຂອງສະມາຊິກໜ້ອຍກວ່າ  15 ອາຍຸຕ້ອງຢູ່ລະຫວ່າງ 15-34`; 
+         }
+      },
       // valid form
       valid: true,
       show_alert: false,
       timeout: 2000,
       message: "Hello",
-      select_lenguage: { english: "ອັງກິດ", chineses: "", others: "" },
       reponsibles: ["ນັກສຶກສາ", "ອາຈານ"],
       member_status: "ສະມາຊິກ",
       // isShow_woman_date: true,
@@ -710,17 +764,17 @@ export default {
       found_id: "F0001-30062021",
       selected_blood_Item: "",
       //----- format date for database
-      birthdate_format:null,
-      youthdate_format:null,
-      womendate_format:null,
-      kamabandate_format:null,
-      psdate_format:null,
-      pdate_format:null,
-      startnuol_format:null,
+      birthdate_format: null,
+      youthdate_format: null,
+      womendate_format: null,
+      kamabandate_format: null,
+      psdate_format: null,
+      pdate_format: null,
+      startnuol_format: null,
       //---------
-      isKamaban:null,
-      isParty_reserve:null,
-      isParty_full:null,
+      isKamaban: null,
+      isParty_reserve: null,
+      isParty_full: null,
     };
   },
   mounted() {
@@ -804,49 +858,50 @@ export default {
     //
     formatDate(date) {
       if (!date) return null;
-      this.birthdate_format=dateformat(date,"yyyy-mm-dd");
+      this.birthdate_format = dateformat(date, "yyyy-mm-dd");
       const [year, month, day] = date.split("-");
+      this.get_Year=parseInt(year);
       return `${day}-${month}-${year}`;
     },
     // Method Young
     formatDate_y(date) {
       if (!date) return null;
-       this.youthdate_format=dateformat(date,"yyyy-mm-dd");
+      this.youthdate_format = dateformat(date, "yyyy-mm-dd");
       const [year, month, day] = date.split("-");
       return `${day}-${month}-${year}`;
     },
     // method women
     formatDate_w(date) {
       if (!date) return null;
-      this.womendate_format=dateformat(date,"yyyy-mm-dd");
+      this.womendate_format = dateformat(date, "yyyy-mm-dd");
       const [year, month, day] = date.split("-");
       return `${day}-${month}-${year}`;
     },
     // method kammaban
     formatDate_k(date) {
       if (!date) return null;
-      this.kamabandate_format=dateformat(date,"yyyy-mm-dd");
+      this.kamabandate_format = dateformat(date, "yyyy-mm-dd");
       const [year, month, day] = date.split("-");
       return `${day}-${month}-${year}`;
     },
     // method ເຂົ້າພັກສຳຮອງ
     formatDate_ps(date) {
       if (!date) return null;
-       this.psdate_format=dateformat(date,"yyyy-mm-dd");
+      this.psdate_format = dateformat(date, "yyyy-mm-dd");
       const [year, month, day] = date.split("-");
       return `${day}-${month}-${year}`;
     },
     // method ເຂົ້າພັກສົມບູນ
     formatDate_p(date) {
       if (!date) return null;
-      this.pdate_format=dateformat(date,"yyyy-mm-dd");
+      this.pdate_format = dateformat(date, "yyyy-mm-dd");
       const [year, month, day] = date.split("-");
       return `${day}-${month}-${year}`;
     },
     // method ເຂົ້າສັງກັດ ມຊ
     formatDate_start_nuol(date) {
       if (!date) return null;
-      this.startnuol_format=dateformat(date,"yyyy-mm-dd");
+      this.startnuol_format = dateformat(date, "yyyy-mm-dd");
       const [year, month, day] = date.split("-");
       return `${day}-${month}-${year}`;
     },
@@ -901,7 +956,6 @@ export default {
 
     // Section Manage Data
     async saveData_Members() {
-      const getlanguage = this.select_lenguage.english+","+this.select_lenguage.chineses+","+this.select_lenguage.others;
       try {
         if (
           this.txt_Membername &&
@@ -918,100 +972,101 @@ export default {
           this.txt_nation &&
           this.txt_ethnic &&
           this.select_riligion &&
-          this.format_Date_p &&
           this.format_Date_y &&
-          this.format_Date_k &&
-          this.format_Date_ps &&
           this.format_Date_start_nuol &&
           this.selected_section_Item &&
           this.selected_typeMember_Item &&
           this.selecte_level_Item &&
           this.select_reponsible &&
-          this.select_lenguage &&
+          this.language_selected &&
           this.selected_blood_Item &&
-          this.member_status 
+          this.member_status
         ) {
-          if(String(this.gender).valueOf()=="ຍິງ" && this.format_Date_w){
-           await axios.post("http://localhost:5000/api/v1/members",{
-              member_id:this.$store.getters.getCustomID,
-              member_name:this.txt_Membername,
-              surname:this.txt_surname,
-              gender:this.gender,
-              birthday:this.birthdate_format,
-              bvillage:this.txt_bvillage,
-              bdistrict:this.txt_bdistrict,
-              bprovince:this.txt_bprovince,
-              nvillage:this.txt_nvillage,
-              ndistrict:this.txt_ndistrict,
-              nprovince:this.txt_nprovince,
-              nation:this.txt_nation,
-              ethnic:this.txt_ethnic,
-              religion:this.select_riligion,
-              tell:parseInt(this.txt_tel),
-              date_Y:this.youthdate_format,
-              date_W:this.womendate_format,
-              date_K:this.kamabandate_format,
-              date_PS:this.psdate_format,
-              date_P:this.pdate_format,
-              sect_id:this.getSect_id,
-              typemember_id:this.get_membertype_id,
-              level_id:this.get_eduLevel_id,
-              responsible:this.select_reponsible,
-              language:getlanguage,
-              blood:this.selected_blood_Item,
-              date_start:this.startnuol_format,
-              status:this.member_status
-           }).then(()=>{
-              this.cancelData_member();
-              this.Msg_done("ບັນທຶກຂໍ້ມູນສຳເລັດແລ້ວ")
-           })
-          }else{
-            await axios.post("http://localhost:5000/api/v1/members",{
-             member_id:this.$store.getters.getCustomID,
-              member_name:this.txt_Membername,
-              surname:this.txt_surname,
-              gender:this.gender,
-              birthday:this.birthdate_format,
-              bvillage:this.txt_bvillage,
-              bdistrict:this.txt_bdistrict,
-              bprovince:this.txt_bprovince,
-              nvillage:this.txt_nvillage,
-              ndistrict:this.txt_ndistrict,
-              nprovince:this.txt_nprovince,
-              nation:this.txt_nation,
-              ethnic:this.txt_ethnic,
-              religion:this.select_riligion,
-              tell:parseInt(this.txt_tel),
-              date_Y:this.youthdate_format,
-              date_K:this.kamabandate_format,
-              date_PS:this.psdate_format,
-              date_P:this.pdate_format,
-              sect_id:this.getSect_id,
-              typemember_id:this.get_membertype_id,
-              level_id:this.get_eduLevel_id,
-              responsible:this.select_reponsible,
-              language:getlanguage,
-              blood:this.selected_blood_Item,
-              date_start:this.startnuol_format,
-              status:this.member_status
-           }).then(()=>{
-              this.cancelData_member();
-              this.Msg_done("ບັນທຶກຂໍ້ມູນສຳເລັດແລ້ວ")
-           })
+          if (String(this.gender).valueOf() == "ຍິງ" && this.format_Date_w) {
+            await axios
+              .post("http://localhost:5000/api/v1/members", {
+                member_id: this.$store.getters.getCustomID,
+                member_name: this.txt_Membername,
+                surname: this.txt_surname,
+                gender: this.gender,
+                birthday: this.birthdate_format,
+                bvillage: this.txt_bvillage,
+                bdistrict: this.txt_bdistrict,
+                bprovince: this.txt_bprovince,
+                nvillage: this.txt_nvillage,
+                ndistrict: this.txt_ndistrict,
+                nprovince: this.txt_nprovince,
+                nation: this.txt_nation,
+                ethnic: this.txt_ethnic,
+                religion: this.select_riligion,
+                tell: parseInt(this.txt_tel),
+                date_Y: this.youthdate_format,
+                date_W: this.womendate_format,
+                date_K: this.kamabandate_format,
+                date_PS: this.psdate_format,
+                date_P: this.pdate_format,
+                sect_id: this.getSect_id,
+                typemember_id: this.get_membertype_id,
+                level_id: this.get_eduLevel_id,
+                responsible: this.select_reponsible,
+                language: this.language_selected.toString(),
+                blood: this.selected_blood_Item,
+                date_start: this.startnuol_format,
+                status: this.member_status,
+              })
+              .then(() => {
+                this.cancelData_member();
+                this.Msg_done("ບັນທຶກຂໍ້ມູນສຳເລັດແລ້ວ");
+              });
+          } else {
+            await axios
+              .post("http://localhost:5000/api/v1/members", {
+                member_id: this.$store.getters.getCustomID,
+                member_name: this.txt_Membername,
+                surname: this.txt_surname,
+                gender: this.gender,
+                birthday: this.birthdate_format,
+                bvillage: this.txt_bvillage,
+                bdistrict: this.txt_bdistrict,
+                bprovince: this.txt_bprovince,
+                nvillage: this.txt_nvillage,
+                ndistrict: this.txt_ndistrict,
+                nprovince: this.txt_nprovince,
+                nation: this.txt_nation,
+                ethnic: this.txt_ethnic,
+                religion: this.select_riligion,
+                tell: parseInt(this.txt_tel),
+                date_Y: this.youthdate_format,
+                date_K: this.kamabandate_format,
+                date_PS: this.psdate_format,
+                date_P: this.pdate_format,
+                sect_id: this.getSect_id,
+                typemember_id: this.get_membertype_id,
+                level_id: this.get_eduLevel_id,
+                responsible: this.select_reponsible,
+                language: this.language_selected.toString(),
+                blood: this.selected_blood_Item,
+                date_start: this.startnuol_format,
+                status: this.member_status,
+              })
+              .then(() => {
+               
+                this.Msg_done("ບັນທຶກຂໍ້ມູນສຳເລັດແລ້ວ");
+              });
+               this.cancelData_member();
           }
-        }else{
-          this.Msg_fail("ຂໍ້ມູນສະມາຊິກບໍ່ຄົບຖ້ວນ ກະລຸນາກວດສອບຄືນໃໝ່")
+        } else {
+          this.Msg_fail("ຂໍ້ມູນສະມາຊິກບໍ່ຄົບຖ້ວນ ກະລຸນາກວດສອບຄືນໃໝ່");
         }
       } catch (err) {
         this.cancelData_member();
-        this.Msg_fail("ບັນທຶກຂໍ້ມູນບໍ່ສຳເລັດ")
+        this.Msg_fail("ບັນທຶກຂໍ້ມູນບໍ່ສຳເລັດ");
         console.log(err);
       }
     },
 
     //Cancel form
     cancelData_member() {
-      location.reload();
       this.$router.push("/Member");
     },
     // get Max ID
@@ -1121,15 +1176,14 @@ export default {
       }
     },
     async get_unit() {
-       this.section_items=[];
-       this.selected_section_Item=null;
+      this.section_items = [];
+      this.selected_section_Item = null;
       if (this.selected_unit_Item) {
         for (let i = 0; i <= this.unit_items_all.length; i++) {
           if (
             String(this.selected_unit_Item).valueOf() ==
             String(this.unit_items_all[i].unit_name).valueOf()
           ) {
-           
             const id = this.unit_items_all[i].unit_id;
             try {
               await axios
@@ -1167,7 +1221,10 @@ export default {
         foundation: this.found_id,
       });
     },
-    
+     remove (item) {
+        this.language_selected.splice(this.language_selected.indexOf(item), 1)
+        this.language_selected = [...this.language_selected]
+      },
   },
 };
 </script>
@@ -1182,7 +1239,8 @@ export default {
   font-family: "boonhome-400";
   font-weight: 10px;
 }
-.content {
+.content,
+.calender {
   font-family: "boonhome-400";
   font-weight: 14px;
 }

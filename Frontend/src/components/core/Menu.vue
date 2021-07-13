@@ -2,9 +2,11 @@
   <div id="app">
     <v-navigation-drawer
       v-model="this.$store.getters.getShowmenu"
+      fixed
       absolute
       temporary
       color="#fdfdfd"
+      class="fixes"
     >
       <v-list>
         <v-list-item class="justify-center">
@@ -140,6 +142,7 @@ export default {
   data() {
     return {
       drawer: true,
+      found_id: "F0001-30062021",
       dataManage: [
         { title: "ຈັດການຂໍ້ມູນຮາກຖານ", icons: "domain", router: "/foundation" },
         {
@@ -268,8 +271,20 @@ export default {
       });
       this.$router.push("/register-view");
     },
+     get_users() {
+      this.$store.dispatch({
+        type: "doget_users",
+        username: "dodo",
+        userstatus: "admin",
+        foundation: this.found_id,
+      });
+    },
   },
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.fixes{
+  position:fixed;
+}
+</style>

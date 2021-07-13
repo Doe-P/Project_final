@@ -4,6 +4,7 @@ import Login from "@/views/login/login.vue";
 import Member from "@/views/Member_form/Member.vue";
 import MemberCreate from "@/views/Member_form/MemberCreate.vue";
 import MemberEdit from "@/views/Member_form/MemberEdit.vue";
+import MemberDetail from "@/views/Member_form/Member-detail.vue";
 import Foundation from "@/views/ManageData/foundation.vue";
 import Section from "@/views/ManageData/section.vue";
 import Unit from "@/views/ManageData/unit.vue";
@@ -56,6 +57,11 @@ const routes = [
     path: "/member-edit",
     name: "member-edit",
     component: MemberEdit,
+  },
+  {
+    path: "/member-detail",
+    name: "member-detail",
+    component: MemberDetail,
   },
   {
     path: "/foundation",

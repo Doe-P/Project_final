@@ -2,7 +2,7 @@
   <div>
     <template>
       <v-dialog
-        v-model="this.$store.getters.getmyData_retire.showForm"
+        v-model="this.$store.getters.getmyData_retireEdit.showForm"
         persistent
         max-width="550"
         transition="dialog-transition"
@@ -12,7 +12,7 @@
           <v-card>
             <v-toolbar color="primary" height="45" dark z-index="1" class="d-flex">
               <v-toolbar-title class="text-header-dialog">
-                <span>ເພີ່ມຂໍ້ມູນສະມາຊິກກະສຽນ</span>
+                <span>ແກ້ໄຂຂໍ້ມູນສະມາຊິກກະສຽນ</span>
               </v-toolbar-title>
             </v-toolbar>
             <v-card-text>
@@ -22,14 +22,14 @@
                     <v-col cols="12" class="pt-0">
                       <v-text-field
                         label="ໃບພົ້ນກະສຽນເລກທີ"
-                        :value="retirement_id"
+                        :value="this.$store.getters.getmyData_retireEdit.retire_id"
                         readonly
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12" class="pt-0">
                       <v-text-field
                         label="ລະຫັດສະມາຊິກ"
-                        :value="this.$store.getters.getmyData_retire.member_id"
+                        :value="txt_member_id"
                         readonly
                         height="20"
                       ></v-text-field>
@@ -37,7 +37,7 @@
                     <v-col cols="12" class="pt-0">
                       <v-text-field
                         label="ຊື່ສະມາຊິກ"
-                        :value="this.$store.getters.getmyData_retire.member_name"
+                        :value="txt_member_name"
                         readonly
                         height="20"
                       ></v-text-field>
@@ -45,7 +45,7 @@
                     <v-col cols="12" class="pt-0">
                       <v-text-field
                         label="ນາມສະກຸນ"
-                        :value="this.$store.getters.getmyData_retire.member_surname"
+                        :value="txt_member_surname"
                         readonly
                         height="20"
                       ></v-text-field>
@@ -149,7 +149,7 @@
                 >ຍົກເລີກ</v-btn
               >
               <v-spacer></v-spacer>
-              <v-btn text color="primary" :disabled="!valid" @click="SaveData_retire"
+              <v-btn text color="primary" :disabled="!valid" @click="UpdateData_retire"
                 >ຕົກລົງ</v-btn
               >
             </v-card-actions>
@@ -162,6 +162,7 @@
 
 <script>
 import axios from 'axios';
+import dateformat from "dateformat"
 export default {
   name: "Formadd",
   data() {
@@ -196,12 +197,21 @@ export default {
       txt_Noask:null,
       txt_reason:null,
       txt_portfolio:null,
+      txt_member_id:null,
+      txt_member_name:null,
+      txt_member_surname:null,
       //-----------
+      getDate_Ask:null,
+      getDate_retire:null,
 
     };
   },
   mounted() {
-    this.getMaxID();
+    this.retirement_id=this.$store.getters.getmyData_retireEdit.retire_id;
+    if(this.retirement_id){
+      location.reload();
+      this.getData_retire_item();
+    }
   },
   watch: {
     ask_date() {
@@ -210,6 +220,9 @@ export default {
      retire_date() {
       this.format_retire_date = this.formatRetire_date(this.retire_date);
     },
+    reload_data(){
+      this.getData_retire_item();
+    }
   },
   computed: {
     AskDateFormatted() {
@@ -218,19 +231,22 @@ export default {
      RetireDateFormatted() {
       return this.formatRetire_date(this.retire_date);
     },
+    reload_data(){
+      return this.getData_retire_item();
+    }
   },
   methods: {
       // ask date
     formatAsk_date(date) {
       if (!date) return null;
-
+      this.getDate_Ask=dateformat(date,"yyyy-mm-dd");
       const [year, month, day] = date.split("-");
       return `${day}-${month}-${year}`;
     },
     // retire date
     formatRetire_date(date) {
       if (!date) return null;
-
+       this.getDate_retire=dateformat(date,"yyyy-mm-dd");
       const [year, month, day] = date.split("-");
       return `${day}-${month}-${year}`;
     },
@@ -249,73 +265,37 @@ export default {
     //close form add
     close_dialog() {
       this.$store.dispatch({
-        type:"doClick_retire",
+        type:"doClick_retireEdit",
         showForm:false,
         member_id:"",
-        member_name:"",
-        member_surname:"",
-        member_age:""
       });
     },
-    // save data
-   async SaveData_retire(){
-     const getmember_id=this.$store.getters.getmyData_retire.member_id;
-     const getmember_age = this.$store.getters.getmyData_retire.member_age;
-     if(getmember_id&&getmember_age&&this.retirement_id&&this.txt_Noask&&this.txt_reason&&this.txt_portfolio&&this.ask_date&&this.retire_date){
-        try{
-        await axios.post("http://localhost:5000/api/v1/retirements",{
-           retire_id:this.retirement_id,
-           member_id:getmember_id,
+    // Update data
+   async UpdateData_retire(){
+     const id =this.$store.getters.getmyData_retireEdit.retire_id;
+     if(id&&this.txt_Noask&&this.txt_reason&&this.txt_portfolio&&this.getDate_Ask&&this.getDate_retire){
+       try{
+        await axios.put(`http://localhost:5000/api/v1/retirements/${id}`,{
            No_Ask:this.txt_Noask,
            reason:this.txt_reason,
            portfolio:this.txt_portfolio,
-           date_Ask:this.ask_date,
-           age:parseInt(getmember_age),
-           date_retire:this.retire_date
+           date_Ask:this.getDate_Ask,
+           date_retire:this.getDate_retire,
         }).then(()=>{
            this.$router.push("/member-retirement")
            this.close_dialog();
-           this.Msg_done("ບັນທຶກຂໍ້ມູນສຳເລັດແລ້ວ")
+           location.reload();
+           this.Msg_done("ແກ້ໄຂຂໍ້ມູນສຳເລັດແລ້ວ")
         })
       }catch(err){
       this.close_dialog();
-      this.Msg_fail("ບັນທຶກຂໍ້ມູນບໍ່ສຳເລັດ")
+      this.Msg_fail("ແກ້ໄຂຂໍ້ມູນບໍ່ສຳເລັດ")
       console.log(err);
       }
      }else{
-       this.Msg_fail("ຂໍ້ມູນບໍ່ຄົບຖ້ວນ ກະລຸນາກວດສອບຂໍ້ມູນຄືນໃໝ່");
+       this.Msg_fail("ຂໍ້ມູນບໍ່ຄົບຖ້ວນກະລຸນາກວດສອບຄືນໃໝ່");
      }
-    },
-   async getMaxID(){
-       try{
-        await axios.get("http://localhost:5000/api/v1/Retire-MaxID").then((response)=>{
-          let get_id = response.data.id;
-          if(get_id){
-           var  conID = parseInt(get_id)+1;
-           switch(conID.toString().length){
-            case 1:
-               this.retirement_id="0000"+conID;
-               break;
-            case 2: 
-               this.retirement_id="000"+conID;
-               break;
-           case 3:
-                 this.retirement_id="00"+conID;
-                 break;
-           case 4:
-                   this.retirement_id="0"+conID;
-                   break;
-           case 5:
-                   this.retirement_id=conID.toString();
-                   break;
-           }
-          }else{
-            this.retirement_id="00001";
-          }
-        })
-       }catch(err){
-         console.log(err);
-       }
+      
     },
     // message done
     Msg_done(text) {
@@ -339,6 +319,25 @@ export default {
         message: text,
       });
     },
+    async getData_retire_item(){
+      const id=this.$store.getters.getmyData_retireEdit.retire_id;
+      try{
+        await axios.get(`http://localhost:5000/api/v1/retirements/${id}`).then((response)=>{
+          this.txt_member_id=response.data.member_id;
+          this.txt_member_name=response.data.member_name;
+          this.txt_member_surname=response.data.surname;
+          this.txt_Noask=response.data.No_Ask;
+          this.format_ask_date=dateformat(response.data.date_Ask,"dd-mm-yyyy");
+          this.getDate_Ask=response.data.date_Ask;
+          this.txt_reason=response.data.reason;
+          this.txt_portfolio=response.data.portfolio;
+          this.format_retire_date=dateformat(response.data.date_retire,"dd-mm-yyyy");
+          this.getDate_retire=response.data.date_retire;
+        })
+      }catch(err){
+        console.log(err);
+      }
+    }
   },
 };
 </script>

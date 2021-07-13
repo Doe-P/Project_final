@@ -229,7 +229,6 @@ export default {
             this.txt_foundID = this.$store.getters.getCustomID;
       } catch (err) {
         console.log(err);
-        alert(err);
       }
     },
     //

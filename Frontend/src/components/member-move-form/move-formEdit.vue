@@ -3,7 +3,7 @@
     <template>
       <v-row justify="center">
         <v-dialog
-          v-model="this.$store.getters.getmoveFormadd"
+          v-model="this.$store.getters.getmoveFormEdit.val"
           persistent
           max-width="500px"
           transition="dialog-transition"
@@ -12,7 +12,7 @@
           <v-card>
             <v-toolbar color="primary" height="45" dark>
               <v-toolbar-title class="text-header-dialog">
-                ເພີ່ມຂໍ້ມູນການຍົກຍ້າຍ
+                ແກ້ໄຂຂໍ້ມູນການຍົກຍ້າຍ
               </v-toolbar-title>
             </v-toolbar>
             <v-card-text>
@@ -23,7 +23,7 @@
                       <v-text-field
                         label="ລະຫັດຍົກຍ້າຍ"
                         required
-                        :value="this.$store.getters.getCustomID"
+                        :value="this.$store.getters.getmoveFormEdit.id"
                         readonly
                       ></v-text-field>
                     </v-col>
@@ -129,6 +129,7 @@
 
 <script>
 import axios from 'axios'
+import dateformat from 'dateformat';
 export default {
   name: "Formadd",
   data() {
@@ -166,17 +167,23 @@ export default {
   },
   mounted() {
     this.setYear_select();
-    this.getMaxID();
+    this.getdata_move();
      },
   watch: {
     move_date() {
       this.format_move_date = this.formatMove_date(this.move_date);
     },
+    reload_data(){
+      this.getdata_move();
+    }
   },
   computed: {
     computedDateFormatted() {
       return this.formatMove_date(this.move_date);
     },
+    reload_data(){
+      return this.getdata_move();
+    }
   },
   methods: {
     formatMove_date(date) {
@@ -192,35 +199,53 @@ export default {
       return `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
     },
    async saveData_Move(){
-     const moveID=this.$store.getters.getCustomID;
- if(moveID&&this.txt_moveNO&&this.move_NO&&this.moveReason&&this.moveLocate&&this.moveSign_by&&this.moveAmount&&this.move_date&&this.year_selected){
+     const moveID=this.$store.getters.getmoveFormEdit.id;
+ if(moveID&&this.txt_moveNO&&this.moveReason&&this.moveLocate&&this.moveSign_by&&this.move_date&&this.year_selected){
        try{
-        await axios.post("http://localhost:5000/api/v1/add-move",{
-          move_id:moveID,
+        await axios.put(`http://localhost:5000/api/v1/moves/${moveID}`,{
           move_NO:this.txt_moveNO,
           m_Year:this.year_selected,
           reason:this.moveReason,
-          amount_move:this.moveAmount,
           locate:this.moveLocate,
           sign_by:this.moveSign_by,
           date_move:this.move_date
         }).then(()=>{
-         this.Msg_done("ບັນທຶກຂໍ້ມູນກິດຈະກຳສຳເລັດແລ້ວ")
-         this.$router.push({name:"member-move-create",params:{id:moveID,move_NO:this.txt_moveNO}})
+         this.Msg_done("ແກ້ໄຂຂໍ້ມູນກິດຈະກຳສຳເລັດແລ້ວ")
+         this.$router.push("/member-move")
+         location.reload();
         })
      }catch(err){
-       this.Msg_fail("ບັນທຶກຂໍ້ມູນກິດຈະກຳບໍ່ສຳເລັດ")
+       this.Msg_fail("ແກ້ໄຂຂໍ້ມູນກິດຈະກຳບໍ່ສຳເລັດ")
        console.log(err);
      }
      }else{
        this.Msg_fail("ຂໍ້ມູນບໍ່ຄົບຖ້ວນ ກະລຸນາກວດສອບຄືນໃໝ່")
      }
     },
+    //get data move to update 
+   async getdata_move(){
+     const get_id=this.$store.getters.getmoveFormEdit.id;
+     if(get_id){
+        try{
+        await axios.get(`http://localhost:5000/api/v1/moves/${get_id}`).then((response)=>{
+          this.txt_moveNO=response.data.move_NO;
+          this.moveReason=response.data.reason;
+          this.year_selected=response.data.m_Year;
+          this.moveLocate=response.data.locate;
+          this.moveSign_by=response.data.sign_by;
+          this.format_move_date=dateformat(response.data.move_date,"dd-mm-yyyy")
+        })
+      }catch(err){
+        console.log(err);
+      }
+     }
+    },
     //close form add
     close_form_add() {
       this.$store.dispatch({
-        type:"doClickmoveFormadd",
+        type:"doClickmoveFormEdit",
         val:false,
+        move_id:"",
       })
       location.reload();
     },
@@ -236,23 +261,6 @@ export default {
         let n = i - 1;
         str = (n.toString() + "-" + i.toString()).toString();
         this.Years.push(str);
-      }
-    },
-     // get max id from foundation
-    async getMaxID() {
-      try {
-        await axios
-          .get("http://localhost:5000/api/v1/Move-MaxID")
-          .then((response) => {
-           const getid = response.data.id;
-           this.$store.dispatch({
-              type: "doCustomID",
-              id: getid,
-              str: "A0001",
-            });
-          });
-      } catch (err) {
-        console.log(err);
       }
     },
       // message done
