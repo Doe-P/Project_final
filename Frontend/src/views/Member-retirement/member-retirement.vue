@@ -47,8 +47,8 @@
                   <v-tooltip bottom>
                     <template v-slot:activator="{ on, attrs }">
                       <v-btn
-                       v-on="on"
-                       v-bind="attrs"
+                        v-on="on"
+                        v-bind="attrs"
                         fab
                         small
                         color="primary"
@@ -72,11 +72,17 @@
                   <td>{{ item.sect_name }}</td>
                   <td>{{ item.unit_name }}</td>
                   <td>{{ item.fund_name }}</td>
-                  <td>{{ item.date_retire|formatDate }}</td>
+                  <td>{{ item.date_retire | formatDate }}</td>
                   <td>
                     <v-tooltip bottom>
-                      <template v-slot:activator="{on,attrs}">
-                        <v-icon small v-on="on" v-bind="attrs" @click="edit_item_retire(item.retire_id)">update</v-icon>
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-icon
+                          small
+                          v-on="on"
+                          v-bind="attrs"
+                          @click="edit_item_retire(item.retire_id)"
+                          >update</v-icon
+                        >
                       </template>
                       <span class="text-tooltip">ແກ້ໄຂຂໍ້ມູນ</span>
                     </v-tooltip>
@@ -87,41 +93,56 @@
           </v-card>
         </v-row>
       </v-container>
-      <formRetireEdit/>
+      <formRetireEdit />
     </v-app>
   </div>
 </template>
 
 <script>
-import formRetireEdit from "@/components/retirement-form/retirementEdit.vue"
+import formRetireEdit from "@/components/retirement-form/retirementEdit.vue";
 import MemberCard from "@/components/cards/MemberCard.vue";
-import axios from 'axios';
+import axios from "axios";
 export default {
   name: "MemberRetirement",
   components: {
     MemberCard,
-    formRetireEdit
+    formRetireEdit,
   },
   data() {
     return {
-      headers:[
-        {text:"ເລກທີໃບພົ້ນກະສຽນ",align:"Left",value:"retire_id",sortable:false},
-        {text:"ຊື່",align:"Left",value:"member_name",sortable:false},
-        {text:"ນາມສະກຸນ",align:"Left",value:"surname",sortable:false},
-        {text:"ເພດ",align:"Left",value:"gender",sortable:false},
-        {text:"ອາຍຸ",align:"Left",value:"age",sortable:false},
-        {text:"ປະເພດສະມາຊິກ",align:"Left",value:"typemember",sortable:true},
-        {text:"ຈຸ",align:"Left",value:"sect_name",sortable:true},
-        {text:"ໜ່ວຍ",align:"Left",value:"unit_name",sortable:true},
-        {text:"ຮາກຖານ",align:"Left",value:"fund_name",sortable:true},
-         {text:"ວັນທີພົ້ນກະສຽນ",align:"Left",value:"action",sortable:false},
-        {text:"Actions",align:"Left",value:"action",sortable:false},
+      headers: [
+        {
+          text: "ເລກທີໃບພົ້ນກະສຽນ",
+          align: "Left",
+          value: "retire_id",
+          sortable: false,
+        },
+        { text: "ຊື່", align: "Left", value: "member_name", sortable: false },
+        { text: "ນາມສະກຸນ", align: "Left", value: "surname", sortable: false },
+        { text: "ເພດ", align: "Left", value: "gender", sortable: false },
+        { text: "ອາຍຸ", align: "Left", value: "age", sortable: false },
+        {
+          text: "ປະເພດສະມາຊິກ",
+          align: "Left",
+          value: "typemember",
+          sortable: true,
+        },
+        { text: "ຈຸ", align: "Left", value: "sect_name", sortable: true },
+        { text: "ໜ່ວຍ", align: "Left", value: "unit_name", sortable: true },
+        { text: "ຮາກຖານ", align: "Left", value: "fund_name", sortable: true },
+        {
+          text: "ວັນທີພົ້ນກະສຽນ",
+          align: "Left",
+          value: "action",
+          sortable: false,
+        },
+        { text: "Actions", align: "Left", value: "action", sortable: false },
       ],
-      myData_menberRetire:[],
-      member_retire_search:null,
+      myData_menberRetire: [],
+      member_retire_search: null,
       //-------
-      getCount_allmember:null,
-      getCount_femalemember:null,
+      getCount_allmember: null,
+      getCount_femalemember: null,
     };
   },
   mounted() {
@@ -130,39 +151,50 @@ export default {
     this.Count_femalemember();
   },
   methods: {
-    async getData_retirements(){
-      try{
-        let response = await axios.get(this.$store.getters.myHostname+"/api/v1/retirements");
-        this.myData_menberRetire=response.data;
-      }catch(err){
+    async getData_retirements() {
+      try {
+        let response = await axios.get(
+          this.$store.getters.myHostname + "/api/v1/retirements"
+        );
+        this.myData_menberRetire = response.data;
+      } catch (err) {
         console.log(err);
       }
     },
-    async Count_allmember(){
-       try{
-        await axios.get(this.$store.getters.myHostname+"/api/v1/count-allmembers-retire").then((response)=>{
-          this.getCount_allmember=response.data.count_member;
-        })
-       }catch(err){
-         console.log(err);
-       }
+    async Count_allmember() {
+      try {
+        await axios
+          .get(
+            this.$store.getters.myHostname + "/api/v1/count-allmembers-retire"
+          )
+          .then((response) => {
+            this.getCount_allmember = response.data.count_member;
+          });
+      } catch (err) {
+        console.log(err);
+      }
     },
-     async Count_femalemember(){
-       try{
-        await axios.get(this.$store.getters.myHostname+"/api/v1/count-femalemembers-retire").then((response)=>{
-          this.getCount_femalemember=response.data.count_member;
-        })
-       }catch(err){
-         console.log(err);
-       }
+    async Count_femalemember() {
+      try {
+        await axios
+          .get(
+            this.$store.getters.myHostname +
+              "/api/v1/count-femalemembers-retire"
+          )
+          .then((response) => {
+            this.getCount_femalemember = response.data.count_member;
+          });
+      } catch (err) {
+        console.log(err);
+      }
     },
-    edit_item_retire(id){
-     this.$store.dispatch({
-        type:"doClick_retireEdit",
-        showForm:true,
-        retire_id:id
+    edit_item_retire(id) {
+      this.$store.dispatch({
+        type: "doClick_retireEdit",
+        showForm: true,
+        retire_id: id,
       });
-    }
+    },
   },
 };
 </script>

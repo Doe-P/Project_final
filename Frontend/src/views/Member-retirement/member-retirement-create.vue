@@ -30,10 +30,10 @@
                 ></v-text-field>
                 <v-spacer></v-spacer>
                 <v-tooltip bottom>
-                  <template v-slot:activator="{on,attrs}">
-                      <v-btn color="primary" dark v-on="on" v-bind="attrs">
-                  <v-icon>print</v-icon>
-                  </v-btn>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-btn color="primary" dark v-on="on" v-bind="attrs">
+                      <v-icon>print</v-icon>
+                    </v-btn>
                   </template>
                   <span class="text-tooltip">ພິມຂໍ້ມູນສະມາຊິກພົ້ນກະສຽນ</span>
                 </v-tooltip>
@@ -47,54 +47,61 @@
                 <td>{{ item.gender }}</td>
                 <td>{{ item.birthday | formatDate }}</td>
                 <td>{{ item.age }}</td>
-                <td>{{item.responsible}}</td>
+                <td>{{ item.responsible }}</td>
                 <td>{{ item.sect_name }}</td>
                 <td>{{ item.unit_name }}</td>
                 <td>{{ item.fund_name }}</td>
                 <td>
-                <v-tooltip bottom>
-                   <template v-slot:activator="{on,attrs}">
-                    <v-btn
-                    v-bind="attrs"
-                    v-on="on"
-                    @click="
-                      selectItem(
-                        item.member_id,
-                        item.member_name,
-                        item.surname,
-                        item.age)"
-                    text
-                    small
-                    color="primary">
-                    <v-icon>add</v-icon>
-                  </v-btn>
-                 </template>
-                 <span class="text-tooltip">ຄລິກເພື່ອເພີ່ມ</span>
-                </v-tooltip>
+                  <v-tooltip bottom>
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-btn
+                        v-bind="attrs"
+                        v-on="on"
+                        @click="
+                          selectItem(
+                            item.member_id,
+                            item.member_name,
+                            item.surname,
+                            item.age
+                          )
+                        "
+                        text
+                        small
+                        color="primary"
+                      >
+                        <v-icon>add</v-icon>
+                      </v-btn>
+                    </template>
+                    <span class="text-tooltip">ຄລິກເພື່ອເພີ່ມ</span>
+                  </v-tooltip>
                 </td>
               </tr>
             </template>
           </v-data-table>
           <v-card-actions class="justify-start">
-             <v-btn color="primary" small @click="$router.push('/member-retirement')">
+            <v-btn
+              color="primary"
+              small
+              @click="$router.push('/member-retirement')"
+            >
               ຍ້ອນກັບ
-             </v-btn>
+            </v-btn>
           </v-card-actions>
         </v-card>
       </v-row>
-     <!-- Retirement component -->
-     <retirementAdd/>
+      <!-- Retirement component -->
+      <retirementAdd />
     </v-container>
   </div>
 </template>
 
 <script>
-import retirementAdd from "@/components/retirement-form/retirementAdd.vue"
-import axios from 'axios';
+import retirementAdd from "@/components/retirement-form/retirementAdd.vue";
+import axios from "axios";
 export default {
   name: "MemberRetirementCreate",
-  components:{
-   retirementAdd,
+  components: {
+    retirementAdd,
   },
   data() {
     return {
@@ -118,13 +125,13 @@ export default {
       myData_memRetire: [
         {
           member_id: 1,
-          member_name:"do",
-          member_surname:"dodo"
+          member_name: "do",
+          member_surname: "dodo",
         },
         {
           member_id: 2,
-           member_name:"Jass",
-          member_surname:"Bye"
+          member_name: "Jass",
+          member_surname: "Bye",
         },
       ],
       selected: [],
@@ -138,35 +145,39 @@ export default {
   },
   methods: {
     // setvalue to form retireAdd
-    selectItem(id,name,surname,age){
+    selectItem(id, name, surname, age) {
       this.$store.dispatch({
-        type:"doClick_retire",
-        showForm:true,
-        member_id:id,
-        member_name:name,
-        member_surname:surname,
-        member_age:age
-      })
+        type: "doClick_retire",
+        showForm: true,
+        member_id: id,
+        member_name: name,
+        member_surname: surname,
+        member_age: age,
+      });
     },
-   async getmemberRetirement(){
-     const user_status='admin'
-      const fund_id=this.$store.getters.getData_user.user_foundation;
-     this.myData_memRetire=[];
-      try{
-        if(user_status=='admin'){
-         let response = await axios.get(this.$store.getters.myHostname+"/api/v1/membersWhere-Status-Age");
-         this.myData_memRetire=response.data;
-      }else if(user_status=='user'){
-         let response =await axios.get(`${this.$store.getters.myHostname}/api/v1/membersWhere-Status-Age-client/${fund_id}`);
-         this.myData_memRetire=response.data;
-      }else{
-         this.Msg_fail("ສະຖານະຜູ້ໃຊ້ລະບົບບໍ່ຖືກຕ້ອງ");
+    async getmemberRetirement() {
+      const user_status = "admin";
+      const fund_id = this.$store.getters.getData_user.user_foundation;
+      this.myData_memRetire = [];
+      try {
+        if (user_status == "admin") {
+          let response = await axios.get(
+            this.$store.getters.myHostname + "/api/v1/membersWhere-Status-Age"
+          );
+          this.myData_memRetire = response.data;
+        } else if (user_status == "user") {
+          let response = await axios.get(
+            `${this.$store.getters.myHostname}/api/v1/membersWhere-Status-Age-client/${fund_id}`
+          );
+          this.myData_memRetire = response.data;
+        } else {
+          this.Msg_fail("ສະຖານະຜູ້ໃຊ້ລະບົບບໍ່ຖືກຕ້ອງ");
+        }
+      } catch (err) {
+        console.log(err);
       }
-    }catch(err){
-      console.log(err);
-    }
-  },
-   // message done
+    },
+    // message done
     Msg_done(text) {
       // Message show
       this.$store.dispatch({
@@ -188,8 +199,8 @@ export default {
         message: text,
       });
     },
-}
-}
+  },
+};
 </script>
 
 <style lang="scss" scoped>
@@ -207,9 +218,8 @@ export default {
   font-family: "boonhome-400";
   font-size: 18px;
 }
-.text-tooltip{
-   font-family: "boonhome-400";
+.text-tooltip {
+  font-family: "boonhome-400";
   font-size: 14px;
-
 }
 </style>

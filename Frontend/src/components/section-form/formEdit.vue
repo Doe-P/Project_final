@@ -72,7 +72,7 @@
                         ></v-text-field>
                       </template>
                       <v-date-picker
-                       class="calendar"
+                        class="calendar"
                         ref="picker"
                         v-model="sect_date_edit"
                         :max="new Date().toISOString().substr(0, 10)"
@@ -84,16 +84,8 @@
                     </v-menu>
                   </template>
                   <v-radio-group v-model="statusSelected" row>
-                    <v-radio
-                      label="ບັນຈຸ"
-                      value="ບັນຈຸ"
-                      
-                    ></v-radio>
-                    <v-radio
-                      label="ບໍ່ໄດ້ບັນຈຸ"
-                      value="ບໍ່ໄດ້ບັນຈຸ"
-                     
-                    ></v-radio>
+                    <v-radio label="ບັນຈຸ" value="ບັນຈຸ"></v-radio>
+                    <v-radio label="ບໍ່ໄດ້ບັນຈຸ" value="ບໍ່ໄດ້ບັນຈຸ"></v-radio>
                   </v-radio-group>
                   <v-btn @click="close_form_edit" color="error">ຍົກເລີກ</v-btn>
                   <span></span>
@@ -117,7 +109,7 @@
 <script>
 import axios from "axios";
 //import moment from "moment";
-import dateformat from "dateformat"
+import dateformat from "dateformat";
 export default {
   name: "Formedit",
   data() {
@@ -151,8 +143,8 @@ export default {
       txt_sectname_edit: null,
       unit_name: null,
       found_name: null,
-      unitID:null,
-      get_date:null,
+      unitID: null,
+      get_date: null,
     };
   },
   mounted() {
@@ -182,7 +174,7 @@ export default {
     // form edit
     formatsect_date_edit(date) {
       if (!date) return null;
-       this.get_date=dateformat(date,"yyyy-mm-dd")
+      this.get_date = dateformat(date, "yyyy-mm-dd");
       const [year, month, day] = date.split("-");
       return `${day}-${month}-${year}`;
     },
@@ -195,15 +187,15 @@ export default {
     close_form_edit() {
       this.$store.dispatch({
         type: "clickShow_sect_formEdit",
-        id:"",
-        name:"",
+        id: "",
+        name: "",
       });
     },
     // get data foundation
     async getdata_found_selection() {
       try {
         let response = await axios.get(
-          this.$store.getters.myHostname+"/api/v1/getItem/foundations"
+          this.$store.getters.myHostname + "/api/v1/getItem/foundations"
         );
         this.get_found_all = response.data;
         for (let i = 0; i <= this.get_found_all.length; i++) {
@@ -248,8 +240,14 @@ export default {
           .get(`${this.$store.getters.myHostname}/api/v1/sections/${id}`)
           .then((response) => {
             (this.txt_sectname_edit = response.data.sect_name),
-             this.format_sect_date_edit=dateformat(response.data.date_sect,"dd-mm-yyyy"),
-              this.get_date=dateformat(response.data.date_sect,"yyyy-mm-dd"),
+              (this.format_sect_date_edit = dateformat(
+                response.data.date_sect,
+                "dd-mm-yyyy"
+              )),
+              (this.get_date = dateformat(
+                response.data.date_sect,
+                "yyyy-mm-dd"
+              )),
               (this.statusSelected = response.data.status_sect);
             for (let i = 0; i <= this.get_found_all.length; i++) {
               if (
@@ -260,7 +258,9 @@ export default {
                 const id = this.get_found_all[i].fund_id;
 
                 axios
-                  .get(`${this.$store.getters.myHostname}/api/v1/getItem-units/${id}`)
+                  .get(
+                    `${this.$store.getters.myHostname}/api/v1/getItem-units/${id}`
+                  )
                   .then((res) => {
                     this.get_unit_all = res.data;
                     for (let i = 0; i <= this.get_unit_all.length; i++) {
@@ -270,7 +270,7 @@ export default {
                         String(this.get_unit_all[i].unit_id).valueOf()
                       ) {
                         this.unit_name = this.get_unit_all[i].unit_name;
-                        this.unitID=this.get_unit_all[i].unit_id;
+                        this.unitID = this.get_unit_all[i].unit_id;
                       }
                     }
                   });
@@ -282,33 +282,41 @@ export default {
       }
     },
     // save data
-   async Submit_form(){
-     const get_id_sect = this.$store.getters.getsect_formEdit.id;
-    for(let i=0;i<=this.get_unit_all.length;i++){
-      if(String(this.unit_name).valueOf()==String(this.get_unit_all[i].unit_name).valueOf()){
-        this.unitID = this.get_unit_all[i].unit_id;
-         try{
-      await axios.put(`${this.$store.getters.myHostname}/api/v1/sections/${get_id_sect}`,{
-       sect_name:this.txt_sectname_edit,
-       unit_id:this.unitID,
-       date_sect: this.get_date,
-       status_sect:this.statusSelected
-      }).then(()=>{
-       this.close_form_edit=false;
-       this.Msg_done("ແກ້ໄຂຂໍ້ມູນສຳເລັດແລ້ວ")
-       location.reload();
-      })
-     }catch(err){
-        this.close_form_edit=false;
-       console.log(err);
-       alert(err)
-      
-       this.Msg_fail("ແກ້ໄຂຂໍ້ມູນບໍ່ສຳເລັດ")
-     }
+    async Submit_form() {
+      const get_id_sect = this.$store.getters.getsect_formEdit.id;
+      for (let i = 0; i <= this.get_unit_all.length; i++) {
+        if (
+          String(this.unit_name).valueOf() ==
+          String(this.get_unit_all[i].unit_name).valueOf()
+        ) {
+          this.unitID = this.get_unit_all[i].unit_id;
+          try {
+            await axios
+              .put(
+                `${this.$store.getters.myHostname}/api/v1/sections/${get_id_sect}`,
+                {
+                  sect_name: this.txt_sectname_edit,
+                  unit_id: this.unitID,
+                  date_sect: this.get_date,
+                  status_sect: this.statusSelected,
+                }
+              )
+              .then(() => {
+                this.close_form_edit = false;
+                this.Msg_done("ແກ້ໄຂຂໍ້ມູນສຳເລັດແລ້ວ");
+                location.reload();
+              });
+          } catch (err) {
+            this.close_form_edit = false;
+            console.log(err);
+            alert(err);
+
+            this.Msg_fail("ແກ້ໄຂຂໍ້ມູນບໍ່ສຳເລັດ");
+          }
+        }
       }
-    }
     },
-        // message done
+    // message done
     Msg_done(text) {
       // Message show
       this.$store.dispatch({

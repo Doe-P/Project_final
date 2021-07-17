@@ -57,7 +57,7 @@ export default new Vuex.Store({
       member_id: "",
       member_name: "",
       member_surname: "",
-      member_age:"",
+      member_age: "",
     },
     //retirement member view
     myData_retireEdit: {
@@ -66,16 +66,16 @@ export default new Vuex.Store({
     },
     // member move
     moveFormadd: false,
-    moveFormEdit:{
-      val:false,
-      id:"",
+    moveFormEdit: {
+      val: false,
+      id: "",
     },
     // form add certificate
     formAdd_certificate: false,
     //form add member certificate
     addMember_certificate: {
-      isShow:false,
-      mydata:[]
+      isShow: false,
+      mydata: [],
     },
     // form edit certificate
     formEdit_certificate: false,
@@ -87,11 +87,11 @@ export default new Vuex.Store({
       user_foundation: "",
     },
     // server host
-    myHost:"http://localhost:5000"
+    myHost: "http://localhost:5000",
   },
   getters: {
     // returnn server host
-    myHostname(state){
+    myHostname(state) {
       return state.myHost;
     },
     //get auto id
@@ -122,8 +122,8 @@ export default new Vuex.Store({
     getmyData_retire(state) {
       return state.myData_retire;
     },
-     //Retirement view
-     getmyData_retireEdit(state) {
+    //Retirement view
+    getmyData_retireEdit(state) {
       return state.myData_retireEdit;
     },
     //Message
@@ -298,23 +298,23 @@ export default new Vuex.Store({
     },
     // Retirement
     setMyData_retire(state, data) {
-      if(data){
+      if (data) {
         state.myData_retire.showForm = data.showForm;
         state.myData_retire.member_id = data.member_id;
         state.myData_retire.member_name = data.member_name;
         state.myData_retire.member_surname = data.member_surname;
-        state.myData_retire.member_age=data.member_age;
-      }else{
-        console.log("not found in"+data.toString());
+        state.myData_retire.member_age = data.member_age;
+      } else {
+        console.log("not found in" + data.toString());
       }
     },
     // Retirement
     setMyData_retireEdit(state, data) {
-      if(data){
+      if (data) {
         state.myData_retireEdit.showForm = data.showForm;
         state.myData_retireEdit.retire_id = data.retire_id;
-      }else{
-        console.log("not found in"+data.toString());
+      } else {
+        console.log("not found in" + data.toString());
       }
     },
     // member move form add
@@ -322,12 +322,12 @@ export default new Vuex.Store({
       state.moveFormadd = val;
     },
     setmoveFormEdit(state, data) {
-      if(data.val&&data.move_id){
-        state.moveFormEdit.val=data.val;
-        state.moveFormEdit.id=data.move_id;
-      }else{
-        state.moveFormEdit.val=false;
-        state.moveFormEdit.id="";
+      if (data.val && data.move_id) {
+        state.moveFormEdit.val = data.val;
+        state.moveFormEdit.id = data.move_id;
+      } else {
+        state.moveFormEdit.val = false;
+        state.moveFormEdit.id = "";
       }
     },
     //form add certificate
@@ -339,15 +339,14 @@ export default new Vuex.Store({
       state.formEdit_certificate = value;
     },
     //form add members certificate
-    setaddMember_certificate(state,data) {
-     if(data){
-      state.addMember_certificate.isShow = true;
-      state.addMember_certificate.mydata=data;
-     }else{
-      state.addMember_certificate.isShow = false;
-       return null
-      
-     }
+    setaddMember_certificate(state, data) {
+      if (data) {
+        state.addMember_certificate.isShow = true;
+        state.addMember_certificate.mydata = data;
+      } else {
+        state.addMember_certificate.isShow = false;
+        return null;
+      }
     },
     // set value for  customID
     setCustomID(state, values) {
@@ -414,14 +413,14 @@ export default new Vuex.Store({
       }
     },
     set_users(state, data) {
-      if(data){
+      if (data) {
         state.get_users.user_name = data.username;
-      state.get_users.user_status = data.userstatus;
-      state.get_users.user_foundation = data.foundation;
-      }else{
+        state.get_users.user_status = data.userstatus;
+        state.get_users.user_foundation = data.foundation;
+      } else {
         state.get_users.user_name = "";
-      state.get_users.user_status = "";
-      state.get_users.user_foundation = "";
+        state.get_users.user_status = "";
+        state.get_users.user_foundation = "";
       }
     },
   },
@@ -481,24 +480,24 @@ export default new Vuex.Store({
     },
     doClick_retire(
       { commit },
-      { showForm, member_id, member_name, member_surname,member_age }
+      { showForm, member_id, member_name, member_surname, member_age }
     ) {
       commit("setMyData_retire", {
         showForm,
         member_id,
         member_name,
         member_surname,
-        member_age
+        member_age,
       });
     },
-    doClick_retireEdit({ commit },{ showForm, retire_id}) {
-      commit("setMyData_retireEdit", {showForm,retire_id});
+    doClick_retireEdit({ commit }, { showForm, retire_id }) {
+      commit("setMyData_retireEdit", { showForm, retire_id });
     },
     doClickmoveFormadd({ commit }, { val }) {
       commit("setmoveFormadd", val);
     },
-    doClickmoveFormEdit({ commit }, { val,move_id }) {
-      commit("setmoveFormEdit", {val,move_id});
+    doClickmoveFormEdit({ commit }, { val, move_id }) {
+      commit("setmoveFormEdit", { val, move_id });
     },
     doClickFormadd_certificate({ commit }, { value }) {
       commit("setformAdd_certificate", value);
@@ -506,7 +505,7 @@ export default new Vuex.Store({
     doClickFormedit_certificate({ commit }, { value }) {
       commit("setformEdit_certificate", value);
     },
-    doClickAddmember_certificate({ commit },{data}) {
+    doClickAddmember_certificate({ commit }, { data }) {
       commit("setaddMember_certificate", data);
     },
     // action customid

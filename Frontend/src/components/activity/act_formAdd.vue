@@ -16,7 +16,11 @@
             </v-toolbar>
             <v-card-text>
               <v-container>
-                <v-form @submit.prevent="SavaData_Activity" class="table-content" v-model="valid">
+                <v-form
+                  @submit.prevent="SavaData_Activity"
+                  class="table-content"
+                  v-model="valid"
+                >
                   <v-text-field
                     label="ລະຫັດກິດຈະກຳ"
                     :value="this.$store.getters.getCustomID"
@@ -102,7 +106,7 @@
 </template>
 
 <script>
-import axios from "axios"
+import axios from "axios";
 export default {
   name: "ActFormadd",
   data() {
@@ -126,18 +130,18 @@ export default {
       },
       // valid form
       valid: false,
-      Data_typeActivity:[],
-      Data_typeActivity_all:[],
-      typeact_selected:null,
-      get_typeAct_id:null,
+      Data_typeActivity: [],
+      Data_typeActivity_all: [],
+      typeact_selected: null,
+      get_typeAct_id: null,
       //-------------
-      txt_actTitle:null,
-      txt_actLocate:null,
+      txt_actTitle: null,
+      txt_actLocate: null,
     };
   },
   mounted() {
-   this.getMaxID();
-   this.getActivity_type();   
+    this.getMaxID();
+    this.getActivity_type();
   },
   watch: {
     act_date() {
@@ -168,14 +172,14 @@ export default {
         type: "clickShow_act_formAdd",
       });
     },
-      // get max id from foundation
+    // get max id from foundation
     async getMaxID() {
       try {
         await axios
-          .get(this.$store.getters.myHostname+"/api/v1/Activity-MaxID")
+          .get(this.$store.getters.myHostname + "/api/v1/Activity-MaxID")
           .then((response) => {
-           const getid = response.data.id;
-           this.$store.dispatch({
+            const getid = response.data.id;
+            this.$store.dispatch({
               type: "doCustomID",
               id: getid,
               str: "C0001",
@@ -186,14 +190,17 @@ export default {
       }
     },
     //
-    select_Actid(){
-     for(let i=0;i<=this.Data_typeActivity_all.length;i++){
-       if(String(this.typeact_selected).valueOf()==String(this.Data_typeActivity_all[i].typeAct_name).valueOf()){
-         this.get_typeAct_id=this.Data_typeActivity_all[i].typeAct_id;
-       }
-     }
+    select_Actid() {
+      for (let i = 0; i <= this.Data_typeActivity_all.length; i++) {
+        if (
+          String(this.typeact_selected).valueOf() ==
+          String(this.Data_typeActivity_all[i].typeAct_name).valueOf()
+        ) {
+          this.get_typeAct_id = this.Data_typeActivity_all[i].typeAct_id;
+        }
+      }
     },
-      // message done
+    // message done
     Msg_done(text) {
       // Message show
       this.$store.dispatch({
@@ -215,24 +222,38 @@ export default {
         message: text,
       });
     },
-   async getActivity_type(){
-       try{
-         await axios.get(this.$store.getters.myHostname+"/api/v1/typeActivity").then((response)=>{
-          this.Data_typeActivity_all=response.data;
-          for(let i=0;i<=this.Data_typeActivity_all.length;i++){
-            this.Data_typeActivity.push(this.Data_typeActivity_all[i].typeAct_name);
-          }
-         })
-       }catch(err){
-         console.log(err);
-       }
+    async getActivity_type() {
+      try {
+        await axios
+          .get(this.$store.getters.myHostname + "/api/v1/typeActivity")
+          .then((response) => {
+            this.Data_typeActivity_all = response.data;
+            for (let i = 0; i <= this.Data_typeActivity_all.length; i++) {
+              this.Data_typeActivity.push(
+                this.Data_typeActivity_all[i].typeAct_name
+              );
+            }
+          });
+      } catch (err) {
+        console.log(err);
+      }
     },
-   async SavaData_Activity(){
-     const activity_id = this.$store.getters.getCustomID;
-     let Activity_array=[];
-     Activity_array.push(activity_id,this.txt_actTitle,this.get_typeAct_id,this.txt_actLocate,0,this.act_date)
-    let conActivity = Activity_array.toString();
-      this.$router.push({name:'activity-create',params:{data:conActivity}})
+    async SavaData_Activity() {
+      const activity_id = this.$store.getters.getCustomID;
+      let Activity_array = [];
+      Activity_array.push(
+        activity_id,
+        this.txt_actTitle,
+        this.get_typeAct_id,
+        this.txt_actLocate,
+        0,
+        this.act_date
+      );
+      let conActivity = Activity_array.toString();
+      this.$router.push({
+        name: "activity-create",
+        params: { data: conActivity },
+      });
 
       /* try{
          await axios.post("http://localhost:5000",{
@@ -252,7 +273,7 @@ export default {
          console.log(err);
        }
        */
-    }
+    },
   },
 };
 </script>
@@ -268,8 +289,8 @@ export default {
   font-family: "boonhome-400";
   font-weight: 24px;
 }
-.calendar{
-   font-family: "boonhome-400";
+.calendar {
+  font-family: "boonhome-400";
   font-weight: 14px;
 }
 </style>

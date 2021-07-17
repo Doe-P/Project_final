@@ -271,7 +271,7 @@ export default {
       });
       this.$router.push("/register-view");
     },
-     get_users() {
+    get_users() {
       this.$store.dispatch({
         type: "doget_users",
         username: "dodo",
@@ -284,7 +284,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.fixes{
-  position:fixed;
+.fixes {
+  position: fixed;
 }
 </style>

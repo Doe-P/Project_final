@@ -36,7 +36,7 @@
                   minLength('ຈຳນວນເງີນສະຕິ', 4),
                   maxLength('ຈຳນວນເງີນສະຕິ', 10),
                 ]"
-                 @keypress.native="isNumberonly($event)"
+                @keypress.native="isNumberonly($event)"
               ></v-text-field>
               <v-btn @click="close_form_edit" color="error">ຍົກເລີກ</v-btn>
               <span></span>
@@ -78,7 +78,7 @@ export default {
       // valid form
       valid: false,
       txt_memberType_name_edit: null,
-      txt_memType_price_edit:0,
+      txt_memType_price_edit: 0,
     };
   },
   mounted() {
@@ -116,30 +116,32 @@ export default {
           .get(`${this.$store.getters.myHostname}/api/v1/type-members/${id}`)
           .then((response) => {
             (this.txt_memberType_name_edit = response.data.typemember),
-              (this.txt_memType_price_edit = (response.data.money).toString());
+              (this.txt_memType_price_edit = response.data.money.toString());
           });
       } catch (err) {
         console.log(err);
       }
     },
-   async Update_data(){
-     const id = this.$store.getters.getMemberType_formEdit.id;
-      try{
-         await axios.put(`${this.$store.getters.myHostname}/api/v1/type-members/${id}`,{
-         typemember:this.txt_memberType_name_edit,
-         money:parseInt(this.txt_memType_price_edit)
-       }).then(()=>{
-        this.close_form_edit();
-        this.Msg_done("ບັນທຶກຂໍ້ມູນສຳເລັດແລ້ວ")
-        location.reload();
-       })
-      }catch(err){
+    async Update_data() {
+      const id = this.$store.getters.getMemberType_formEdit.id;
+      try {
+        await axios
+          .put(`${this.$store.getters.myHostname}/api/v1/type-members/${id}`, {
+            typemember: this.txt_memberType_name_edit,
+            money: parseInt(this.txt_memType_price_edit),
+          })
+          .then(() => {
+            this.close_form_edit();
+            this.Msg_done("ບັນທຶກຂໍ້ມູນສຳເລັດແລ້ວ");
+            location.reload();
+          });
+      } catch (err) {
         this.close_form_edit();
         this.Msg_fail("ແກ້ໄຂຂໍ້ມູນບໍ່ສຳເລັດ");
         console.log(err);
       }
     },
-     Msg_done(text) {
+    Msg_done(text) {
       // Message show
       this.$store.dispatch({
         type: "doClick_myMsg",

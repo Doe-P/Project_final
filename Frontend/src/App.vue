@@ -4,7 +4,7 @@
     <v-app>
       <div id="myapp">
         <Header v-show="$store.getters.getLogin" />
-         <Msg/>
+        <Msg />
         <Menu />
       </div>
 

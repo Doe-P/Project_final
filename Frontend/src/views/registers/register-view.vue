@@ -139,7 +139,7 @@ export default {
       ],
       userData: [{ user_id: 1 }, { user_id: 2 }],
       search_user: null,
-      confirm_dialog:false,
+      confirm_dialog: false,
     };
   },
 

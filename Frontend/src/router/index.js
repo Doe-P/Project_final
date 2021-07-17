@@ -24,16 +24,16 @@ import receive_money from "@/views/receive/receive-money.vue";
 import receive_create from "@/views/receive/receive-create.vue";
 import certificate_view from "@/views/Certificate/certificate-view.vue";
 import certificate_detail from "@/views/Certificate/certificate-detail.vue";
-import membersReport from "@/views/reports/membersReport.vue"
-import members_statisticsReport from "@/views/reports/members-statistics-report.vue"
-import members_moveReport from "@/views/reports/member-move-report.vue"
-import members_retireReport from "@/views/reports/member-retirement-report.vue"
-import receive_Report from "@/views/reports/receive-report.vue"
-import activityReport from "@/views/reports/activity-report.vue"
-import certificateReport from "@/views/reports/certificate-report.vue"
-import register_view from "@/views/registers/register-view.vue"
-import register_create from "@/views/registers/register-create.vue"
-import register_edit from "@/views/registers/register-edit.vue"
+import membersReport from "@/views/reports/membersReport.vue";
+import members_statisticsReport from "@/views/reports/members-statistics-report.vue";
+import members_moveReport from "@/views/reports/member-move-report.vue";
+import members_retireReport from "@/views/reports/member-retirement-report.vue";
+import receive_Report from "@/views/reports/receive-report.vue";
+import activityReport from "@/views/reports/activity-report.vue";
+import certificateReport from "@/views/reports/certificate-report.vue";
+import register_view from "@/views/registers/register-view.vue";
+import register_create from "@/views/registers/register-create.vue";
+import register_edit from "@/views/registers/register-edit.vue";
 
 Vue.use(VueRouter);
 
@@ -54,16 +54,16 @@ const routes = [
     component: MemberCreate,
   },
   {
-    path: '/member/edit/:member_edit',
+    path: "/member/edit/:member_edit",
     name: "member-edit",
     component: MemberEdit,
-    props:true
+    props: true,
   },
   {
-    path: '/member/detail/:member_detail',
+    path: "/member/detail/:member_detail",
     name: "member-detail",
     component: MemberDetail,
-    props:true
+    props: true,
   },
   {
     path: "/foundation",
@@ -101,10 +101,10 @@ const routes = [
     component: certificateType,
   },
   {
-    path: '/activity',
+    path: "/activity",
     name: "activity",
     component: Activity,
-    props:true,
+    props: true,
   },
   {
     path: "/activity-create",
@@ -112,7 +112,7 @@ const routes = [
     component: ActivityCreate,
   },
   {
-    path: '/activity/view/:activity_view',
+    path: "/activity/view/:activity_view",
     name: "activity-view",
     component: Activityview,
   },
@@ -122,95 +122,95 @@ const routes = [
     component: retirement,
   },
   {
-   path:"/member-retirement-create",
-   name:"member-retirement-create",
-   component:retirement_create
+    path: "/member-retirement-create",
+    name: "member-retirement-create",
+    component: retirement_create,
   },
   {
-   path:"/member-move",
-   name:"member-move",
-   component:member_move
+    path: "/member-move",
+    name: "member-move",
+    component: member_move,
   },
   {
-    path:"/member-move-create",
-    name:"member-move-create",
-    component:member_move_create
+    path: "/member-move-create",
+    name: "member-move-create",
+    component: member_move_create,
   },
- {
-  path:"/member/move/detail/:id",
-  name:"member-move-detail",
-  component:member_move_detail
- },
- {
-   path:"/receive-money",
-   name:"receive-money",
-   component:receive_money
- },
- {
-   path:"/recive-create",
-   name:"recive-create",
-   component:receive_create
- },
- {
-   path:"/certificate-view",
-   name:"certificate-view",
-   component:certificate_view
- },
- {
-   path:"/certificate-detail",
-   name:"certificate-datail",
-   component:certificate_detail
- },
- {
-  path:"/members-report",
-  name:"members-report",
-  component:membersReport
- },
- {
-   path:"/members-statistics-report",
-   name:"members-statistics-report",
-   component:members_statisticsReport
- },
- {
-  path:"/member-move-report",
-  name:"member-move-report",
-  component:members_moveReport
- },
- {
-   path:"/members-retirement-report",
-   name:"members-retirment-report",
-   component:members_retireReport
- },
- {
-  path:"/receive-report",
-  name:"receive-report",
-  component:receive_Report
- },
- {
-   path:"/activity-report",
-   name:"activity-report",
-   component:activityReport
- },
- {
-  path:"/certificate-report",
-  name:"certificate-report",
-  component:certificateReport
- },
- {
-   path:"/register-view",
-   name:"register-view",
-   component:register_view
- },
- {
-  path:"/register-create",
-  name:"register-create",
-  component:register_create
- },
- {
-  path:"/register-edit",
-  name:"register-edit",
-  component:register_edit
- },
+  {
+    path: "/member/move/detail/:id",
+    name: "member-move-detail",
+    component: member_move_detail,
+  },
+  {
+    path: "/receive-money",
+    name: "receive-money",
+    component: receive_money,
+  },
+  {
+    path: "/recive-create",
+    name: "recive-create",
+    component: receive_create,
+  },
+  {
+    path: "/certificate-view",
+    name: "certificate-view",
+    component: certificate_view,
+  },
+  {
+    path: "/certificate-detail",
+    name: "certificate-datail",
+    component: certificate_detail,
+  },
+  {
+    path: "/members-report",
+    name: "members-report",
+    component: membersReport,
+  },
+  {
+    path: "/members-statistics-report",
+    name: "members-statistics-report",
+    component: members_statisticsReport,
+  },
+  {
+    path: "/member-move-report",
+    name: "member-move-report",
+    component: members_moveReport,
+  },
+  {
+    path: "/members-retirement-report",
+    name: "members-retirment-report",
+    component: members_retireReport,
+  },
+  {
+    path: "/receive-report",
+    name: "receive-report",
+    component: receive_Report,
+  },
+  {
+    path: "/activity-report",
+    name: "activity-report",
+    component: activityReport,
+  },
+  {
+    path: "/certificate-report",
+    name: "certificate-report",
+    component: certificateReport,
+  },
+  {
+    path: "/register-view",
+    name: "register-view",
+    component: register_view,
+  },
+  {
+    path: "/register-create",
+    name: "register-create",
+    component: register_create,
+  },
+  {
+    path: "/register-edit",
+    name: "register-edit",
+    component: register_edit,
+  },
   {
     path: "/",
     redirect: "/Login",
@@ -223,8 +223,8 @@ const routes = [
 
 const router = new VueRouter({
   routes,
-  mode:'history',
-  base:process.env.BASE_URL
+  mode: "history",
+  base: process.env.BASE_URL,
 });
 
 export default router;

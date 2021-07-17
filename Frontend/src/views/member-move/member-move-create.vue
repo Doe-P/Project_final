@@ -80,7 +80,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import axios from "axios";
 export default {
   name: "MemberMoveCreate",
   data() {
@@ -92,7 +92,7 @@ export default {
         { text: "ນາມສະກຸນ", value: "surname", sortable: false },
         { text: "ເພດ", value: "gender", sortable: true },
         { text: "ປະເພດສະມາຊິກ", value: "typemember", sortable: true },
-         { text: "ຈຸ", value: "sect_name", sortable: true },
+        { text: "ຈຸ", value: "sect_name", sortable: true },
         { text: "ໜ່ວຍ", value: "unit_name", sortable: true },
         { text: "ຮາກຖານ", value: "fund_name", sortable: true },
       ],
@@ -100,23 +100,23 @@ export default {
       single_select: false,
       member_selected: [],
       checked: true,
-      filter_member_id:[],
+      filter_member_id: [],
       //-------------
-      myFoundations:[],
-      myFoundation_all:[],
-      selected_found:null,
+      myFoundations: [],
+      myFoundation_all: [],
+      selected_found: null,
       //--------------
-      myUnits:[],
-      myUnit_all:[],
-      selected_unit:null,
+      myUnits: [],
+      myUnit_all: [],
+      selected_unit: null,
       //
-      mySections:[],
-      mySection_all:[],
-      selected_sect:null,
+      mySections: [],
+      mySection_all: [],
+      selected_sect: null,
       //
-      get_fund_id:null,
-      get_unit_id:null,
-      get_sect_id:null
+      get_fund_id: null,
+      get_unit_id: null,
+      get_sect_id: null,
     };
   },
 
@@ -130,7 +130,7 @@ export default {
         this.checked = false;
         this.filter_member();
       } else {
-        this.filter_member_id=[];
+        this.filter_member_id = [];
         this.checked = true;
       }
     },
@@ -145,43 +145,57 @@ export default {
       }
     },
     */
-    filter_member(){
-      this.filter_member_id=[];
-     for(let i=0;i<=this.member_selected.length;i++){
-         this.filter_member_id.push(this.member_selected[i].member_id)
-        }
+    filter_member() {
+      this.filter_member_id = [];
+      for (let i = 0; i <= this.member_selected.length; i++) {
+        this.filter_member_id.push(this.member_selected[i].member_id);
+      }
     },
     // save
-   async SaveData_move_detail(){
-      const get_id=this.$route.params.id;
-     if(this.filter_member_id&&this.$route.params.id&&this.$route.params.move_NO){
-        for(let i=0;i<this.filter_member_id.length;i++){
-        const member_id = this.filter_member_id[i];
-        try{
-          await axios.post(this.$store.getters.myHostname+"/api/v1/move-detail",{
-           move_id:get_id,
-           member_id:member_id,
-         }).then(()=>{
-            this.Msg_done("ຍົກຍ້າຍສະມາຊິກສຳເລັດ")
-            this.$router.push("/member-move")
-         })
-        }catch(err){
-          this.Msg_fail("ຂໍ້ມູນຜິດພາດບໍ່ສາມາດເພີ່ມສະມາຊິກໄດ້");
+    async SaveData_move_detail() {
+      const get_id = this.$route.params.id;
+      if (
+        this.filter_member_id &&
+        this.$route.params.id &&
+        this.$route.params.move_NO
+      ) {
+        for (let i = 0; i < this.filter_member_id.length; i++) {
+          const member_id = this.filter_member_id[i];
+          try {
+            await axios
+              .post(this.$store.getters.myHostname + "/api/v1/move-detail", {
+                move_id: get_id,
+                member_id: member_id,
+              })
+              .then(() => {
+                this.Msg_done("ຍົກຍ້າຍສະມາຊິກສຳເລັດ");
+                this.$router.push("/member-move");
+              });
+          } catch (err) {
+            this.Msg_fail("ຂໍ້ມູນຜິດພາດບໍ່ສາມາດເພີ່ມສະມາຊິກໄດ້");
+            console.log(err);
+          }
+        }
+        // check amount on section
+        try {
+          await axios
+            .put(
+              `${this.$store.getters.myHostname}/api/v1/Update-Status/section/${this.get_sect_id}`
+            )
+            .then(() => {
+              this.Msg_done(
+                "ບໍ່ມີສະມາຊິກໃນຈຸ" +
+                  this.selected_sect +
+                  "ອັບເດດສະຖານະຈຸເປັນລົບລ້າງ"
+              );
+              this.$router.push("/member-move");
+            });
+        } catch (err) {
           console.log(err);
         }
       }
-       // check amount on section 
-      try{
-        await axios.put(`${this.$store.getters.myHostname}/api/v1/Update-Status/section/${this.get_sect_id}`).then(()=>{
-          this.Msg_done("ບໍ່ມີສະມາຊິກໃນຈຸ"+this.selected_sect+"ອັບເດດສະຖານະຈຸເປັນລົບລ້າງ")
-           this.$router.push("/member-move")
-        })
-      }catch(err){
-        console.log(err);
-      }
-     }
     },
-     // message done
+    // message done
     Msg_done(text) {
       // Message show
       this.$store.dispatch({
@@ -204,91 +218,113 @@ export default {
       });
     },
     // get foundations
-   async get_foundations(){
-     this.myFoundation_all=[];
-      try{
-        await axios.get(this.$store.getters.myHostname+"/api/v1/foundations").then((response)=>{
-          this.myFoundation_all=response.data;
-          for(let i=0;i<=this.myFoundation_all.length;i++){
-            this.myFoundations.push(this.myFoundation_all[i].fund_name);
-          }
-        });
-
-      }catch(err){
+    async get_foundations() {
+      this.myFoundation_all = [];
+      try {
+        await axios
+          .get(this.$store.getters.myHostname + "/api/v1/foundations")
+          .then((response) => {
+            this.myFoundation_all = response.data;
+            for (let i = 0; i <= this.myFoundation_all.length; i++) {
+              this.myFoundations.push(this.myFoundation_all[i].fund_name);
+            }
+          });
+      } catch (err) {
         console.log(err);
       }
     },
     //get units
-   async get_units(){
-     this.myUnit_all=[];
-     this.myUnits=[];
-     //-----
-       this.mySections=[];
-      this.selected_sect=null;
+    async get_units() {
+      this.myUnit_all = [];
+      this.myUnits = [];
+      //-----
+      this.mySections = [];
+      this.selected_sect = null;
       //
-     this.selected_unit=null;
-     //
-     for(let i=0;i<=this.myFoundation_all.length;i++){
-       if(String(this.selected_found).valueOf()==String(this.myFoundation_all[i].fund_name).valueOf()){
-         const get_fund=this.myFoundation_all[i].fund_id;
-         this.get_fund_id=get_fund;
-          try{
-       await axios.get(`${this.$store.getters.myHostname}/api/v1/getItem-units/${get_fund}`).then((response)=>{
-         this.myUnit_all=response.data;
-          for(let i=0;i<=this.myUnit_all.length;i++){
-            this.myUnits.push(this.myUnit_all[i].unit_name)
+      this.selected_unit = null;
+      //
+      for (let i = 0; i <= this.myFoundation_all.length; i++) {
+        if (
+          String(this.selected_found).valueOf() ==
+          String(this.myFoundation_all[i].fund_name).valueOf()
+        ) {
+          const get_fund = this.myFoundation_all[i].fund_id;
+          this.get_fund_id = get_fund;
+          try {
+            await axios
+              .get(
+                `${this.$store.getters.myHostname}/api/v1/getItem-units/${get_fund}`
+              )
+              .then((response) => {
+                this.myUnit_all = response.data;
+                for (let i = 0; i <= this.myUnit_all.length; i++) {
+                  this.myUnits.push(this.myUnit_all[i].unit_name);
+                }
+              });
+          } catch (err) {
+            console.log(err);
           }
-       })
-     }catch(err){
-       console.log(err);
-     }
-       }
-     }
-    },
-   // get sections
-  async get_sections(){
-    this.mySection_all=[];
-    this.mySections=[];
-    this.selected_sect=null;
-    for(let i=0; i<=this.myUnit_all.length;i++){
-      if(String(this.selected_unit).valueOf()==String(this.myUnit_all[i].unit_name).valueOf()){
-       const get_unit_id=this.myUnit_all[i].unit_id;
-       this.get_unit_id=get_unit_id;
-       try{
-      await axios.get(`${this.$store.getters.myHostname}/api/v1/allsections/${get_unit_id}`).then((response)=>{
-        this.mySection_all=response.data;
-         for(let i=0;i<=this.mySection_all.length;i++){
-           this.mySections.push(this.mySection_all[i].sect_name)
-         }
-      })
-    }catch(err){
-      console.log(err);
-    }
+        }
       }
-    }
-   },
-   // get data member by section unit foudation and member status on tb_member
-  async getData_member_byCondition(value){
-      if(value!=""){
-        for(let i=0;i<=this.mySection_all.length;i++){
-          if(String(this.selected_sect).valueOf()==String(this.mySection_all[i].sect_name).valueOf()){
-            const id=this.mySection_all[i].sect_id;
-            this.get_sect_id=id;
-            this.myData_member=[];
-             try{
-            await axios.get(`${this.$store.getters.myHostname}/api/v1/getMember/move-detail/${id}`,{
-          }).then((response)=>{
-            this.myData_member=response.data;
-          })
-        }catch(err){
-          console.log(err);
-        }
+    },
+    // get sections
+    async get_sections() {
+      this.mySection_all = [];
+      this.mySections = [];
+      this.selected_sect = null;
+      for (let i = 0; i <= this.myUnit_all.length; i++) {
+        if (
+          String(this.selected_unit).valueOf() ==
+          String(this.myUnit_all[i].unit_name).valueOf()
+        ) {
+          const get_unit_id = this.myUnit_all[i].unit_id;
+          this.get_unit_id = get_unit_id;
+          try {
+            await axios
+              .get(
+                `${this.$store.getters.myHostname}/api/v1/allsections/${get_unit_id}`
+              )
+              .then((response) => {
+                this.mySection_all = response.data;
+                for (let i = 0; i <= this.mySection_all.length; i++) {
+                  this.mySections.push(this.mySection_all[i].sect_name);
+                }
+              });
+          } catch (err) {
+            console.log(err);
           }
         }
-      }else{
+      }
+    },
+    // get data member by section unit foudation and member status on tb_member
+    async getData_member_byCondition(value) {
+      if (value != "") {
+        for (let i = 0; i <= this.mySection_all.length; i++) {
+          if (
+            String(this.selected_sect).valueOf() ==
+            String(this.mySection_all[i].sect_name).valueOf()
+          ) {
+            const id = this.mySection_all[i].sect_id;
+            this.get_sect_id = id;
+            this.myData_member = [];
+            try {
+              await axios
+                .get(
+                  `${this.$store.getters.myHostname}/api/v1/getMember/move-detail/${id}`,
+                  {}
+                )
+                .then((response) => {
+                  this.myData_member = response.data;
+                });
+            } catch (err) {
+              console.log(err);
+            }
+          }
+        }
+      } else {
         this.getData_member();
       }
-   }
+    },
   },
 };
 </script>

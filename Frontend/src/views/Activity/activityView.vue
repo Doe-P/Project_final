@@ -29,19 +29,18 @@
                 <v-spacer></v-spacer>
               </v-toolbar>
             </template>
-            <template v-slot:item="{item,index}">
+            <template v-slot:item="{ item, index }">
               <tr class="table-content">
-                <td>{{index + 1}}</td>
+                <td>{{ index + 1 }}</td>
                 <td>{{ item.acti_title }}</td>
                 <td>{{ item.typeAct_name }}</td>
-                 <td>{{ item.member_name }}</td>
+                <td>{{ item.member_name }}</td>
                 <td>{{ item.member_surname }}</td>
                 <td>{{ item.gender }}</td>
-                 <td>{{ item.typemember }}</td>
-                <td>{{ item.unit_name}}</td>
+                <td>{{ item.typemember }}</td>
+                <td>{{ item.unit_name }}</td>
                 <td>{{ item.sect_name }}</td>
                 <td>{{ item.fund_name }}</td>
-               
               </tr>
             </template>
           </v-data-table>
@@ -61,18 +60,18 @@
 </template>
 
 <script>
-import axios from 'axios';
+import axios from "axios";
 export default {
   name: "Activitydetail",
-  props:['myID'],
+  props: ["myID"],
   data() {
     return {
       myData_act_detaill: [],
       searchData: null,
-      loading:true,
+      loading: true,
       headers: [
         { text: "ລຳດັບ", value: "NO", sortable: false },
-         { text: "ຫົວຂໍ້ກິດຈະກຳ", value: "acti_title", sortable: false },
+        { text: "ຫົວຂໍ້ກິດຈະກຳ", value: "acti_title", sortable: false },
         { text: "ປະເພດກິດຈະກຳ", value: "typeAct_name", sortable: true },
         { text: "ຊື່", value: "name", sortable: false },
         { text: "ນາມສະກຸນ", value: "surname", sortable: false },
@@ -88,21 +87,25 @@ export default {
     this.getActivity_detail();
   },
   methods: {
-    async getActivity_detail(){
-      try{
-      await axios.get(`${this.$store.getters.myHostname}/api/v1/activityDetail/${this.$route.params.activity_view}`).then((response)=>{
-       this.myData_act_detaill=response.data;
-       this.loading=false;
-      })
-      }catch(err){
+    async getActivity_detail() {
+      try {
+        await axios
+          .get(
+            `${this.$store.getters.myHostname}/api/v1/activityDetail/${this.$route.params.activity_view}`
+          )
+          .then((response) => {
+            this.myData_act_detaill = response.data;
+            this.loading = false;
+          });
+      } catch (err) {
         console.log(err);
       }
     },
   },
 
-  created(){
+  created() {
     console.log(this.$route.params.activity_view);
-  }
+  },
 };
 </script>
 

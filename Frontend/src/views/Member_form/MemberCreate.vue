@@ -314,7 +314,7 @@
                           v-model="date_y"
                           :max="new Date().toISOString().substr(0, 10)"
                           min="1950-01-01"
-                           locale="lao"
+                          locale="lao"
                           class="calender"
                         >
                         </v-date-picker>
@@ -351,7 +351,7 @@
                           v-model="date_start_nuol"
                           :max="new Date().toISOString().substr(0, 10)"
                           min="1950-01-01"
-                           locale="lao"
+                          locale="lao"
                           class="calender"
                         >
                         </v-date-picker>
@@ -370,7 +370,9 @@
                             v-show="gender == 'ຍິງ'"
                             v-model="format_Date_w"
                             label="ວັນເດືອນປີເຂົ້າແມ່ຍິງ"
-                            :rules="[isChecked('ວັນເດືອນປີເຂົ້າແມ່ຍິງ',gender)]"
+                            :rules="[
+                              isChecked('ວັນເດືອນປີເຂົ້າແມ່ຍິງ', gender),
+                            ]"
                             prepend-icon="mdi-calendar"
                             readonly
                             @blur="date_w = parseDate_y(format_Date_w)"
@@ -383,7 +385,7 @@
                           v-model="date_w"
                           :max="new Date().toISOString().substr(0, 10)"
                           min="1950-01-01"
-                           locale="lao"
+                          locale="lao"
                           class="calender"
                         >
                         </v-date-picker>
@@ -407,7 +409,9 @@
                           <v-text-field
                             v-show="isKamaban == 'ກຳມະບານ'"
                             v-model="format_Date_k"
-                            :rules="[isChecked('ວັນເດືອນປີເຂົ້າກຳມະບານ',isKamaban)]"
+                            :rules="[
+                              isChecked('ວັນເດືອນປີເຂົ້າກຳມະບານ', isKamaban),
+                            ]"
                             label="ວັນເດືອນປີເຂົ້າກຳມະບານ"
                             prepend-icon="mdi-calendar"
                             readonly
@@ -421,7 +425,7 @@
                           v-model="date_k"
                           :max="new Date().toISOString().substr(0, 10)"
                           min="1950-01-01"
-                           locale="lao"
+                          locale="lao"
                           class="calender"
                         >
                         </v-date-picker>
@@ -444,7 +448,12 @@
                           <v-text-field
                             v-show="isParty_reserve == 'ສັງກັດພັກສຳຮອງ'"
                             v-model="format_Date_ps"
-                            :rules="[isChecked('ວັນເດືອນປີເຂົ້າພັກສຳຮອງ',isParty_reserve)]"
+                            :rules="[
+                              isChecked(
+                                'ວັນເດືອນປີເຂົ້າພັກສຳຮອງ',
+                                isParty_reserve
+                              ),
+                            ]"
                             label="ວັນເດືອນປີເຂົ້າພັກສຳຮອງ"
                             prepend-icon="mdi-calendar"
                             readonly
@@ -458,7 +467,7 @@
                           v-model="date_ps"
                           :max="new Date().toISOString().substr(0, 10)"
                           min="1950-01-01"
-                           locale="lao"
+                          locale="lao"
                           class="calender"
                         >
                         </v-date-picker>
@@ -482,7 +491,12 @@
                           <v-text-field
                             v-show="isParty_full == 'ສັງກັດພັກສົມບູນ'"
                             v-model="format_Date_p"
-                            :rules="[isChecked('ວັນເດືອນປີເຂົ້າພັກສົມບູນ',isParty_full)]"
+                            :rules="[
+                              isChecked(
+                                'ວັນເດືອນປີເຂົ້າພັກສົມບູນ',
+                                isParty_full
+                              ),
+                            ]"
                             label="ວັນເດືອນປີເຂົ້າພັກສົມບູນ"
                             prepend-icon="mdi-calendar"
                             readonly
@@ -556,7 +570,9 @@
                       label="ໜ້າທີ່ຮັບຜິດຊອບ"
                       :rules="[required('ໜ້າທີ່ຮັບຜິດຊອບ')]"
                     ></v-select>
-                     <span class="sub-text">ພາສາຕ່າງປະເທດທີ່ອ່ານ ແລະ ຂຽນໄດ້ດີ</span>
+                    <span class="sub-text"
+                      >ພາສາຕ່າງປະເທດທີ່ອ່ານ ແລະ ຂຽນໄດ້ດີ</span
+                    >
                     <v-combobox
                       v-model="language_selected"
                       :items="items"
@@ -639,9 +655,9 @@ export default {
   },
   data() {
     return {
-       language_selected: ["ອັງກິດ"],
-        items: ["ອັງກິດ", "ຈີນ","ຫວຽດນາມ","ຢີ່ປຸ່ນ","ເກົາຫຼີ"],
-        get_Year:null,
+      language_selected: ["ອັງກິດ"],
+      items: ["ອັງກິດ", "ຈີນ", "ຫວຽດນາມ", "ຢີ່ປຸ່ນ", "ເກົາຫຼີ"],
+      get_Year: null,
       //Valid input
       required(propertyType) {
         return (v) => (v && v.length > 0) || `ກະລຸນາປ້ອນຂໍ້ມູນ${propertyType}`;
@@ -659,28 +675,32 @@ export default {
       radioRule() {
         return (v) => (v && v != true) || "ກະລຸນາເລືອກເພດກ່ອນ";
       },
-      isChecked(propertyType,condition){
-        if(condition=='ຍິງ'){
-           return (v) => (v && v.length > 0) || `ກະລຸນາປ້ອນຂໍ້ມູນ${propertyType}`;
-        }else if(condition=='ກຳມະບານ'){
-          return (v) => (v && v.length > 0) || `ກະລຸນາປ້ອນຂໍ້ມູນ${propertyType}`;
-        }else if(condition=='ສັງກັດພັກສຳຮອງ'){
-           return (v) => (v && v.length > 0) || `ກະລຸນາປ້ອນຂໍ້ມູນ${propertyType}`;
-        }else if(condition=='ສັງກັດພັກສົມບູນ'){
-          return (v) => (v && v.length > 0) || `ກະລຸນາປ້ອນຂໍ້ມູນ${propertyType}`;
-        }else{
+      isChecked(propertyType, condition) {
+        if (condition == "ຍິງ") {
+          return (v) =>
+            (v && v.length > 0) || `ກະລຸນາປ້ອນຂໍ້ມູນ${propertyType}`;
+        } else if (condition == "ກຳມະບານ") {
+          return (v) =>
+            (v && v.length > 0) || `ກະລຸນາປ້ອນຂໍ້ມູນ${propertyType}`;
+        } else if (condition == "ສັງກັດພັກສຳຮອງ") {
+          return (v) =>
+            (v && v.length > 0) || `ກະລຸນາປ້ອນຂໍ້ມູນ${propertyType}`;
+        } else if (condition == "ສັງກັດພັກສົມບູນ") {
+          return (v) =>
+            (v && v.length > 0) || `ກະລຸນາປ້ອນຂໍ້ມູນ${propertyType}`;
+        } else {
           console.log("validate text on member create form err");
         }
       },
-      isCheckAge(birthdate){
-         var d = new Date();
-         var y=d.getFullYear();
-         var age =y-birthdate;
-         if(age>=35){
-          return  `ອາຍຸຂອງສະມາຊິກຫຼາຍກວ່າ 34 ອາຍຸຕ້ອງຢູ່ລະຫວ່າງ 15-34`; 
-         }else if(age<15){
-          return  `ອາຍຸຂອງສະມາຊິກໜ້ອຍກວ່າ  15 ອາຍຸຕ້ອງຢູ່ລະຫວ່າງ 15-34`; 
-         }
+      isCheckAge(birthdate) {
+        var d = new Date();
+        var y = d.getFullYear();
+        var age = y - birthdate;
+        if (age >= 35) {
+          return `ອາຍຸຂອງສະມາຊິກຫຼາຍກວ່າ 34 ອາຍຸຕ້ອງຢູ່ລະຫວ່າງ 15-34`;
+        } else if (age < 15) {
+          return `ອາຍຸຂອງສະມາຊິກໜ້ອຍກວ່າ  15 ອາຍຸຕ້ອງຢູ່ລະຫວ່າງ 15-34`;
+        }
       },
       // valid form
       valid: true,
@@ -860,7 +880,7 @@ export default {
       if (!date) return null;
       this.birthdate_format = dateformat(date, "yyyy-mm-dd");
       const [year, month, day] = date.split("-");
-      this.get_Year=parseInt(year);
+      this.get_Year = parseInt(year);
       return `${day}-${month}-${year}`;
     },
     // Method Young
@@ -984,7 +1004,7 @@ export default {
         ) {
           if (String(this.gender).valueOf() == "ຍິງ" && this.format_Date_w) {
             await axios
-              .post(this.$store.getters.myHostname+"/api/v1/members", {
+              .post(this.$store.getters.myHostname + "/api/v1/members", {
                 member_id: this.$store.getters.getCustomID,
                 member_name: this.txt_Membername,
                 surname: this.txt_surname,
@@ -1020,7 +1040,7 @@ export default {
               });
           } else {
             await axios
-              .post(this.$store.getters.myHostname+"/api/v1/members", {
+              .post(this.$store.getters.myHostname + "/api/v1/members", {
                 member_id: this.$store.getters.getCustomID,
                 member_name: this.txt_Membername,
                 surname: this.txt_surname,
@@ -1050,10 +1070,9 @@ export default {
                 status: this.member_status,
               })
               .then(() => {
-               
                 this.Msg_done("ບັນທຶກຂໍ້ມູນສຳເລັດແລ້ວ");
               });
-               this.cancelData_member();
+            this.cancelData_member();
           }
         } else {
           this.Msg_fail("ຂໍ້ມູນສະມາຊິກບໍ່ຄົບຖ້ວນ ກະລຸນາກວດສອບຄືນໃໝ່");
@@ -1073,7 +1092,7 @@ export default {
     async getMaxID() {
       try {
         await axios
-          .get(this.$store.getters.myHostname+"/api/v1/members-MaxID")
+          .get(this.$store.getters.myHostname + "/api/v1/members-MaxID")
           .then((response) => {
             const getid = response.data.id;
             this.$store.dispatch({
@@ -1111,7 +1130,7 @@ export default {
     async get_TypeMember_selection() {
       try {
         await axios
-          .get(this.$store.getters.myHostname+"/api/v1/type-members")
+          .get(this.$store.getters.myHostname + "/api/v1/type-members")
           .then((response) => {
             this.typeMember_item_All = response.data;
             for (let i = 0; i <= this.typeMember_item_All.length; i++) {
@@ -1138,7 +1157,7 @@ export default {
     async get_educationLevel() {
       try {
         await axios
-          .get(this.$store.getters.myHostname+"/api/v1/education-levels")
+          .get(this.$store.getters.myHostname + "/api/v1/education-levels")
           .then((response) => {
             this.level_item_All = response.data;
             for (let i = 0; i <= this.level_item_All.length; i++) {
@@ -1164,7 +1183,9 @@ export default {
       const found_id = this.$store.getters.getData_user.user_foundation;
       try {
         await axios
-          .get(`${this.$store.getters.myHostname}/api/v1/getItem-units/${found_id}`)
+          .get(
+            `${this.$store.getters.myHostname}/api/v1/getItem-units/${found_id}`
+          )
           .then((response) => {
             this.unit_items_all = response.data;
             for (let i = 0; i <= this.unit_items_all.length; i++) {
@@ -1187,7 +1208,9 @@ export default {
             const id = this.unit_items_all[i].unit_id;
             try {
               await axios
-                .get(`${this.$store.getters.myHostname}/api/v1/allsections/${id}`)
+                .get(
+                  `${this.$store.getters.myHostname}/api/v1/allsections/${id}`
+                )
                 .then((response) => {
                   this.section_items_all = response.data;
                   for (let a = 0; a <= this.section_items_all.length; a++) {
@@ -1221,10 +1244,10 @@ export default {
         foundation: this.found_id,
       });
     },
-     remove (item) {
-        this.language_selected.splice(this.language_selected.indexOf(item), 1)
-        this.language_selected = [...this.language_selected]
-      },
+    remove(item) {
+      this.language_selected.splice(this.language_selected.indexOf(item), 1);
+      this.language_selected = [...this.language_selected];
+    },
   },
 };
 </script>

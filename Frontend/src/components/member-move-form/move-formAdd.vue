@@ -32,28 +32,29 @@
                         label="ເລກທີໃບຍົກຍ້າຍ"
                         required
                         v-model="txt_moveNO"
-                        :rules="[required('ເລກທີໃບຍົກຍ້າຍ'),maxLength('ເລກທີໃບຍົກຍ້າຍ',20),minLength('ເລກທີໃບຍົກຍ້າຍ',2)]"
+                        :rules="[
+                          required('ເລກທີໃບຍົກຍ້າຍ'),
+                          maxLength('ເລກທີໃບຍົກຍ້າຍ', 20),
+                          minLength('ເລກທີໃບຍົກຍ້າຍ', 2),
+                        ]"
                         counter="20"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12" class="pt-0">
-                     <v-select
-                       :items="Years"
-                       v-model="year_selected"
-                       label="ສົກຮຽນ"
-                        :rules="[
-                          required('ສົກຮຽນ')
-                        ]"
-                     ></v-select>
+                      <v-select
+                        :items="Years"
+                        v-model="year_selected"
+                        label="ສົກຮຽນ"
+                        :rules="[required('ສົກຮຽນ')]"
+                      ></v-select>
                     </v-col>
                     <v-col cols="12" class="pt-0">
                       <v-textarea
                         label="ເຫດຜົນ"
                         counter="50"
                         rows="1"
-                        
                         v-model="moveReason"
-                          :rules="[
+                        :rules="[
                           required('ເຫດຜົນ'),
                           maxLength('ເຫດຜົນ', 50),
                           minLength('ເຫດຜົນ', 5),
@@ -67,7 +68,11 @@
                         append-icon="place"
                         v-model="moveLocate"
                         required
-                        :rules="[required('ອອກທີ່'),maxLength('ອອກທີ່', 50),minLength('ອອກທີ່', 3)]"
+                        :rules="[
+                          required('ອອກທີ່'),
+                          maxLength('ອອກທີ່', 50),
+                          minLength('ອອກທີ່', 3),
+                        ]"
                         counter="50"
                       ></v-text-field>
                     </v-col>
@@ -77,7 +82,11 @@
                         v-model="moveSign_by"
                         required
                         counter="30"
-                        :rules="[required('ອອກໂດຍ'),maxLength('ອອກໂດຍ', 30),minLength('ອອກໂດຍ', 3),]"
+                        :rules="[
+                          required('ອອກໂດຍ'),
+                          maxLength('ອອກໂດຍ', 30),
+                          minLength('ອອກໂດຍ', 3),
+                        ]"
                       ></v-text-field>
                     </v-col>
                   </v-row>
@@ -116,9 +125,14 @@
               </v-container>
             </v-card-text>
             <v-card-actions class="justify-end text-actions">
-                    <v-btn text @click="close_form_add" color="error">ຍົກເລີກ</v-btn>
-                  <v-btn
-                    text @click.prevent="saveData_Move" color="primary" :disabled="!valid" >ບັນທຶກ</v-btn>
+              <v-btn text @click="close_form_add" color="error">ຍົກເລີກ</v-btn>
+              <v-btn
+                text
+                @click.prevent="saveData_Move"
+                color="primary"
+                :disabled="!valid"
+                >ບັນທຶກ</v-btn
+              >
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -128,7 +142,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+import axios from "axios";
 export default {
   name: "Formadd",
   data() {
@@ -153,20 +167,20 @@ export default {
       // valid form
       valid: false,
       show: true,
-      Year_start:null,
-      Years:[],
+      Year_start: null,
+      Years: [],
       //------------
-      txt_moveNO:null,
-      year_selected:null,
-      moveReason:null,
-      moveLocate:null,
-      moveSign_by:null,
+      txt_moveNO: null,
+      year_selected: null,
+      moveReason: null,
+      moveLocate: null,
+      moveSign_by: null,
     };
   },
   mounted() {
     this.setYear_select();
     this.getMaxID();
-     },
+  },
   watch: {
     move_date() {
       this.format_move_date = this.formatMove_date(this.move_date);
@@ -190,43 +204,56 @@ export default {
       const [month, day, year] = date.split("/");
       return `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
     },
-   async saveData_Move(){
-     const moveID=this.$store.getters.getCustomID;
-     alert(moveID)
- if(moveID&&this.txt_moveNO&&this.moveReason&&this.moveLocate&&this.moveSign_by&&this.move_date&&this.year_selected){
-       try{
-        await axios.post(this.$store.getters.myHostname+"/api/v1/add-move",{
-          move_id:moveID,
-          move_NO:this.txt_moveNO,
-          m_Year:this.year_selected,
-          reason:this.moveReason,
-          locate:this.moveLocate,
-          sign_by:this.moveSign_by,
-          date_move:this.move_date
-        }).then(()=>{
-         this.Msg_done("ບັນທຶກຂໍ້ມູນກິດຈະກຳສຳເລັດແລ້ວ")
-         this.$router.push({name:"member-move-create",params:{id:moveID,move_NO:this.txt_moveNO}})
-         location.reload();
-        })
-     }catch(err){
-       this.Msg_fail("ບັນທຶກຂໍ້ມູນກິດຈະກຳບໍ່ສຳເລັດ")
-       console.log(err);
-     }
-     }else{
-       this.Msg_fail("ຂໍ້ມູນບໍ່ຄົບຖ້ວນ ກະລຸນາກວດສອບຄືນໃໝ່")
-     }
+    async saveData_Move() {
+      const moveID = this.$store.getters.getCustomID;
+      alert(moveID);
+      if (
+        moveID &&
+        this.txt_moveNO &&
+        this.moveReason &&
+        this.moveLocate &&
+        this.moveSign_by &&
+        this.move_date &&
+        this.year_selected
+      ) {
+        try {
+          await axios
+            .post(this.$store.getters.myHostname + "/api/v1/add-move", {
+              move_id: moveID,
+              move_NO: this.txt_moveNO,
+              m_Year: this.year_selected,
+              reason: this.moveReason,
+              locate: this.moveLocate,
+              sign_by: this.moveSign_by,
+              date_move: this.move_date,
+            })
+            .then(() => {
+              this.Msg_done("ບັນທຶກຂໍ້ມູນກິດຈະກຳສຳເລັດແລ້ວ");
+              this.$router.push({
+                name: "member-move-create",
+                params: { id: moveID, move_NO: this.txt_moveNO },
+              });
+              location.reload();
+            });
+        } catch (err) {
+          this.Msg_fail("ບັນທຶກຂໍ້ມູນກິດຈະກຳບໍ່ສຳເລັດ");
+          console.log(err);
+        }
+      } else {
+        this.Msg_fail("ຂໍ້ມູນບໍ່ຄົບຖ້ວນ ກະລຸນາກວດສອບຄືນໃໝ່");
+      }
     },
     //close form add
     close_form_add() {
       this.$store.dispatch({
-        type:"doClickmoveFormadd",
-        val:false,
-      })
+        type: "doClickmoveFormadd",
+        val: false,
+      });
       location.reload();
     },
     // save data
 
-     setYear_select() {
+    setYear_select() {
       // let object = [];
       let str = "";
       var d = new Date();
@@ -238,14 +265,14 @@ export default {
         this.Years.push(str);
       }
     },
-     // get max id from foundation
+    // get max id from foundation
     async getMaxID() {
       try {
         await axios
-          .get(this.$store.getters.myHostname+"/api/v1/Move-MaxID")
+          .get(this.$store.getters.myHostname + "/api/v1/Move-MaxID")
           .then((response) => {
-           const getid = response.data.id;
-           this.$store.dispatch({
+            const getid = response.data.id;
+            this.$store.dispatch({
               type: "doCustomID",
               id: getid,
               str: "V0001",
@@ -255,7 +282,7 @@ export default {
         console.log(err);
       }
     },
-      // message done
+    // message done
     Msg_done(text) {
       // Message show
       this.$store.dispatch({
@@ -297,8 +324,8 @@ export default {
   font-size: 18px;
 }
 .calendar,
-.text-actions{
-   font-family: "boonhome-400";
+.text-actions {
+  font-family: "boonhome-400";
   font-weight: normal;
   font-size: 14px;
 }

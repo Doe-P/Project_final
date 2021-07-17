@@ -38,17 +38,17 @@ export default {
     return {
       Year_select: [],
       Year_start: null,
-      Year_value_select:null,
-      isChecked:true,
+      Year_value_select: null,
+      isChecked: true,
     };
   },
 
   mounted() {
-      this.setYear_select();
+    this.setYear_select();
   },
 
   methods: {
-        setYear_select() {
+    setYear_select() {
       // let object = [];
       let str = "";
       var d = new Date();
@@ -60,12 +60,12 @@ export default {
         this.Year_select.push(str);
       }
     },
-     Isselect(value){
-     if(value!=""){
-       this.isChecked=false;
-     }else{
-       this.isChecked=true;
-     }
+    Isselect(value) {
+      if (value != "") {
+        this.isChecked = false;
+      } else {
+        this.isChecked = true;
+      }
     },
   },
 };

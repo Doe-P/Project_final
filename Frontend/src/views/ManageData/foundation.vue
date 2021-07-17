@@ -48,7 +48,7 @@
           <template v-slot:item="{ item, index }">
             <tr class="table-content">
               <td>{{ index + 1 }}</td>
-               <td>{{ item.fund_id }}</td>
+              <td>{{ item.fund_id }}</td>
               <td>{{ item.fund_name }}</td>
               <td>{{ item.date_fund | formatDate }}</td>
               <td>{{ item.status_fund }}</td>
@@ -122,7 +122,6 @@ import formAdd from "@/components/foundation-form/formAdd.vue";
 import formEdit from "@/components/foundation-form/formEdit.vue";
 import axios from "axios";
 
-
 export default {
   name: "foundation",
   components: {
@@ -136,10 +135,10 @@ export default {
       get_ID: "",
       searchData: "",
       foundation_Data: [],
-      loading:true,
+      loading: true,
       headers: [
         { text: "ລຳດັບ", align: "Left", value: "No" },
-         { text: "ລະຫັດ", align: "Left", value: "fund_id" },
+        { text: "ລະຫັດ", align: "Left", value: "fund_id" },
         { text: "ຊື່ຮາກຖານ", value: "fund_name", sortable: true },
         {
           text: "ວັນເດືອນປີຂະຫຍາຍຮາກຖານ",
@@ -152,8 +151,7 @@ export default {
     };
   },
 
-  mounted() {
-  },
+  mounted() {},
   created() {
     this.getData_foundations();
   },
@@ -163,30 +161,31 @@ export default {
     },
   },
   computed: {
-   reload_data() {
+    reload_data() {
       return this.getData_foundations();
     },
-  
   },
   methods: {
     async delete_found_item() {
       try {
         if (this.get_ID) {
           await axios
-            .delete(`${this.$store.getters.myHostname}/api/v1/foundations/${this.get_ID}`)
+            .delete(
+              `${this.$store.getters.myHostname}/api/v1/foundations/${this.get_ID}`
+            )
             .then(() => {
               this.confirm_dialog = false;
               this.Msg_done();
               this.getData_foundations();
             });
-        }else{
-           this.$store.dispatch({
-        type: "doClick_myMsg",
-        mshow: true,
-        mcolor: "error",
-        micon: "error",
-        message: "ບໍ່ພົບຂໍ້ມູນທີ່ຈະລົບ",
-      });
+        } else {
+          this.$store.dispatch({
+            type: "doClick_myMsg",
+            mshow: true,
+            mcolor: "error",
+            micon: "error",
+            message: "ບໍ່ພົບຂໍ້ມູນທີ່ຈະລົບ",
+          });
         }
       } catch (err) {
         console.log(err);
@@ -241,10 +240,10 @@ export default {
     async getData_foundations() {
       try {
         let response = await axios.get(
-          this.$store.getters.myHostname+"/api/v1/foundations"
+          this.$store.getters.myHostname + "/api/v1/foundations"
         );
         this.foundation_Data = response.data;
-        this.loading=false;
+        this.loading = false;
       } catch (err) {
         console.log(err);
       }

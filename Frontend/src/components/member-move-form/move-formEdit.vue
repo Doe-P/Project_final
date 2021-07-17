@@ -32,28 +32,29 @@
                         label="ເລກທີໃບຍົກຍ້າຍ"
                         required
                         v-model="txt_moveNO"
-                        :rules="[required('ເລກທີໃບຍົກຍ້າຍ'),maxLength('ເລກທີໃບຍົກຍ້າຍ',20),minLength('ເລກທີໃບຍົກຍ້າຍ',2)]"
+                        :rules="[
+                          required('ເລກທີໃບຍົກຍ້າຍ'),
+                          maxLength('ເລກທີໃບຍົກຍ້າຍ', 20),
+                          minLength('ເລກທີໃບຍົກຍ້າຍ', 2),
+                        ]"
                         counter="20"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12" class="pt-0">
-                     <v-select
-                       :items="Years"
-                       v-model="year_selected"
-                       label="ສົກຮຽນ"
-                        :rules="[
-                          required('ສົກຮຽນ')
-                        ]"
-                     ></v-select>
+                      <v-select
+                        :items="Years"
+                        v-model="year_selected"
+                        label="ສົກຮຽນ"
+                        :rules="[required('ສົກຮຽນ')]"
+                      ></v-select>
                     </v-col>
                     <v-col cols="12" class="pt-0">
                       <v-textarea
                         label="ເຫດຜົນ"
                         counter="50"
                         rows="1"
-                        
                         v-model="moveReason"
-                          :rules="[
+                        :rules="[
                           required('ເຫດຜົນ'),
                           maxLength('ເຫດຜົນ', 50),
                           minLength('ເຫດຜົນ', 5),
@@ -67,7 +68,11 @@
                         append-icon="place"
                         v-model="moveLocate"
                         required
-                        :rules="[required('ອອກທີ່'),maxLength('ອອກທີ່', 50),minLength('ອອກທີ່', 3)]"
+                        :rules="[
+                          required('ອອກທີ່'),
+                          maxLength('ອອກທີ່', 50),
+                          minLength('ອອກທີ່', 3),
+                        ]"
                         counter="50"
                       ></v-text-field>
                     </v-col>
@@ -77,7 +82,11 @@
                         v-model="moveSign_by"
                         required
                         counter="30"
-                        :rules="[required('ອອກໂດຍ'),maxLength('ອອກໂດຍ', 30),minLength('ອອກໂດຍ', 3),]"
+                        :rules="[
+                          required('ອອກໂດຍ'),
+                          maxLength('ອອກໂດຍ', 30),
+                          minLength('ອອກໂດຍ', 3),
+                        ]"
                       ></v-text-field>
                     </v-col>
                   </v-row>
@@ -116,9 +125,14 @@
               </v-container>
             </v-card-text>
             <v-card-actions class="justify-end text-actions">
-                    <v-btn text @click="close_form_add" color="error">ຍົກເລີກ</v-btn>
-                  <v-btn
-                    text @click.prevent="saveData_Move" color="primary" :disabled="!valid" >ບັນທຶກ</v-btn>
+              <v-btn text @click="close_form_add" color="error">ຍົກເລີກ</v-btn>
+              <v-btn
+                text
+                @click.prevent="saveData_Move"
+                color="primary"
+                :disabled="!valid"
+                >ບັນທຶກ</v-btn
+              >
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -128,8 +142,8 @@
 </template>
 
 <script>
-import axios from 'axios'
-import dateformat from 'dateformat';
+import axios from "axios";
+import dateformat from "dateformat";
 export default {
   name: "Formadd",
   data() {
@@ -154,36 +168,36 @@ export default {
       // valid form
       valid: false,
       show: true,
-      Year_start:null,
-      Years:[],
+      Year_start: null,
+      Years: [],
       //------------
-      txt_moveNO:null,
-      year_selected:null,
-      moveReason:null,
-      moveLocate:null,
-      moveSign_by:null,
-      moveAmount:0,
+      txt_moveNO: null,
+      year_selected: null,
+      moveReason: null,
+      moveLocate: null,
+      moveSign_by: null,
+      moveAmount: 0,
     };
   },
   mounted() {
     this.setYear_select();
     this.getdata_move();
-     },
+  },
   watch: {
     move_date() {
       this.format_move_date = this.formatMove_date(this.move_date);
     },
-    reload_data(){
+    reload_data() {
       this.getdata_move();
-    }
+    },
   },
   computed: {
     computedDateFormatted() {
       return this.formatMove_date(this.move_date);
     },
-    reload_data(){
+    reload_data() {
       return this.getdata_move();
-    }
+    },
   },
   methods: {
     formatMove_date(date) {
@@ -198,60 +212,75 @@ export default {
       const [month, day, year] = date.split("/");
       return `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
     },
-   async saveData_Move(){
-     const moveID=this.$store.getters.getmoveFormEdit.id;
- if(moveID&&this.txt_moveNO&&this.moveReason&&this.moveLocate&&this.moveSign_by&&this.move_date&&this.year_selected){
-       try{
-        await axios.put(`${this.$store.getters.myHostname}/api/v1/moves/${moveID}`,{
-          move_NO:this.txt_moveNO,
-          m_Year:this.year_selected,
-          reason:this.moveReason,
-          locate:this.moveLocate,
-          sign_by:this.moveSign_by,
-          date_move:this.move_date
-        }).then(()=>{
-         this.Msg_done("ແກ້ໄຂຂໍ້ມູນກິດຈະກຳສຳເລັດແລ້ວ")
-         this.$router.push("/member-move")
-         location.reload();
-        })
-     }catch(err){
-       this.Msg_fail("ແກ້ໄຂຂໍ້ມູນກິດຈະກຳບໍ່ສຳເລັດ")
-       console.log(err);
-     }
-     }else{
-       this.Msg_fail("ຂໍ້ມູນບໍ່ຄົບຖ້ວນ ກະລຸນາກວດສອບຄືນໃໝ່")
-     }
-    },
-    //get data move to update 
-   async getdata_move(){
-     const get_id=this.$store.getters.getmoveFormEdit.id;
-     if(get_id){
-        try{
-        await axios.get(`${this.$store.getters.myHostname}/api/v1/moves/${get_id}`).then((response)=>{
-          this.txt_moveNO=response.data.move_NO;
-          this.moveReason=response.data.reason;
-          this.year_selected=response.data.m_Year;
-          this.moveLocate=response.data.locate;
-          this.moveSign_by=response.data.sign_by;
-          this.format_move_date=dateformat(response.data.move_date,"dd-mm-yyyy")
-        })
-      }catch(err){
-        console.log(err);
+    async saveData_Move() {
+      const moveID = this.$store.getters.getmoveFormEdit.id;
+      if (
+        moveID &&
+        this.txt_moveNO &&
+        this.moveReason &&
+        this.moveLocate &&
+        this.moveSign_by &&
+        this.move_date &&
+        this.year_selected
+      ) {
+        try {
+          await axios
+            .put(`${this.$store.getters.myHostname}/api/v1/moves/${moveID}`, {
+              move_NO: this.txt_moveNO,
+              m_Year: this.year_selected,
+              reason: this.moveReason,
+              locate: this.moveLocate,
+              sign_by: this.moveSign_by,
+              date_move: this.move_date,
+            })
+            .then(() => {
+              this.Msg_done("ແກ້ໄຂຂໍ້ມູນກິດຈະກຳສຳເລັດແລ້ວ");
+              this.$router.push("/member-move");
+              location.reload();
+            });
+        } catch (err) {
+          this.Msg_fail("ແກ້ໄຂຂໍ້ມູນກິດຈະກຳບໍ່ສຳເລັດ");
+          console.log(err);
+        }
+      } else {
+        this.Msg_fail("ຂໍ້ມູນບໍ່ຄົບຖ້ວນ ກະລຸນາກວດສອບຄືນໃໝ່");
       }
-     }
+    },
+    //get data move to update
+    async getdata_move() {
+      const get_id = this.$store.getters.getmoveFormEdit.id;
+      if (get_id) {
+        try {
+          await axios
+            .get(`${this.$store.getters.myHostname}/api/v1/moves/${get_id}`)
+            .then((response) => {
+              this.txt_moveNO = response.data.move_NO;
+              this.moveReason = response.data.reason;
+              this.year_selected = response.data.m_Year;
+              this.moveLocate = response.data.locate;
+              this.moveSign_by = response.data.sign_by;
+              this.format_move_date = dateformat(
+                response.data.move_date,
+                "dd-mm-yyyy"
+              );
+            });
+        } catch (err) {
+          console.log(err);
+        }
+      }
     },
     //close form add
     close_form_add() {
       this.$store.dispatch({
-        type:"doClickmoveFormEdit",
-        val:false,
-        move_id:"",
-      })
+        type: "doClickmoveFormEdit",
+        val: false,
+        move_id: "",
+      });
       location.reload();
     },
     // save data
 
-     setYear_select() {
+    setYear_select() {
       // let object = [];
       let str = "";
       var d = new Date();
@@ -263,7 +292,7 @@ export default {
         this.Years.push(str);
       }
     },
-      // message done
+    // message done
     Msg_done(text) {
       // Message show
       this.$store.dispatch({
@@ -305,8 +334,8 @@ export default {
   font-size: 18px;
 }
 .calendar,
-.text-actions{
-   font-family: "boonhome-400";
+.text-actions {
+  font-family: "boonhome-400";
   font-weight: normal;
   font-size: 14px;
 }

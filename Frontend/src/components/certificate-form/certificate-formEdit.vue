@@ -24,7 +24,11 @@
                       </v-text-field>
                     </v-col>
                     <v-col cols="6">
-                      <v-text-field label="ເລກທີໃບຍ້ອງຍໍ" readonly v-model="txt_certi_NO">
+                      <v-text-field
+                        label="ເລກທີໃບຍ້ອງຍໍ"
+                        readonly
+                        v-model="txt_certi_NO"
+                      >
                       </v-text-field>
                     </v-col>
                     <v-col cols="6">
@@ -44,13 +48,21 @@
                         v-model="txt_title"
                         class="pt-0"
                         counter="100"
-                        :rules="[required('ເນື້ອໃນການຍ້ອງຍໍ'),minLength('ເນື້ອໃນການຍ້ອງຍໍ',5),maxLength('ເນື້ອໃນການຍ້ອງຍໍ',100)]"
+                        :rules="[
+                          required('ເນື້ອໃນການຍ້ອງຍໍ'),
+                          minLength('ເນື້ອໃນການຍ້ອງຍໍ', 5),
+                          maxLength('ເນື້ອໃນການຍ້ອງຍໍ', 100),
+                        ]"
                       >
                       </v-textarea>
                     </v-col>
                     <v-col cols="6">
                       <v-text-field
-                         :rules="[required('ອອກທີ່'),minLength('ອອກທີ່',3),maxLength('ອອກທີ່',50)]"
+                        :rules="[
+                          required('ອອກທີ່'),
+                          minLength('ອອກທີ່', 3),
+                          maxLength('ອອກທີ່', 50),
+                        ]"
                         label="ອອກທີ່"
                         counter="50"
                         v-model="txt_locate"
@@ -89,12 +101,12 @@
                           ></v-text-field>
                         </template>
                         <v-date-picker
-                         class="calendar"
-                            ref="picker"
-                            v-model="certi_date"
-                            :max="new Date().toISOString().substr(0, 10)"
-                            min="1950-01-01"
-                            locale="lao"
+                          class="calendar"
+                          ref="picker"
+                          v-model="certi_date"
+                          :max="new Date().toISOString().substr(0, 10)"
+                          min="1950-01-01"
+                          locale="lao"
                         ></v-date-picker>
                       </v-menu>
                     </v-col>
@@ -103,12 +115,8 @@
               </v-container>
             </v-card-text>
             <v-card-actions class="justify-space-between btn_text">
-                <v-btn @click="close_dialog"  color="error">
-                    ຍົກເລີກ
-                </v-btn>
-                <v-btn :disabled="!valid"  color="primary">
-                    ບັນທືກ
-                </v-btn>
+              <v-btn @click="close_dialog" color="error"> ຍົກເລີກ </v-btn>
+              <v-btn :disabled="!valid" color="primary"> ບັນທືກ </v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -122,14 +130,19 @@ export default {
   name: "CertificateFormadd",
   data() {
     return {
-          // certificate date
+      // certificate date
       certi_date: new Date().toISOString().substr(0, 10),
       certi_date_menu: false,
       certi_date_format: null,
       certi_type: [],
       certiType_select: "",
-      Datasign_by:['ຮາກຖານ','ຄຊປປລ ມຊ','ກະຊວງສຶກສາ ແລະ ກິລາ','ສູນກາງຊາວໝຸ່ມ'],
-       //Valid input
+      Datasign_by: [
+        "ຮາກຖານ",
+        "ຄຊປປລ ມຊ",
+        "ກະຊວງສຶກສາ ແລະ ກິລາ",
+        "ສູນກາງຊາວໝຸ່ມ",
+      ],
+      //Valid input
       required(propertyType) {
         return (v) => (v && v.length > 0) || `ກະລຸນາປ້ອນຂໍ້ມູນ${propertyType}`;
       },
@@ -146,15 +159,14 @@ export default {
       // valid form
       valid: false,
       //------
-      txt_certi_NO:null,
-      txt_title:null,
-      txt_locate:null,
-      signBy_select:null
+      txt_certi_NO: null,
+      txt_title: null,
+      txt_locate: null,
+      signBy_select: null,
     };
   },
 
-  mounted() {
-  },
+  mounted() {},
   watch: {
     certi_date() {
       this.certi_date_format = this.formatCerti_date(this.certi_date);
@@ -179,12 +191,12 @@ export default {
       return `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
     },
     // close form
-    close_dialog(){
-         this.$store.dispatch({
-        type:"doClickFormedit_certificate",
-        value:false,
-      })
-    }
+    close_dialog() {
+      this.$store.dispatch({
+        type: "doClickFormedit_certificate",
+        value: false,
+      });
+    },
   },
 };
 </script>

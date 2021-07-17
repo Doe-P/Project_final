@@ -52,9 +52,16 @@
               <td>{{ item.date_unit | formatDate }}</td>
               <td>{{ item.status_unit }}</td>
               <td>
-                <v-icon color="update" small @click="edit_unit_item(item.unit_id)">update</v-icon>
+                <v-icon
+                  color="update"
+                  small
+                  @click="edit_unit_item(item.unit_id)"
+                  >update</v-icon
+                >
                 <span class="ma-1"></span>
-                <v-icon color="delete" small @click="getID_delete(item.unit_id)">delete</v-icon>
+                <v-icon color="delete" small @click="getID_delete(item.unit_id)"
+                  >delete</v-icon
+                >
               </td>
             </tr>
           </template>
@@ -119,7 +126,7 @@ export default {
       searchData: null,
       myfoundnames: [],
       myData_unit: [],
-      id_delete:"",
+      id_delete: "",
       headers: [
         { text: "ລະຫັດໜ່ວຍ", align: "Left", value: "unit_id" },
         { text: "ຊື່ໜ່ວຍ", value: "unit_name", sortable: true },
@@ -148,12 +155,12 @@ export default {
     edit_unit_item(value) {
       this.$store.dispatch({
         type: "clickShow_unit_formEdit",
-        id:value,
+        id: value,
       });
     },
     getID_delete(id) {
       this.confirm_dialog = true;
-      this.id_delete= id;
+      this.id_delete = id;
     },
     //open form add
     open_form_add() {
@@ -164,7 +171,9 @@ export default {
     // get unit data from api
     async getData_Units() {
       try {
-        let response = await axios.get(this.$store.getters.myHostname+"/api/v1/units");
+        let response = await axios.get(
+          this.$store.getters.myHostname + "/api/v1/units"
+        );
         this.myData_unit = response.data;
       } catch (err) {
         console.log(err);
@@ -194,19 +203,23 @@ export default {
       });
     },
     // delete data
-  async  delete_unit_item(){
-     try{
-        await axios.delete(`${this.$store.getters.myHostname}/api/v1/units/${this.id_delete}`).then(()=>{
-        this.confirm_dialog=false
-        this.Msg_done("ລົບຂໍ້ມູນສຳເລັດ")
-        this.getData_Units();
-      })
-     }catch(err){
-       console.log(err);
-       this.confirm_dialog=false;
-       this.Msg_fail("ລົບຂໍ້ມູນບໍ່ສຳເລັດ")
-     }
-    }
+    async delete_unit_item() {
+      try {
+        await axios
+          .delete(
+            `${this.$store.getters.myHostname}/api/v1/units/${this.id_delete}`
+          )
+          .then(() => {
+            this.confirm_dialog = false;
+            this.Msg_done("ລົບຂໍ້ມູນສຳເລັດ");
+            this.getData_Units();
+          });
+      } catch (err) {
+        console.log(err);
+        this.confirm_dialog = false;
+        this.Msg_fail("ລົບຂໍ້ມູນບໍ່ສຳເລັດ");
+      }
+    },
   },
 };
 </script>

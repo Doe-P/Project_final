@@ -49,14 +49,14 @@
                     ></v-select>
                     <v-row>
                       <v-col cols="10">
-                           <v-textarea
-                           rows="2"
-                           label="ຫົວຂໍ້ການຍ້ອງຍໍ"
-                           readonly
-                           :value="activity_Title"
-                           >
-                           </v-textarea>
-                           </v-col>
+                        <v-textarea
+                          rows="2"
+                          label="ຫົວຂໍ້ການຍ້ອງຍໍ"
+                          readonly
+                          :value="activity_Title"
+                        >
+                        </v-textarea>
+                      </v-col>
                       <v-col cols="2" class="pt-7 align-content-end">
                         <v-card-actions class="justify-end">
                           <v-btn color="primary" :disabled="isChecked2">
@@ -90,8 +90,8 @@ export default {
       Years: [],
       start_year: 2000,
       isChecked: true,
-      select_NO:"",
-      activity_Title:"",
+      select_NO: "",
+      activity_Title: "",
       isChecked2: true,
     };
   },
@@ -126,13 +126,13 @@ export default {
         this.isChecked = true;
       }
     },
-    check_select(val){
-     if(val!="" && this.activity_Title!=""){
-         this.isChecked2=false;
-     }else{
-         this.isChecked2=true;
-     }
-    }
+    check_select(val) {
+      if (val != "" && this.activity_Title != "") {
+        this.isChecked2 = false;
+      } else {
+        this.isChecked2 = true;
+      }
+    },
   },
 };
 </script>

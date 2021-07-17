@@ -64,7 +64,7 @@
                         ></v-text-field>
                       </template>
                       <v-date-picker
-                       class="calendar"
+                        class="calendar"
                         ref="picker"
                         v-model="unit_date_edit"
                         :max="new Date().toISOString().substr(0, 10)"
@@ -195,7 +195,7 @@ export default {
     async getdata_found_selection() {
       try {
         let response = await axios.get(
-          this.$store.getters.myHostname+"/api/v1/getItem/foundations"
+          this.$store.getters.myHostname + "/api/v1/getItem/foundations"
         );
         this.get_foundationAll = response.data;
         for (let i = 0; i <= this.get_foundationAll.length; i++) {
@@ -217,7 +217,7 @@ export default {
               (this.format_unit_date_edit = moment(
                 response.data.date_unit
               ).format("DD-MM-YYYY")),
-              this.get_id=dateformat(response.data.date_unit,"yyyy-mm-dd"),
+              (this.get_id = dateformat(response.data.date_unit, "yyyy-mm-dd")),
               (this.statusSelected = response.data.status_unit);
           });
       } catch (err) {
@@ -236,12 +236,15 @@ export default {
           try {
             this.select_fund_id = this.get_foundationAll[i].fund_id;
             await axios
-              .put(`${this.$store.getters.myHostname}/api/v1/units/${get_unit_id}`, {
-                unit_name: this.txt_unitname_edit,
-                fund_id: this.select_fund_id,
-                date_unit: this.get_id,
-                status_unit: this.statusSelected,
-              })
+              .put(
+                `${this.$store.getters.myHostname}/api/v1/units/${get_unit_id}`,
+                {
+                  unit_name: this.txt_unitname_edit,
+                  fund_id: this.select_fund_id,
+                  date_unit: this.get_id,
+                  status_unit: this.statusSelected,
+                }
+              )
               .then(() => {
                 this.close_form_edit();
                 this.Msg_done("ແກ້ໄຂຂໍ້ມູນສຳເລັດແລ້ວ");
@@ -296,8 +299,8 @@ export default {
   font-weight: normal;
   font-size: 18px;
 }
-.calendar{
-   font-family: "boonhome-400";
+.calendar {
+  font-family: "boonhome-400";
   font-weight: normal;
   font-size: 14px;
 }

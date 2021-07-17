@@ -42,7 +42,7 @@
                 </v-tooltip>
               </v-toolbar>
             </template>
-            <template v-slot:item="{ item,index }">
+            <template v-slot:item="{ item, index }">
               <tr>
                 <td>
                   {{ index + 1 }}
@@ -61,7 +61,7 @@
                         v-on="on"
                         v-bind="attrs"
                         small
-                        @click="editcertificate_item"
+                        @click="editcertificate_item(item.certific_id)"
                         >update</v-icon
                       >
                     </template>
@@ -70,7 +70,11 @@
                   <span class="ma-1"></span>
                   <v-tooltip bottom>
                     <template v-slot:activator="{ on, attrs }">
-                      <v-icon @click="$router.push('/certificate-detail')" small v-on="on" v-bind="attrs"
+                      <v-icon
+                        @click="$router.push('/certificate-detail')"
+                        small
+                        v-on="on"
+                        v-bind="attrs"
                         >table_view</v-icon
                       >
                     </template>
@@ -84,7 +88,7 @@
       </v-row>
       <formAdd />
       <addMembercertificate />
-      <formEdit/>
+      <formEdit />
     </v-container>
   </div>
 </template>
@@ -93,7 +97,7 @@
 import formAdd from "@/components/certificate-form/certificate-formAdd.vue";
 import formEdit from "@/components/certificate-form/certificate-formEdit.vue";
 import addMembercertificate from "@/components/certificate-form/addMember_certificate.vue";
-import axios from 'axios';
+import axios from "axios";
 export default {
   name: "CertificateView",
   components: {
@@ -119,7 +123,8 @@ export default {
       myFoundation: [],
       myUnit: [],
       show: true,
-      loading:true,
+      loading: true,
+      Certificate_id: null,
     };
   },
 
@@ -134,42 +139,47 @@ export default {
         value: true,
       });
     },
-    editcertificate_item() {
+    editcertificate_item(id) {
+      this.Certificate_id = id;
       this.$store.dispatch({
         type: "doClickFormedit_certificate",
         value: true,
       });
     },
-    openform_addMember_certi(){
+    openform_addMember_certi() {
       this.$store.dispatch({
-        type:"doClickAddmember_certificate",
-        value:true,
-      })
+        type: "doClickAddmember_certificate",
+        value: true,
+      });
     },
-     //get data certificate
-     async getData_certificate(){
-       this.myData_certificate=[]
-       let user_status="admin"
-       if(user_status=="admin"){
-          try{
-         await axios.get(this.$store.getters.myHostname+"/api/v1/geCertificate/admin").then((response)=>{
-           this.myData_certificate=response.data;
-           this.loading=false;
-         })
-       }catch(err){
-         console.log(err);
-       }
-       }else{
-           try{
-         await axios.get(`${this.$store.getters.myHostname}/`).then((response)=>{
-           this.myData_certificate=response.data;
-           this.loading=false;
-         })
-       }catch(err){
-         console.log(err);
-       }
-       }
-     }
+    //get data certificate
+    async getData_certificate() {
+      this.myData_certificate = [];
+      let user_status = "admin";
+      if (user_status == "admin") {
+        try {
+          await axios
+            .get(this.$store.getters.myHostname + "/api/v1/geCertificate/admin")
+            .then((response) => {
+              this.myData_certificate = response.data;
+              this.loading = false;
+            });
+        } catch (err) {
+          console.log(err);
+        }
+      } else {
+        try {
+          await axios
+            .get(`${this.$store.getters.myHostname}/`)
+            .then((response) => {
+              this.myData_certificate = response.data;
+              this.loading = false;
+            });
+        } catch (err) {
+          console.log(err);
+        }
+      }
+    },
   },
 };
 </script>

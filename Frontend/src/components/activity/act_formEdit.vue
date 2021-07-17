@@ -9,14 +9,18 @@
           transition="dialog-transition"
         >
           <v-card>
-           <v-toolbar color="primary" height="45" dark>
+            <v-toolbar color="primary" height="45" dark>
               <v-toolbar-title class="text-header-dialog">
                 ແກ້ໄຂຫົວຂໍ້ກິດຈະກຳ
               </v-toolbar-title>
             </v-toolbar>
             <v-card-text>
               <v-container>
-                <v-form @submit.prevent="Update_Activity" class="table-content" v-model="valid">
+                <v-form
+                  @submit.prevent="Update_Activity"
+                  class="table-content"
+                  v-model="valid"
+                >
                   <v-text-field
                     label="ຫົວຂໍ້ກິດຈະກຳ"
                     :rules="[
@@ -86,7 +90,6 @@
                 </v-form>
               </v-container>
             </v-card-text>
-          
           </v-card>
         </v-dialog>
       </v-row>
@@ -95,11 +98,11 @@
 </template>
 
 <script>
-import axios from 'axios';
-import dateformat from "dateformat"
+import axios from "axios";
+import dateformat from "dateformat";
 export default {
   name: "ActFormadd",
-  props:['myID'],
+  props: ["myID"],
   data() {
     return {
       act_date: new Date().toISOString().substr(0, 10),
@@ -121,44 +124,44 @@ export default {
       },
       // valid form
       valid: false,
-      getID:null,
+      getID: null,
       //---------
-      txt_actTitle:null,
-      typeact_selected:null,
-      txt_actLocate:null,
-      Data_typeActivity:[],
-      typeActivity_all:[],
-      get_typeActivityID:null,
-      getDate:null,
+      txt_actTitle: null,
+      typeact_selected: null,
+      txt_actLocate: null,
+      Data_typeActivity: [],
+      typeActivity_all: [],
+      get_typeActivityID: null,
+      getDate: null,
     };
   },
   mounted() {
     this.getData_activity();
     this.getTypeActivity();
-    if(this.myID){
-      this.getID=this.myID
+    if (this.myID) {
+      this.getID = this.myID;
     }
   },
   watch: {
     act_date() {
       this.format_act_date = this.formatAct_date(this.act_date);
     },
-    reload(){
+    reload() {
       this.getData_activity();
-    }
+    },
   },
   computed: {
     computedDateFormatted() {
       return this.formatAct_date(this.act_date);
     },
-    reload(){
+    reload() {
       return this.getData_activity();
-    }
+    },
   },
   methods: {
     formatAct_date(date) {
       if (!date) return null;
-      this.getDate=dateformat(date,"yyyy-mm-dd")
+      this.getDate = dateformat(date, "yyyy-mm-dd");
       const [year, month, day] = date.split("-");
       return `${day}-${month}-${year}`;
     },
@@ -170,71 +173,87 @@ export default {
     },
     // close form add
     close_formEdit() {
-      this.myID=null;
+      this.myID = null;
       this.$store.dispatch({
         type: "clickShow_act_formEdit",
       });
-      
     },
-  async getData_activity(){
-      if(this.myID &&this.$store.getters.getAct_formEdit==true){
-        try{
-          await axios.get(`${this.$store.getters.myHostname}/api/v1/activity-byID/${this.myID}`).then((response)=>{
-            this.txt_actTitle=response.data.acti_title;
-            this.format_act_date=dateformat(response.data.date_acti,"dd-mm-yyyy");
-            this.txt_actLocate=response.data.place;
-            this.get_typeActivityID=response.data.typeAct_id;
-            this.getDate=response.data.date_acti;
-            for(let i in this.typeActivity_all){
-              if(String(response.data.typeAct_id).valueOf()==String(this.typeActivity_all[i].typeAct_id).valueOf()){
-                this.typeact_selected=this.typeActivity_all[i].typeAct_name;
+    async getData_activity() {
+      if (this.myID && this.$store.getters.getAct_formEdit == true) {
+        try {
+          await axios
+            .get(
+              `${this.$store.getters.myHostname}/api/v1/activity-byID/${this.myID}`
+            )
+            .then((response) => {
+              this.txt_actTitle = response.data.acti_title;
+              this.format_act_date = dateformat(
+                response.data.date_acti,
+                "dd-mm-yyyy"
+              );
+              this.txt_actLocate = response.data.place;
+              this.get_typeActivityID = response.data.typeAct_id;
+              this.getDate = response.data.date_acti;
+              for (let i in this.typeActivity_all) {
+                if (
+                  String(response.data.typeAct_id).valueOf() ==
+                  String(this.typeActivity_all[i].typeAct_id).valueOf()
+                ) {
+                  this.typeact_selected = this.typeActivity_all[i].typeAct_name;
+                }
               }
-            }
-          })
-        }catch(err){
+            });
+        } catch (err) {
           console.log(err);
         }
       }
     },
-    async getTypeActivity(){
-    
-      try{
-        await axios.get(this.$store.getters.myHostname+"/api/v1/typeActivity").then((response)=>{
-          this.typeActivity_all=response.data;
-          for(let i in this.typeActivity_all){
-            this.Data_typeActivity.push(this.typeActivity_all[i].typeAct_name)
-          }
-        })
-      }catch(err){
-
+    async getTypeActivity() {
+      try {
+        await axios
+          .get(this.$store.getters.myHostname + "/api/v1/typeActivity")
+          .then((response) => {
+            this.typeActivity_all = response.data;
+            for (let i in this.typeActivity_all) {
+              this.Data_typeActivity.push(
+                this.typeActivity_all[i].typeAct_name
+              );
+            }
+          });
+      } catch (err) {
         console.log(err);
       }
     },
-   async Update_Activity(){
-       const id = this.myID;
-      for(let i in this.typeActivity_all){
-        if(String(this.typeact_selected).valueOf()==String(this.typeActivity_all[i].typeAct_name).valueOf()){
-          this.get_typeActivityID=this.typeActivity_all[i].typeAct_id;
-           try{
-        await axios.put(`${this.$store.getters.myHostname}/api/v1/activity/${id}`,{
-          acti_title:this.txt_actTitle,
-          typeAct_id:this.get_typeActivityID,
-          date_acti:this.getDate,
-          place:this.txt_actLocate,
-        }).then(()=>{
-          this.Msg_done("ແກ້ໄຂຂໍ້ມູນກິດຈະກຳສຳເລັດ")
-           this.close_formEdit();
-          location.reload();
-        })
-       }catch(err){
-         this.Msg_fail("ແກ້ໄຂຂໍ້ມູນກິດຈະກຳບໍ່ສຳເລັດ")
-         console.log(err);
-         this.close_formEdit();
-       }
+    async Update_Activity() {
+      const id = this.myID;
+      for (let i in this.typeActivity_all) {
+        if (
+          String(this.typeact_selected).valueOf() ==
+          String(this.typeActivity_all[i].typeAct_name).valueOf()
+        ) {
+          this.get_typeActivityID = this.typeActivity_all[i].typeAct_id;
+          try {
+            await axios
+              .put(`${this.$store.getters.myHostname}/api/v1/activity/${id}`, {
+                acti_title: this.txt_actTitle,
+                typeAct_id: this.get_typeActivityID,
+                date_acti: this.getDate,
+                place: this.txt_actLocate,
+              })
+              .then(() => {
+                this.Msg_done("ແກ້ໄຂຂໍ້ມູນກິດຈະກຳສຳເລັດ");
+                this.close_formEdit();
+                location.reload();
+              });
+          } catch (err) {
+            this.Msg_fail("ແກ້ໄຂຂໍ້ມູນກິດຈະກຳບໍ່ສຳເລັດ");
+            console.log(err);
+            this.close_formEdit();
+          }
         }
       }
     },
-        // message done
+    // message done
     Msg_done(text) {
       // Message show
       this.$store.dispatch({

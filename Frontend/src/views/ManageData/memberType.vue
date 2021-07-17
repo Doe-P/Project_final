@@ -50,9 +50,19 @@
                 <td>{{ item.typemember }}</td>
                 <td>{{ item.money }}</td>
                 <td>
-                  <v-icon color="update" small @click="edit_memberType_item(item.typemember_id)">update</v-icon>
+                  <v-icon
+                    color="update"
+                    small
+                    @click="edit_memberType_item(item.typemember_id)"
+                    >update</v-icon
+                  >
                   <span class="ma-1"></span>
-                  <v-icon color="delete" small @click="delete_memberType_item(item.typemember_id)">delete</v-icon>
+                  <v-icon
+                    color="delete"
+                    small
+                    @click="delete_memberType_item(item.typemember_id)"
+                    >delete</v-icon
+                  >
                 </td>
               </tr>
             </template>
@@ -116,7 +126,7 @@ export default {
       confirm_dialog: false,
       form_edit_dialog: false,
       searchData: null,
-      get_id:null,
+      get_id: null,
       myData_memberType: [],
       headers: [
         { text: "ລະຫັດປະເພດສະມາຊິກ", align: "Left", value: "typemember_id" },
@@ -136,22 +146,21 @@ export default {
   },
   computed: {
     reload_data() {
-      return this.getAll_dataTypeMember() ;
+      return this.getAll_dataTypeMember();
     },
-  
   },
   methods: {
     //edit data education level
     edit_memberType_item(id) {
       this.$store.dispatch({
         type: "clickShow_memType_formEdit",
-        id:id,
+        id: id,
       });
     },
     //delete data education level
     delete_memberType_item(id) {
       this.confirm_dialog = true;
-      this.get_id=id;
+      this.get_id = id;
     },
     // open form add
     open_form_add() {
@@ -163,7 +172,7 @@ export default {
     async getAll_dataTypeMember() {
       try {
         let response = await axios.get(
-          this.$store.getters.myHostname+"/api/v1/type-members"
+          this.$store.getters.myHostname + "/api/v1/type-members"
         );
         this.myData_memberType = response.data;
       } catch (err) {
@@ -171,20 +180,24 @@ export default {
       }
     },
     // delete data
-   async confirm_delete_item(){
-     try{
-       await axios.delete(`${this.$store.getters.myHostname}/api/v1/type-members/${this.get_id}`).then(()=>{
-          this.confirm_dialog=false;
-          this.Msg_done("ລົບຂໍ້ມູນສຳເລັດແລ້ວ");
-          location.reload();
-       })
-     }catch(err){
-       this.confirm_dialog=false;
-       this.Msg_fail("ລົບຂໍ້ມູນປະເພດສະມາຊິກບໍ່ສຳເລັດ")
-       console.log(err);
-     }
+    async confirm_delete_item() {
+      try {
+        await axios
+          .delete(
+            `${this.$store.getters.myHostname}/api/v1/type-members/${this.get_id}`
+          )
+          .then(() => {
+            this.confirm_dialog = false;
+            this.Msg_done("ລົບຂໍ້ມູນສຳເລັດແລ້ວ");
+            location.reload();
+          });
+      } catch (err) {
+        this.confirm_dialog = false;
+        this.Msg_fail("ລົບຂໍ້ມູນປະເພດສະມາຊິກບໍ່ສຳເລັດ");
+        console.log(err);
+      }
     },
-      // message done
+    // message done
     Msg_done(text) {
       // Message show
       this.$store.dispatch({

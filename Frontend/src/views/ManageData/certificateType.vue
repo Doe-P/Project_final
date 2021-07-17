@@ -49,9 +49,22 @@
                 <td>{{ item.typeCerti_id }}</td>
                 <td>{{ item.typeCerti_name }}</td>
                 <td>
-                  <v-icon small @click="edit_certiType_item(item.typeCerti_id,item.typeCerti_name)">edit</v-icon>
+                  <v-icon
+                    small
+                    @click="
+                      edit_certiType_item(
+                        item.typeCerti_id,
+                        item.typeCerti_name
+                      )
+                    "
+                    >edit</v-icon
+                  >
                   <span class="ma-1"></span>
-                  <v-icon small @click="delete_certiType_item(item.typeCerti_id)">delete</v-icon>
+                  <v-icon
+                    small
+                    @click="delete_certiType_item(item.typeCerti_id)"
+                    >delete</v-icon
+                  >
                 </td>
               </tr>
             </template>
@@ -188,7 +201,7 @@
 </template>
 
 <script>
-import axios from "axios"
+import axios from "axios";
 export default {
   name: "certificatetype",
   data() {
@@ -220,33 +233,33 @@ export default {
       // valid form
       valid_add: false,
       valid_edit: false,
-      txt_certi_name:null,
-      txt_certi_name_edit:null,
-      get_id:null,
-      delete_id:null,
+      txt_certi_name: null,
+      txt_certi_name_edit: null,
+      get_id: null,
+      delete_id: null,
     };
   },
   mounted() {
-     this.getMaxID();
-     this.getData_All();
+    this.getMaxID();
+    this.getData_All();
   },
   methods: {
     //edit data education level
-    edit_certiType_item(id,type) {
+    edit_certiType_item(id, type) {
       this.form_edit_dialog = true;
-      this.get_id=id;
-      this.txt_certi_name_edit=type;
+      this.get_id = id;
+      this.txt_certi_name_edit = type;
     },
     //delete data education level
     delete_certiType_item(id) {
       this.confirm_dialog = true;
-      this.delete_id=id;
+      this.delete_id = id;
     },
-       // get max id 
-     async getMaxID() {
+    // get max id
+    async getMaxID() {
       try {
         await axios
-          .get(this.$store.getters.myHostname+"/api/v1/certificateType-MaxID")
+          .get(this.$store.getters.myHostname + "/api/v1/certificateType-MaxID")
           .then((response) => {
             const getid = response.data.id;
             this.$store.dispatch({
@@ -259,62 +272,75 @@ export default {
         console.log(err);
       }
     },
-   async getData_All(){
-     try{
-      let response = await axios.get(this.$store.getters.myHostname+"/api/v1/typecertificate");
-      this.myData_certificateType=response.data;
-     }catch(err){
-       console.log(err);
-     }
+    async getData_All() {
+      try {
+        let response = await axios.get(
+          this.$store.getters.myHostname + "/api/v1/typecertificate"
+        );
+        this.myData_certificateType = response.data;
+      } catch (err) {
+        console.log(err);
+      }
     },
-    // save data 
-   async Save_Data(){
-      try{
-        await axios.post(this.$store.getters.myHostname+"/api/v1/typeCertificate",{
-         typeCerti_id:this.$store.getters.getCustomID,
-         typeCerti_name:this.txt_certi_name
-        }).then(()=>{
-          this.form_add_dialog=false;
-          this.Msg_done("ບັນທຶກຂໍ້ມູນສຳເລັດແລ້ວ");
-          location.reload();
-        })
-      }catch(err){
-        this.form_add_dialog=false;
+    // save data
+    async Save_Data() {
+      try {
+        await axios
+          .post(this.$store.getters.myHostname + "/api/v1/typeCertificate", {
+            typeCerti_id: this.$store.getters.getCustomID,
+            typeCerti_name: this.txt_certi_name,
+          })
+          .then(() => {
+            this.form_add_dialog = false;
+            this.Msg_done("ບັນທຶກຂໍ້ມູນສຳເລັດແລ້ວ");
+            location.reload();
+          });
+      } catch (err) {
+        this.form_add_dialog = false;
         this.Msg_fail("ບັນທຶກຂໍ້ມູນບໍ່ສຳເລັດ");
         console.log(err);
       }
     },
     // Update data
-  async  Update_data(){
-       try{
-        await axios.put(`${this.$store.getters.myHostname}/api/v1/typeCertificate/${this.get_id}`,{
-         typeCerti_name:this.txt_certi_name_edit,
-        }).then(()=>{
-          this.form_edit_dialog=false;
-          this.Msg_done("ແກ້ໄຂຂໍ້ມູນສຳເລັດແລ້ວ");
-          location.reload();
-        })
-       }catch(err){
-         this.form_edit_dialog=false;
-         this.Msg_fail("ແກ້ໄຂຂໍ້ມູນບໍ່ສຳເລັດ");
-         console.log(err);
-       }
+    async Update_data() {
+      try {
+        await axios
+          .put(
+            `${this.$store.getters.myHostname}/api/v1/typeCertificate/${this.get_id}`,
+            {
+              typeCerti_name: this.txt_certi_name_edit,
+            }
+          )
+          .then(() => {
+            this.form_edit_dialog = false;
+            this.Msg_done("ແກ້ໄຂຂໍ້ມູນສຳເລັດແລ້ວ");
+            location.reload();
+          });
+      } catch (err) {
+        this.form_edit_dialog = false;
+        this.Msg_fail("ແກ້ໄຂຂໍ້ມູນບໍ່ສຳເລັດ");
+        console.log(err);
+      }
     },
-     // delete data
-   async  confirm_delete(){
-        try{
-         await axios.delete(`${this.$store.getters.myHostname}/api/v1/typeCertificate/${this.delete_id}`).then(()=>{
-          this.confirm_dialog=false;
-          this.Msg_done("ລົບຂໍ້ມູນສຳເລັດແລ້ວ");
-          location.reload();
-         })
-        }catch(err){
-          this.confirm_dialog=false;
-          this.Msg_fail("ລົບຂໍ້ມູນບໍ່ສຳເລັດ");
-          console.log(err);
-        }
-     },
-     // message done
+    // delete data
+    async confirm_delete() {
+      try {
+        await axios
+          .delete(
+            `${this.$store.getters.myHostname}/api/v1/typeCertificate/${this.delete_id}`
+          )
+          .then(() => {
+            this.confirm_dialog = false;
+            this.Msg_done("ລົບຂໍ້ມູນສຳເລັດແລ້ວ");
+            location.reload();
+          });
+      } catch (err) {
+        this.confirm_dialog = false;
+        this.Msg_fail("ລົບຂໍ້ມູນບໍ່ສຳເລັດ");
+        console.log(err);
+      }
+    },
+    // message done
     Msg_done(text) {
       // Message show
       this.$store.dispatch({

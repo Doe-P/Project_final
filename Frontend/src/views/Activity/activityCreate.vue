@@ -35,7 +35,7 @@
                 <v-spacer></v-spacer>
               </v-toolbar>
             </template>
-            
+
             <!--
             <template v-slot:item="{ item }">
               <tr class="table-content">
@@ -59,10 +59,14 @@
             -->
           </v-data-table>
           <v-card-actions class="justify-space-between table-content">
-             <v-btn color="error" dark @click="$router.push('/activity')">
+            <v-btn color="error" dark @click="$router.push('/activity')">
               <span>ຍົກເລີກ</span>
             </v-btn>
-            <v-btn @click.prevent="SaveData_activitys" :disabled="checked" color="primary">
+            <v-btn
+              @click.prevent="SaveData_activitys"
+              :disabled="checked"
+              color="primary"
+            >
               <span>ບັນທຶກ</span>
             </v-btn>
           </v-card-actions>
@@ -73,7 +77,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import axios from "axios";
 export default {
   name: "Activitycreate",
   data() {
@@ -90,7 +94,7 @@ export default {
           mem_foundation: "hh",
         },
         {
-           mem_id: 2,
+          mem_id: 2,
           mem_name: "tado",
           mem_surname: "dodo",
           mem_gender: "gg",
@@ -120,111 +124,114 @@ export default {
         { text: "ເພດ", value: "gender", sortable: false },
         { text: "ລະດັບການສຶກສາ", value: "level_name", sortable: true },
         { text: "ປະເພດສະມາຊິກ", value: "typemember", sortable: true },
-         { text: "ຈຸ", value: "sect_name", sortable: true },
+        { text: "ຈຸ", value: "sect_name", sortable: true },
         { text: "ໜ່ວຍ", value: "unit_name", sortable: true },
         { text: "ຮາກຖານ", value: "fund_name", sortable: true },
       ],
       // select all
-      single_select:false,
-      selected:[],
-      checked:true,
-      loading:true,
-      filter_MemberID:[],
-      array:[],
+      single_select: false,
+      selected: [],
+      checked: true,
+      loading: true,
+      filter_MemberID: [],
+      array: [],
     };
   },
   mounted() {
-   this.getData_member();
+    this.getData_member();
   },
   methods: {
     checkSelect(value) {
       if (value != "") {
         this.checked = false;
-         this.filter_member();
+        this.filter_member();
       } else {
         this.checked = true;
-        this.filter_MemberID=[]
+        this.filter_MemberID = [];
       }
     },
-    //filter id in data member 
-    filter_member(){
-      this.filter_MemberID=[]
-      this.filter_MemberID=this.myData_member.map(a=>a.member_id)
-     
+    //filter id in data member
+    filter_member() {
+      this.filter_MemberID = [];
+      this.filter_MemberID = this.myData_member.map((a) => a.member_id);
     },
-    //get data member 
-   async getData_member(){
-       const user_status="admin"
-       const get_found="F0001-30062021";
-       this.myData_member=[]
-       if(user_status=="admin"){
-         try{
-           let response = await axios.get(this.$store.getters.myHostname+"/api/v1/getMembers");
-           this.myData_member=response.data;
-           this.loading=false;
-         }catch(err){
-           console.log(err);
-         }
-       }else{
-         try{
-           let response = await axios.get(`${this.$store.getters.myHostname}/${get_found}`);
-           this.myData_member=response.data;
-            this.loading=false;
-         }catch(err){
-           console.log(err);
-         }
-       }
-    },
-   async SaveData_activitys(){
-   
-     let arr = this.$route.params.data
-     let arrray = arr.split(",")
-    // let total =this.filter_MemberID.length
-    // let arrActivity = arrray.push(total)
-     var json_arr ={};
-      json_arr.acti_id=arrray[0],
-     json_arr.acti_title=arrray[1],
-     json_arr.typeAct_id=arrray[2];
-     json_arr.place=arrray[3];
-     json_arr.amount_acti=this.selected.length;
-     json_arr.date_acti=arrray[5]
-     let mydata_arr =[]
-     for(let i in this.filter_MemberID){
-       json_arr.member_id=this.filter_MemberID[i]
-        mydata_arr[i]={
-          acti_id:arrray[0],
-          acti_title:arrray[1],
-          typeAct_id:arrray[2],
-          place:arrray[3],
-          amount_acti:this.selected.length,
-          date_acti:arrray[5],
-          member_id:this.filter_MemberID[i]
+    //get data member
+    async getData_member() {
+      const user_status = "admin";
+      const get_found = "F0001-30062021";
+      this.myData_member = [];
+      if (user_status == "admin") {
+        try {
+          let response = await axios.get(
+            this.$store.getters.myHostname + "/api/v1/getMembers"
+          );
+          this.myData_member = response.data;
+          this.loading = false;
+        } catch (err) {
+          console.log(err);
         }
-      
-     }
-    
-   
-      console.log(mydata_arr);
-    
-    if(arrray && mydata_arr){
-       try{
-       await axios.post(this.$store.getters.myHostname+"/api/v1/new-activity",{
-        data:mydata_arr
-       }).then(()=>{
-        this.Msg_done("ບັນທືກຂໍ້ມູນກິດຈະກຳສຳເລັດ")
-        this.$router.push("/activity")
-        location.reload();
-       })
-     }catch(err){
-       this.Msg_fail("ບັນທຶກຂໍ້ມູນກິດຈະກຳບໍ໋ສຳເລັດ ກະລຸນາກວດສອບຂໍ້ມູນອີກຄັ້ງ")
-       console.log(err);
-     }
-    }else{
-      this.Msg_fail("ມີຂໍ້ຜິດພາດກັບຂໍ້ມູນກິດຈະກຳ ຫຼື ຂໍ້ມູນສະມາຊິກ")
-    }
-    
+      } else {
+        try {
+          let response = await axios.get(
+            `${this.$store.getters.myHostname}/${get_found}`
+          );
+          this.myData_member = response.data;
+          this.loading = false;
+        } catch (err) {
+          console.log(err);
+        }
+      }
     },
-   // message done
+    async SaveData_activitys() {
+      let arr = this.$route.params.data;
+      let arrray = arr.split(",");
+      // let total =this.filter_MemberID.length
+      // let arrActivity = arrray.push(total)
+      var json_arr = {};
+      (json_arr.acti_id = arrray[0]),
+        (json_arr.acti_title = arrray[1]),
+        (json_arr.typeAct_id = arrray[2]);
+      json_arr.place = arrray[3];
+      json_arr.amount_acti = this.selected.length;
+      json_arr.date_acti = arrray[5];
+      let mydata_arr = [];
+      for (let i in this.filter_MemberID) {
+        json_arr.member_id = this.filter_MemberID[i];
+        mydata_arr[i] = {
+          acti_id: arrray[0],
+          acti_title: arrray[1],
+          typeAct_id: arrray[2],
+          place: arrray[3],
+          amount_acti: this.selected.length,
+          date_acti: arrray[5],
+          member_id: this.filter_MemberID[i],
+        };
+      }
+
+      console.log(mydata_arr);
+
+      if (arrray && mydata_arr) {
+        try {
+          await axios
+            .post(this.$store.getters.myHostname + "/api/v1/new-activity", {
+              data: mydata_arr,
+            })
+            .then(() => {
+              this.Msg_done("ບັນທືກຂໍ້ມູນກິດຈະກຳສຳເລັດ");
+              this.$router.push("/activity");
+              location.reload();
+            });
+        } catch (err) {
+          this.Msg_fail(
+            "ບັນທຶກຂໍ້ມູນກິດຈະກຳບໍ໋ສຳເລັດ ກະລຸນາກວດສອບຂໍ້ມູນອີກຄັ້ງ"
+          );
+          console.log(err);
+        }
+      } else {
+        this.Msg_fail("ມີຂໍ້ຜິດພາດກັບຂໍ້ມູນກິດຈະກຳ ຫຼື ຂໍ້ມູນສະມາຊິກ");
+      }
+    },
+    // message done
     Msg_done(text) {
       // Message show
       this.$store.dispatch({

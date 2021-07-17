@@ -358,7 +358,9 @@
                             v-show="gender == 'ຍິງ'"
                             v-model="format_Date_w"
                             label="ວັນເດືອນປີເຂົ້າແມ່ຍິງ"
-                            :rules="[isChecked('ວັນເດືອນປີເຂົ້າແມ່ຍິງ',gender)]"
+                            :rules="[
+                              isChecked('ວັນເດືອນປີເຂົ້າແມ່ຍິງ', gender),
+                            ]"
                             prepend-icon="mdi-calendar"
                             readonly
                             @blur="date_w = parseDate_y(format_Date_w)"
@@ -393,7 +395,9 @@
                           <v-text-field
                             v-show="isKamaban == 'ກຳມະບານ'"
                             v-model="format_Date_k"
-                            :rules="[isChecked('ວັນເດືອນປີເຂົ້າກຳມະບານ',isKamaban)]"
+                            :rules="[
+                              isChecked('ວັນເດືອນປີເຂົ້າກຳມະບານ', isKamaban),
+                            ]"
                             label="ວັນເດືອນປີເຂົ້າກຳມະບານ"
                             prepend-icon="mdi-calendar"
                             readonly
@@ -428,7 +432,12 @@
                           <v-text-field
                             v-show="isParty_reserve == 'ສັງກັດພັກສຳຮອງ'"
                             v-model="format_Date_ps"
-                            :rules="[isChecked('ວັນເດືອນປີເຂົ້າພັກສຳຮອງ',isParty_reserve)]"
+                            :rules="[
+                              isChecked(
+                                'ວັນເດືອນປີເຂົ້າພັກສຳຮອງ',
+                                isParty_reserve
+                              ),
+                            ]"
                             label="ວັນເດືອນປີເຂົ້າພັກສຳຮອງ"
                             prepend-icon="mdi-calendar"
                             readonly
@@ -464,7 +473,12 @@
                           <v-text-field
                             v-show="isParty_full == 'ສັງກັດພັກສົມບູນ'"
                             v-model="format_Date_p"
-                            :rules="[isChecked('ວັນເດືອນປີເຂົ້າພັກສົມບູນ',isParty_full)]"
+                            :rules="[
+                              isChecked(
+                                'ວັນເດືອນປີເຂົ້າພັກສົມບູນ',
+                                isParty_full
+                              ),
+                            ]"
                             label="ວັນເດືອນປີເຂົ້າພັກສົມບູນ"
                             prepend-icon="mdi-calendar"
                             readonly
@@ -536,32 +550,34 @@
                       label="ໜ້າທີ່ຮັບຜິດຊອບ"
                       :rules="[required('ໜ້າທີ່ຮັບຜິດຊອບ')]"
                     ></v-select>
-                      <span class="sub-text">ພາສາຕ່າງປະເທດທີ່ອ່ານ ແລະ ຂຽນໄດ້ດີ</span>
-                      <v-combobox
-                        v-model="language_selected"
-                        :items="items"
-                        chips
-                        clearable
-                        label="ເລືອກພາສາ"
-                        multiple
-                        solo
-                        :rules="[required('ພາສາ')]"
+                    <span class="sub-text"
+                      >ພາສາຕ່າງປະເທດທີ່ອ່ານ ແລະ ຂຽນໄດ້ດີ</span
+                    >
+                    <v-combobox
+                      v-model="language_selected"
+                      :items="items"
+                      chips
+                      clearable
+                      label="ເລືອກພາສາ"
+                      multiple
+                      solo
+                      :rules="[required('ພາສາ')]"
+                    >
+                      <template
+                        v-slot:selection="{ attrs, item, select, selected }"
                       >
-                        <template
-                          v-slot:selection="{ attrs, item, select, selected }"
+                        <v-chip
+                          v-bind="attrs"
+                          :input-value="selected"
+                          close
+                          @click="select"
+                          @click:close="remove(item)"
                         >
-                          <v-chip
-                            v-bind="attrs"
-                            :input-value="selected"
-                            close
-                            @click="select"
-                            @click:close="remove(item)"
-                          >
-                            <strong>{{ item }}</strong
-                            >&nbsp;
-                          </v-chip>
-                        </template>
-                      </v-combobox>
+                          <strong>{{ item }}</strong
+                          >&nbsp;
+                        </v-chip>
+                      </template>
+                    </v-combobox>
                     <v-select
                       :items="blood_items"
                       :rules="[required('ໝວດເລືອດ')]"
@@ -651,23 +667,23 @@ export default {
           console.log("validate text on member create form err");
         }
       },
-       isCheckAge(birthdate){
-         var d = new Date();
-         var y=d.getFullYear();
-         var age =y-birthdate;
-         if(birthdate){
-            if(age>=35){
-          return  `ອາຍຸຂອງສະມາຊິກຫຼາຍກວ່າ 34 ອາຍຸຕ້ອງຢູ່ລະຫວ່າງ 15-34`; 
-         }else if(age<15){
-          return  `ອາຍຸຂອງສະມາຊິກໜ້ອຍກວ່າ  15 ອາຍຸຕ້ອງຢູ່ລະຫວ່າງ 15-34`; 
-         }
-         }
+      isCheckAge(birthdate) {
+        var d = new Date();
+        var y = d.getFullYear();
+        var age = y - birthdate;
+        if (birthdate) {
+          if (age >= 35) {
+            return `ອາຍຸຂອງສະມາຊິກຫຼາຍກວ່າ 34 ອາຍຸຕ້ອງຢູ່ລະຫວ່າງ 15-34`;
+          } else if (age < 15) {
+            return `ອາຍຸຂອງສະມາຊິກໜ້ອຍກວ່າ  15 ອາຍຸຕ້ອງຢູ່ລະຫວ່າງ 15-34`;
+          }
+        }
       },
       // valid form
       valid: true,
       reponsibles: ["ນັກສຶກສາ", "ອາຈານ"],
       member_status: "",
-      get_Year:null,
+      get_Year: null,
       // isShow_woman_date: true,
       //Birthday
       date: new Date().toISOString().substr(0, 10),
@@ -754,7 +770,7 @@ export default {
       isKamaban: null,
       isParty_reserve: null,
       isParty_full: null,
-      member_id:null,
+      member_id: null,
     };
   },
   mounted() {
@@ -839,7 +855,7 @@ export default {
       if (!date) return null;
       this.birthdate_format = dateformat(date, "yyyy-mm-dd");
       const [year, month, day] = date.split("-");
-      this.get_Year=parseInt(year);
+      this.get_Year = parseInt(year);
       return `${day}-${month}-${year}`;
     },
     // Method Young
@@ -962,69 +978,75 @@ export default {
         ) {
           if (String(this.gender).valueOf() == "ຍິງ" && this.format_Date_w) {
             await axios
-              .put(`${this.$store.getters.myHostname}/api/v1/members/${this.member_id}`, {
-                member_name: this.txt_Membername,
-                surname: this.txt_surname,
-                gender: this.gender,
-                birthday: this.birthdate_format,
-                bvillage: this.txt_bvillage,
-                bdistrict: this.txt_bdistrict,
-                bprovince: this.txt_bprovince,
-                nvillage: this.txt_nvillage,
-                ndistrict: this.txt_ndistrict,
-                nprovince: this.txt_nprovince,
-                nation: this.txt_nation,
-                ethnic: this.txt_ethnic,
-                religion: this.select_riligion,
-                tell: parseInt(this.txt_tel),
-                date_Y: this.youthdate_format,
-                date_W: this.womendate_format,
-                date_K: this.kamabandate_format,
-                date_PS: this.psdate_format,
-                date_P: this.pdate_format,
-                sect_id: this.getSect_id,
-                typemember_id: this.get_membertype_id,
-                level_id: this.get_eduLevel_id,
-                responsible: this.select_reponsible,
-                language:this.language_selected.toString(),
-                blood: this.selected_blood_Item,
-                date_start: this.startnuol_format,
-                status: this.member_status,
-              })
+              .put(
+                `${this.$store.getters.myHostname}/api/v1/members/${this.member_id}`,
+                {
+                  member_name: this.txt_Membername,
+                  surname: this.txt_surname,
+                  gender: this.gender,
+                  birthday: this.birthdate_format,
+                  bvillage: this.txt_bvillage,
+                  bdistrict: this.txt_bdistrict,
+                  bprovince: this.txt_bprovince,
+                  nvillage: this.txt_nvillage,
+                  ndistrict: this.txt_ndistrict,
+                  nprovince: this.txt_nprovince,
+                  nation: this.txt_nation,
+                  ethnic: this.txt_ethnic,
+                  religion: this.select_riligion,
+                  tell: parseInt(this.txt_tel),
+                  date_Y: this.youthdate_format,
+                  date_W: this.womendate_format,
+                  date_K: this.kamabandate_format,
+                  date_PS: this.psdate_format,
+                  date_P: this.pdate_format,
+                  sect_id: this.getSect_id,
+                  typemember_id: this.get_membertype_id,
+                  level_id: this.get_eduLevel_id,
+                  responsible: this.select_reponsible,
+                  language: this.language_selected.toString(),
+                  blood: this.selected_blood_Item,
+                  date_start: this.startnuol_format,
+                  status: this.member_status,
+                }
+              )
               .then(() => {
                 this.cancelData_member();
                 this.Msg_done("ແກ້ໄຂຂໍ້ມູນສຳເລັດແລ້ວ");
               });
           } else {
             await axios
-              .put(`${this.$store.getters.myHostname}/api/v1/members/${this.member_id}`, {
-                member_name: this.txt_Membername,
-                surname: this.txt_surname,
-                gender: this.gender,
-                birthday: this.birthdate_format,
-                bvillage: this.txt_bvillage,
-                bdistrict: this.txt_bdistrict,
-                bprovince: this.txt_bprovince,
-                nvillage: this.txt_nvillage,
-                ndistrict: this.txt_ndistrict,
-                nprovince: this.txt_nprovince,
-                nation: this.txt_nation,
-                ethnic: this.txt_ethnic,
-                religion: this.select_riligion,
-                tell: parseInt(this.txt_tel),
-                date_Y: this.youthdate_format,
-                date_K: this.kamabandate_format,
-                date_PS: this.psdate_format,
-                date_P: this.pdate_format,
-                sect_id: this.getSect_id,
-                typemember_id: this.get_membertype_id,
-                level_id: this.get_eduLevel_id,
-                responsible: this.select_reponsible,
-                language: this.language_selected.toString(),
-                blood: this.selected_blood_Item,
-                date_start: this.startnuol_format,
-                status: this.member_status,
-              })
+              .put(
+                `${this.$store.getters.myHostname}/api/v1/members/${this.member_id}`,
+                {
+                  member_name: this.txt_Membername,
+                  surname: this.txt_surname,
+                  gender: this.gender,
+                  birthday: this.birthdate_format,
+                  bvillage: this.txt_bvillage,
+                  bdistrict: this.txt_bdistrict,
+                  bprovince: this.txt_bprovince,
+                  nvillage: this.txt_nvillage,
+                  ndistrict: this.txt_ndistrict,
+                  nprovince: this.txt_nprovince,
+                  nation: this.txt_nation,
+                  ethnic: this.txt_ethnic,
+                  religion: this.select_riligion,
+                  tell: parseInt(this.txt_tel),
+                  date_Y: this.youthdate_format,
+                  date_K: this.kamabandate_format,
+                  date_PS: this.psdate_format,
+                  date_P: this.pdate_format,
+                  sect_id: this.getSect_id,
+                  typemember_id: this.get_membertype_id,
+                  level_id: this.get_eduLevel_id,
+                  responsible: this.select_reponsible,
+                  language: this.language_selected.toString(),
+                  blood: this.selected_blood_Item,
+                  date_start: this.startnuol_format,
+                  status: this.member_status,
+                }
+              )
               .then(() => {
                 this.cancelData_member();
                 this.Msg_done("ແກ້ໄຂຂໍ້ມູນສຳເລັດແລ້ວ");
@@ -1069,7 +1091,7 @@ export default {
     async get_TypeMember_selection() {
       try {
         await axios
-          .get(this.$store.getters.myHostname+"/api/v1/type-members")
+          .get(this.$store.getters.myHostname + "/api/v1/type-members")
           .then((response) => {
             this.typeMember_item_All = response.data;
             for (let i = 0; i <= this.typeMember_item_All.length; i++) {
@@ -1096,7 +1118,7 @@ export default {
     async get_educationLevel() {
       try {
         await axios
-          .get(this.$store.getters.myHostname+"/api/v1/education-levels")
+          .get(this.$store.getters.myHostname + "/api/v1/education-levels")
           .then((response) => {
             this.level_item_All = response.data;
             for (let i = 0; i <= this.level_item_All.length; i++) {
@@ -1146,7 +1168,9 @@ export default {
             const id = this.unit_items_all[i].unit_id;
             try {
               await axios
-                .get(`${this.$store.getters.myHostname}/api/v1/allsections/${id}`)
+                .get(
+                  `${this.$store.getters.myHostname}/api/v1/allsections/${id}`
+                )
                 .then((response) => {
                   this.section_items_all = response.data;
                   for (let a = 0; a <= this.section_items_all.length; a++) {
@@ -1187,14 +1211,19 @@ export default {
       let get_item_sect = "";
       try {
         await axios
-          .get(`${this.$store.getters.myHostname}/api/v1/members/${this.$route.params.member_edit}`)
+          .get(
+            `${this.$store.getters.myHostname}/api/v1/members/${this.$route.params.member_edit}`
+          )
           .then((response) => {
-            this.member_id=response.data.member_id;
+            this.member_id = response.data.member_id;
             this.txt_Membername = response.data.member_name;
             this.txt_surname = response.data.surname;
             this.gender = response.data.gender;
             this.format_Date = dateformat(response.data.birthday, "dd-mm-yyyy");
-            this.birthdate_format=dateformat(response.data.birthday,"yyyy-mm-dd");
+            this.birthdate_format = dateformat(
+              response.data.birthday,
+              "yyyy-mm-dd"
+            );
             this.txt_tel = response.data.tell.toString();
             this.txt_bvillage = response.data.bvillage;
             this.txt_bdistrict = response.data.bdistrict;
@@ -1207,9 +1236,18 @@ export default {
             this.select_riligion = response.data.religion;
             w = response.data.date_W;
             this.format_Date_y = dateformat(response.data.date_Y, "dd-mm-yyyy");
-            this.youthdate_format=dateformat(response.data.date_Y,"yyyy-mm-dd");
-            this.startnuol_format=dateformat(response.data.date_start,"yyyy-mm-dd");
-            this.format_Date_start_nuol = dateformat(response.data.date_start,"dd-mm-yyyy");
+            this.youthdate_format = dateformat(
+              response.data.date_Y,
+              "yyyy-mm-dd"
+            );
+            this.startnuol_format = dateformat(
+              response.data.date_start,
+              "yyyy-mm-dd"
+            );
+            this.format_Date_start_nuol = dateformat(
+              response.data.date_start,
+              "dd-mm-yyyy"
+            );
             k = response.data.date_K;
             ps = response.data.date_PS;
             p = response.data.date_P;
@@ -1227,12 +1265,12 @@ export default {
       } catch (err) {
         console.log(err);
       }
-       this.getUnit_selected(get_item_unit,get_item_sect);
+      this.getUnit_selected(get_item_unit, get_item_sect);
       // ກວດສອບວັນທີຂອງອົງການຈັດຕັ້ງ
       if (w) {
         this.gender = "ຍິງ";
         this.format_Date_w = dateformat(w, "dd-mm-yyyy");
-        this.womendate_format=dateformat(w,"yyyy-mm-dd");
+        this.womendate_format = dateformat(w, "yyyy-mm-dd");
       } else {
         this.format_Date_w = null;
       }
@@ -1240,7 +1278,7 @@ export default {
       if (k) {
         this.isKamaban = "ກຳມະບານ";
         this.format_Date_k = dateformat(k, "dd-mm-yyyy");
-         this.kamabandate_format=dateformat(k,"yyyy-mm-dd");
+        this.kamabandate_format = dateformat(k, "yyyy-mm-dd");
       } else {
         this.isKamaban = "";
         this.format_Date_k = null;
@@ -1249,7 +1287,7 @@ export default {
       if (ps) {
         this.isParty_reserve = "ສັງກັດພັກສຳຮອງ";
         this.format_Date_ps = dateformat(ps, "dd-mm-yyyy");
-         this.psdate_format=dateformat(ps,"yyyy-mm-dd");
+        this.psdate_format = dateformat(ps, "yyyy-mm-dd");
       } else {
         this.isParty_reserve = "";
         this.format_Date_ps = null;
@@ -1258,7 +1296,7 @@ export default {
       if (p) {
         this.isParty_full = "ສັງກັດພັກສົມບູນ";
         this.format_Date_p = dateformat(p, "dd-mm-yyyy");
-         this.pdate_format=dateformat(p,"yyyy-mm-dd");
+        this.pdate_format = dateformat(p, "yyyy-mm-dd");
       } else {
         this.isParty_full = "";
         this.format_Date_p = null;
@@ -1266,9 +1304,9 @@ export default {
       this.getSect_selected(get_item_sect);
     },
     remove(item) {
-      if(this.language_selected.length>=2){
+      if (this.language_selected.length >= 2) {
         this.language_selected.splice(this.language_selected.indexOf(item), 1);
-      this.language_selected = [...this.language_selected];
+        this.language_selected = [...this.language_selected];
       }
     },
     //get member type item selected
@@ -1294,33 +1332,42 @@ export default {
           String(this.level_item_All[l].level_id).valueOf()
         ) {
           this.selecte_level_Item = this.level_item_All[l].level_name;
-          this.get_eduLevel_id=id;
+          this.get_eduLevel_id = id;
         }
       }
     },
     // get unit item selected
-    async getUnit_selected(unitid,sectid) {
-      this.section_items_all=[];
+    async getUnit_selected(unitid, sectid) {
+      this.section_items_all = [];
       for (let i = 0; i <= this.unit_items_all.length; i++) {
-        if (String(unitid).valueOf() ==String(this.unit_items_all[i].unit_id).valueOf()) {
+        if (
+          String(unitid).valueOf() ==
+          String(this.unit_items_all[i].unit_id).valueOf()
+        ) {
           this.selected_unit_Item = this.unit_items_all[i].unit_name;
-           try {
-              await axios
-                .get(`${this.$store.getters.myHostname}/api/v1/allsections/${unitid}`)
-                .then((response) => {
-                  this.section_items_all = response.data;
-                  for (let a = 0; a <= this.section_items_all.length; a++) {
-                    this.section_items.push(this.section_items_all[a].sect_name);
-                    const getvalue =String(this.section_items_all[a].sect_id).valueOf();
-                    if (String(sectid).valueOf() == getvalue) {
-                       this.selected_section_Item = this.section_items_all[a].sect_name;
-                        this.getSect_id=this.section_items_all[a].sect_id;
-                      }
-                   }
-                });
-            } catch (err) {
-              console.log(err);
-            }
+          try {
+            await axios
+              .get(
+                `${this.$store.getters.myHostname}/api/v1/allsections/${unitid}`
+              )
+              .then((response) => {
+                this.section_items_all = response.data;
+                for (let a = 0; a <= this.section_items_all.length; a++) {
+                  this.section_items.push(this.section_items_all[a].sect_name);
+                  const getvalue = String(
+                    this.section_items_all[a].sect_id
+                  ).valueOf();
+                  if (String(sectid).valueOf() == getvalue) {
+                    this.selected_section_Item = this.section_items_all[
+                      a
+                    ].sect_name;
+                    this.getSect_id = this.section_items_all[a].sect_id;
+                  }
+                }
+              });
+          } catch (err) {
+            console.log(err);
+          }
         }
       }
     },

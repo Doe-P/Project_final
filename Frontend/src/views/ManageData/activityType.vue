@@ -9,7 +9,7 @@
             loading="true"
             loading-text="ກຳລັງໂຫຼດຂໍ້ມູນ.."
             :search="searchData"
-            class="elevation-3  table-content"
+            class="elevation-3 table-content"
           >
             <template v-slot:top>
               <v-toolbar>
@@ -49,9 +49,21 @@
                 <td>{{ item.typeAct_id }}</td>
                 <td>{{ item.typeAct_name }}</td>
                 <td>
-                  <v-icon color="update" small @click="edit_actiType_item(item.typeAct_id,item.typeAct_name)">update</v-icon>
+                  <v-icon
+                    color="update"
+                    small
+                    @click="
+                      edit_actiType_item(item.typeAct_id, item.typeAct_name)
+                    "
+                    >update</v-icon
+                  >
                   <span class="ma-1"></span>
-                  <v-icon color="delete" small @click="delete_actiType_item(item.typeAct_id)">delete</v-icon>
+                  <v-icon
+                    color="delete"
+                    small
+                    @click="delete_actiType_item(item.typeAct_id)"
+                    >delete</v-icon
+                  >
                 </td>
               </tr>
             </template>
@@ -188,7 +200,7 @@
 </template>
 
 <script>
-import axios from "axios"
+import axios from "axios";
 export default {
   name: "activityType",
   data() {
@@ -221,31 +233,30 @@ export default {
       valid_add: false,
       valid_edit: false,
       //----add----
-      txt_actiType_name:null,
+      txt_actiType_name: null,
       //---edit ----
-      txt_actiType_name_edit:null,
-      get_id:null,
-      delete_id:null,
-
+      txt_actiType_name_edit: null,
+      get_id: null,
+      delete_id: null,
     };
   },
   mounted() {
-       this.getMaxID();
-       this.getData_typeActivity();
+    this.getMaxID();
+    this.getData_typeActivity();
   },
   methods: {
     //edit data education level
-    edit_actiType_item(id,type) {
+    edit_actiType_item(id, type) {
       this.form_edit_dialog = true;
-      this.txt_actiType_name_edit=type;
-      this.get_id=id;
+      this.txt_actiType_name_edit = type;
+      this.get_id = id;
     },
     //delete data education level
     delete_actiType_item(id) {
       this.confirm_dialog = true;
-       this.delete_id=id;
+      this.delete_id = id;
     },
-     // get Max ID
+    // get Max ID
     async getMaxID() {
       try {
         await axios
@@ -262,62 +273,70 @@ export default {
         console.log(err);
       }
     },
-   async getData_typeActivity(){
-       try{
-       let response = await axios.get("http://localhost:5000/api/v1/typeActivity");
-        this.myData_activityType= response.data;
-       }catch(err){
-         console.log(err);
-       }
+    async getData_typeActivity() {
+      try {
+        let response = await axios.get(
+          "http://localhost:5000/api/v1/typeActivity"
+        );
+        this.myData_activityType = response.data;
+      } catch (err) {
+        console.log(err);
+      }
     },
     // save data activity type
-   async Save_Data(){
-        try{
-          await axios.post("http://localhost:5000/api/v1/typeActivity",{
-             typeAct_id:this.$store.getters.getCustomID,
-             typeAct_name:this.txt_actiType_name
-          }).then(()=>{
-             this.form_add_dialog=false;
-             this.Msg_done("ບັນທຶກຂໍ້ມູນສຳເລັດແລ້ວ");
-             location.reload();
+    async Save_Data() {
+      try {
+        await axios
+          .post("http://localhost:5000/api/v1/typeActivity", {
+            typeAct_id: this.$store.getters.getCustomID,
+            typeAct_name: this.txt_actiType_name,
           })
-        }catch(err){
-          this.form_add_dialog=false;
-          this.Msg_fail("ບັນທຶກຂໍ້ມູນບໍ່ສຳເລັດ");
-          console.log(err);
-        }
+          .then(() => {
+            this.form_add_dialog = false;
+            this.Msg_done("ບັນທຶກຂໍ້ມູນສຳເລັດແລ້ວ");
+            location.reload();
+          });
+      } catch (err) {
+        this.form_add_dialog = false;
+        this.Msg_fail("ບັນທຶກຂໍ້ມູນບໍ່ສຳເລັດ");
+        console.log(err);
+      }
     },
     // Update data activity type
-   async Update_Data(){
-      try{
-       await axios.put(`http://localhost:5000/api/v1/typeActivity/${this.get_id}`,{
-         typeAct_name:this.txt_actiType_name_edit,
-       }).then(()=>{
-          this.form_edit_dialog=false;
-          this.Msg_done("ແກ້ໄຂຂໍ້ມູນສຳເລັດແລ້ວ");
-          location.reload();
-       })
-      }catch(err){
-        this.form_edit_dialog=false;
+    async Update_Data() {
+      try {
+        await axios
+          .put(`http://localhost:5000/api/v1/typeActivity/${this.get_id}`, {
+            typeAct_name: this.txt_actiType_name_edit,
+          })
+          .then(() => {
+            this.form_edit_dialog = false;
+            this.Msg_done("ແກ້ໄຂຂໍ້ມູນສຳເລັດແລ້ວ");
+            location.reload();
+          });
+      } catch (err) {
+        this.form_edit_dialog = false;
         this.Msg_fail("ແກ້ໄຂຂໍ້ມູນບໍ່ສຳເລັດ");
         console.log(err);
       }
     },
     // delete data
-   async confirm_delete(){
-      try{
-       await axios.delete(`http://localhost:5000/api/v1/typeActivity/${this.delete_id}`).then(()=>{
-         this.confirm_dialog=false;
-         this.Msg_done("ລົບຂໍ້ມູນສຳເລັດແລ້ວ");
-         location.reload();
-       })
-      }catch(err){
-        this.confirm_dialog=false;
+    async confirm_delete() {
+      try {
+        await axios
+          .delete(`http://localhost:5000/api/v1/typeActivity/${this.delete_id}`)
+          .then(() => {
+            this.confirm_dialog = false;
+            this.Msg_done("ລົບຂໍ້ມູນສຳເລັດແລ້ວ");
+            location.reload();
+          });
+      } catch (err) {
+        this.confirm_dialog = false;
         this.Msg_fail("ລົບຂໍ້ມູນບໍ່ສຳເລັດ");
         console.log(err);
       }
     },
-        // message done
+    // message done
     Msg_done(text) {
       // Message show
       this.$store.dispatch({

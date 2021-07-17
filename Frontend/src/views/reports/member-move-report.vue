@@ -73,9 +73,9 @@ export default {
     return {
       Year_select: [],
       Year_start: null,
-      Year_value_select:null,
-      isChecked:true,
-      isChecked_:true,
+      Year_value_select: null,
+      isChecked: true,
+      isChecked_: true,
     };
   },
 
@@ -96,20 +96,20 @@ export default {
         this.Year_select.push(str);
       }
     },
-    Isselect(value){
-     if(value!=""){
-       this.isChecked=false;
-     }else{
-       this.isChecked=true;
-     }
-    },
-    isselect_(value){
-      if(value!=""){
-         this.isChecked_=false;
-      }else{
-         this.isChecked_=true;
+    Isselect(value) {
+      if (value != "") {
+        this.isChecked = false;
+      } else {
+        this.isChecked = true;
       }
-    }
+    },
+    isselect_(value) {
+      if (value != "") {
+        this.isChecked_ = false;
+      } else {
+        this.isChecked_ = true;
+      }
+    },
   },
 };
 </script>

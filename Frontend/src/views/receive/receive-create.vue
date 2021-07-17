@@ -3,11 +3,11 @@
     <v-container fluid>
       <v-row justify="center" class="my-5 mx-10">
         <v-card width="100%">
-            <v-toolbar color="primary" height="45" dark>
-                <v-toolbar-title class="header">
-                    ຮັບເງິນສະຕິຊາວໜຸ່ມ
-                </v-toolbar-title>
-            </v-toolbar>
+          <v-toolbar color="primary" height="45" dark>
+            <v-toolbar-title class="header">
+              ຮັບເງິນສະຕິຊາວໜຸ່ມ
+            </v-toolbar-title>
+          </v-toolbar>
           <v-data-table
             :headers="headers"
             :items="Data_members"
@@ -44,7 +44,7 @@
             </template>
           </v-data-table>
           <v-card-text>
-            <v-form class="text-form" >
+            <v-form class="text-form">
               <v-row class="mx-10">
                 <v-col cols="6">
                   <v-text-field
@@ -99,14 +99,14 @@
                     readonly
                   ></v-text-field>
                 </v-col>
-                 <v-col cols="6">
-                      <span>ເລືອກງວດທີ່ຕ້ອງຊຳລະ</span>
-                   <v-radio-group v-model="value_select" row>
-                       <v-radio label="ງວດທີ I" value="ງວດທີ I"></v-radio>
-                       <v-radio label="ງວດທີ II" value="ງວດທີ II"></v-radio>
-                        <v-radio label="ໝົດປີ" value="ໝົດປີ"></v-radio>
-                   </v-radio-group>
-                 </v-col>
+                <v-col cols="6">
+                  <span>ເລືອກງວດທີ່ຕ້ອງຊຳລະ</span>
+                  <v-radio-group v-model="value_select" row>
+                    <v-radio label="ງວດທີ I" value="ງວດທີ I"></v-radio>
+                    <v-radio label="ງວດທີ II" value="ງວດທີ II"></v-radio>
+                    <v-radio label="ໝົດປີ" value="ໝົດປີ"></v-radio>
+                  </v-radio-group>
+                </v-col>
                 <v-col cols="6">
                   <v-menu
                     ref="menu1"
@@ -119,7 +119,7 @@
                   >
                     <template v-slot:activator="{ on, attrs }">
                       <v-text-field
-                      :rules="[required('ວັນທີ')]"
+                        :rules="[required('ວັນທີ')]"
                         v-model="receive_date_format"
                         label="ວັນທີ"
                         prepend-icon="mdi-calendar"
@@ -145,10 +145,10 @@
             </v-form>
           </v-card-text>
           <v-card-actions class="text-form justify-end">
-              <v-btn @click="$router.push('/receive-money')" color="error">
-                  ຍົກເລີກ
-              </v-btn>
-              <v-btn :disabled="isChecked" color="primary">ບັນທຶກ</v-btn>
+            <v-btn @click="$router.push('/receive-money')" color="error">
+              ຍົກເລີກ
+            </v-btn>
+            <v-btn :disabled="isChecked" color="primary">ບັນທຶກ</v-btn>
           </v-card-actions>
         </v-card>
       </v-row>
@@ -161,7 +161,7 @@ export default {
   name: "ReceiveCreate",
   data() {
     return {
-         //Valid input
+      //Valid input
       required(propertyType) {
         return (v) => (v && v.length > 0) || `ກະລຸນາປ້ອນຂໍ້ມູນ${propertyType}`;
       },
@@ -182,28 +182,28 @@ export default {
       receive_date: new Date().toISOString().substr(0, 10),
       receive_date_menu: false,
       receive_date_format: null,
-      value_select:"ງວດທີ I",
-      select_year:null,
-      Year_start:null,
-      Year_select:[],
+      value_select: "ງວດທີ I",
+      select_year: null,
+      Year_start: null,
+      Year_select: [],
     };
   },
 
   mounted() {
     this.setYear_select();
   },
- watch: {
+  watch: {
     receive_date() {
       this.receive_date_format = this.formatReceive_date(this.receive_date);
     },
   },
-   computed: {
+  computed: {
     ReceiveDateFormatted() {
       return this.formatReceive_date(this.receive_date);
     },
   },
   methods: {
-       // certificate date
+    // certificate date
     formatReceive_date(date) {
       if (!date) return null;
       const [year, month, day] = date.split("-");
@@ -222,7 +222,7 @@ export default {
         this.isChecked = true;
       }
     },
-     setYear_select() {
+    setYear_select() {
       // let object = [];
       let str = "";
       var d = new Date();
@@ -251,8 +251,8 @@ export default {
   font-size: 18px;
   color: #0779e4;
 }
-.header{
-     font-family: "boonhome-400";
+.header {
+  font-family: "boonhome-400";
   font-size: 18px;
 }
 </style>

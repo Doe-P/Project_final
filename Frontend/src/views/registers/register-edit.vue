@@ -54,7 +54,7 @@
                     label="ຢືນຢັນລະຫັດຜ່ານ"
                     id="id"
                     v-model="txt_user_conpsw"
-                     :append-icon="
+                    :append-icon="
                       isshowPassword ? 'visibility' : 'visibility_off'
                     "
                     @click:append="isshowPassword = !isshowPassword"

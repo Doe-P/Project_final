@@ -88,43 +88,45 @@
                   </v-form>
                 </v-card-text>
                 <v-card-actions class="justify-end">
-                    <v-btn color="primary" :disabled="!valid" @click="submit">
-                        <v-icon>print</v-icon>
-                    </v-btn>
+                  <v-btn color="primary" :disabled="!valid" @click="submit">
+                    <v-icon>print</v-icon>
+                  </v-btn>
                 </v-card-actions>
               </v-card>
             </v-col>
             <v-col cols="6">
               <v-card width="100%">
                 <v-card-title primary-title>
-                  <span class="sub-header">ລາຍງານລາຍຊື່ສະມາຊິກທີ່ພົ້ນກະສຽນ</span>
+                  <span class="sub-header"
+                    >ລາຍງານລາຍຊື່ສະມາຊິກທີ່ພົ້ນກະສຽນ</span
+                  >
                 </v-card-title>
                 <v-card-text>
-                    <v-form class="text-content">
-                        <v-select
-                        :items="Foundations"
-                        v-model="select_found"
-                        label="ເລືອກຮາກຖານ"
+                  <v-form class="text-content">
+                    <v-select
+                      :items="Foundations"
+                      v-model="select_found"
+                      label="ເລືອກຮາກຖານ"
                     ></v-select>
-                     <v-row>
-                         <v-col cols="6">
-                          <v-select
-                              :items="Years"
-                              v-model="value"
-                              label="ເລືອກປີ"
-                              append-icon="today"
-                              @input="selectvalue($event)"
-                          ></v-select>
-                         </v-col>
-                         <v-col cols="6" class="pt-7 align-content-end">
-                           <v-card-actions class="justify-end">
-                                <v-btn color="primary" :disabled="isChecked">
-                                    <v-icon>print</v-icon>
-                                </v-btn>
-                           </v-card-actions>
-                         </v-col>
-                     </v-row>
-                    </v-form>
+                    <v-row>
+                      <v-col cols="6">
+                        <v-select
+                          :items="Years"
+                          v-model="value"
+                          label="ເລືອກປີ"
+                          append-icon="today"
+                          @input="selectvalue($event)"
+                        ></v-select>
+                      </v-col>
+                      <v-col cols="6" class="pt-7 align-content-end">
+                        <v-card-actions class="justify-end">
+                          <v-btn color="primary" :disabled="isChecked">
+                            <v-icon>print</v-icon>
+                          </v-btn>
+                        </v-card-actions>
+                      </v-col>
+                    </v-row>
+                  </v-form>
                 </v-card-text>
               </v-card>
             </v-col>
@@ -140,7 +142,7 @@ export default {
   name: "MemberRetirementReport",
   data() {
     return {
-         // start date
+      // start date
       start_date: new Date().toISOString().substr(0, 10),
       start_date_menu: false,
       start_date_format: null,
@@ -153,28 +155,27 @@ export default {
         return (v) => (v && v.length > 0) || `ກະລຸນາປ້ອນຂໍ້ມູນ${propertyType}`;
       },
       // validate btn
-      valid:false,
-      message:"",
-      Years:[],
-      start_year:2000,
-      isChecked:true,
-      select_found:"",
+      valid: false,
+      message: "",
+      Years: [],
+      start_year: 2000,
+      isChecked: true,
+      select_found: "",
     };
   },
 
   mounted() {
-      this.setYear();
+    this.setYear();
   },
- watch: {
+  watch: {
     start_date() {
       this.start_date_format = this.formatStart_date(this.start_date);
     },
     end_date() {
       this.end_date_format = this.formatEnd_date(this.end_date);
     },
-    
   },
-   computed: {
+  computed: {
     StartDateFormatted() {
       return this.formatStart_date(this.start_date);
     },
@@ -183,9 +184,9 @@ export default {
     },
   },
   methods: {
-        // start date
+    // start date
     formatStart_date(date) {
-        this.message=""
+      this.message = "";
       if (!date) return null;
       const [year, month, day] = date.split("-");
       return `${day}-${month}-${year}`;
@@ -198,7 +199,7 @@ export default {
     },
     // end date
     formatEnd_date(date) {
-        this.message=""
+      this.message = "";
       if (!date) return null;
       const [year, month, day] = date.split("-");
       return `${day}-${month}-${year}`;
@@ -209,32 +210,32 @@ export default {
       const [month, day, year] = date.split("/");
       return `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
     },
-     submit(){
-        if(this.start_date_format > this.end_date_format){
-             this.$store.dispatch({
-        type: "doClick_myMsg",
-        mshow: true,
-        mcolor: "error",
-        micon: "error",
-        message: "ຂໍ້ມູນບໍ່ຖືກຕ້ອງກະລຸນາກວດສອບຄືນໃໝ່",
-      });
-      this.message="ກະລຸນາເລືອກວັນທີຄືນໃໝ່"
-        }
+    submit() {
+      if (this.start_date_format > this.end_date_format) {
+        this.$store.dispatch({
+          type: "doClick_myMsg",
+          mshow: true,
+          mcolor: "error",
+          micon: "error",
+          message: "ຂໍ້ມູນບໍ່ຖືກຕ້ອງກະລຸນາກວດສອບຄືນໃໝ່",
+        });
+        this.message = "ກະລຸນາເລືອກວັນທີຄືນໃໝ່";
+      }
     },
-    setYear(){
-        var now =new Date();
-        var y=now.getFullYear();
-        for(let i=y; i>=this.start_year; i--){
-            this.Years.push(i);
-        }
+    setYear() {
+      var now = new Date();
+      var y = now.getFullYear();
+      for (let i = y; i >= this.start_year; i--) {
+        this.Years.push(i);
+      }
     },
-    selectvalue(val){
-        if((val!="") && (this.select_found !="")){
-            this.isChecked=false;
-        }else{
-             this.isChecked=true;
-        }
-    }
+    selectvalue(val) {
+      if (val != "" && this.select_found != "") {
+        this.isChecked = false;
+      } else {
+        this.isChecked = true;
+      }
+    },
   },
 };
 </script>
@@ -250,8 +251,8 @@ export default {
   color: #0779e4;
 }
 .text-content,
-.calender{
-     font-family: "boonhome-400";
+.calender {
+  font-family: "boonhome-400";
   font-size: 14px;
 }
 </style>

@@ -2,7 +2,7 @@
   <div id="move">
     <v-container fluid>
       <v-row justify="center" class="my-5 mx-10">
-         <v-col lg="6" md="6" sm="12" cols="12">
+        <v-col lg="6" md="6" sm="12" cols="12">
           <MemberCard
             id="card"
             title="ສະມາຊິກຍົກຍ້າຍທັງໝົດ"
@@ -68,7 +68,7 @@
                 <td>{{ item.reason }}</td>
                 <td>{{ item.locate }}</td>
                 <td>{{ item.sign_by }}</td>
-                <td>{{ item.date_move |formatDate }}</td>
+                <td>{{ item.date_move | formatDate }}</td>
                 <td>
                   <v-tooltip bottom>
                     <template v-slot:activator="{ on, attrs }">
@@ -89,7 +89,12 @@
                         small
                         v-on="on"
                         v-bind="attrs"
-                        @click="$router.push({name:'member-move-detail',params:{id:item.move_id}})"
+                        @click="
+                          $router.push({
+                            name: 'member-move-detail',
+                            params: { id: item.move_id },
+                          })
+                        "
                         >table_view</v-icon
                       >
                     </template>
@@ -101,23 +106,23 @@
           </v-data-table>
         </v-card>
         <moveformAdd />
-        <moveformEdit/>
+        <moveformEdit />
       </v-row>
     </v-container>
   </div>
 </template>
 
 <script>
-import MemberCard from "@/components/cards/MemberCard.vue"
+import MemberCard from "@/components/cards/MemberCard.vue";
 import moveformAdd from "@/components/member-move-form/move-formAdd.vue";
 import moveformEdit from "@/components/member-move-form/move-formEdit.vue";
-import axios from 'axios';
+import axios from "axios";
 export default {
   name: "move",
   components: {
     moveformAdd,
     moveformEdit,
-    MemberCard
+    MemberCard,
   },
   data() {
     return {
@@ -133,89 +138,105 @@ export default {
       ],
       search_move: "",
       myData_move: [{ move_id: 1 }],
-      user_status:"admin",
-      value:true,
-      getCount_all:0,
-      getCount_female:0,
+      user_status: "admin",
+      value: true,
+      getCount_all: 0,
+      getCount_female: 0,
     };
   },
-  mounted(){
+  mounted() {
     this.getData_move();
     this.CountAll_membermove();
     this.CountFemale_membermove();
   },
   methods: {
-   async getData_move(){
-     this.myData_move=[];
-      this.user_status="admin";
-     try{
-      if(this.user_status=="admin"){
-      let response = await axios.get(this.$store.getters.myHostname+"/api/v1/moves");
-      this.myData_move=response.data;
-      this.value=false;
-      }else{
-      let response = await axios.get(this.$store.getters.myHostname+"/api/v1/moves");
-      this.myData_move=response.data;
-      this.value=false;
+    async getData_move() {
+      this.myData_move = [];
+      this.user_status = "admin";
+      try {
+        if (this.user_status == "admin") {
+          let response = await axios.get(
+            this.$store.getters.myHostname + "/api/v1/moves"
+          );
+          this.myData_move = response.data;
+          this.value = false;
+        } else {
+          let response = await axios.get(
+            this.$store.getters.myHostname + "/api/v1/moves"
+          );
+          this.myData_move = response.data;
+          this.value = false;
+        }
+      } catch (err) {
+        console.log(err);
       }
-     }catch(err){
-       console.log(err);
-     }
     },
-    openFormadd(){
+    openFormadd() {
       this.$store.dispatch({
-        type:"doClickmoveFormadd",
-        val:true,
-      })
+        type: "doClickmoveFormadd",
+        val: true,
+      });
     },
     edit_Item_move(id) {
-       this.$store.dispatch({
-        type:"doClickmoveFormEdit",
-        val:true,
-        move_id:id
-      })
+      this.$store.dispatch({
+        type: "doClickmoveFormEdit",
+        val: true,
+        move_id: id,
+      });
     },
     // get count all member move for admin
-   async CountAll_membermove(){
-    const user_status= 'admin'
-    const get_found="F0001-30062021"
-      if(user_status=="admin"){
-         try{
-         await axios.get(this.$store.getters.myHostname+"/api/v1/countAll").then((response)=>{
-           this.getCount_all=parseInt(response.data.amount);
-         })
-       }catch(err){
-         console.log(err);
-       }
-      }else{
-         try{
-         await axios.get(`${this.$store.getters.myHostname}/api/v1/countAll-foundation/${get_found}`).then((response)=>{
-           this.getCount_all=parseInt(response.data.amount);
-         })
-       }catch(err){
-         console.log(err);
-       }
+    async CountAll_membermove() {
+      const user_status = "admin";
+      const get_found = "F0001-30062021";
+      if (user_status == "admin") {
+        try {
+          await axios
+            .get(this.$store.getters.myHostname + "/api/v1/countAll")
+            .then((response) => {
+              this.getCount_all = parseInt(response.data.amount);
+            });
+        } catch (err) {
+          console.log(err);
+        }
+      } else {
+        try {
+          await axios
+            .get(
+              `${this.$store.getters.myHostname}/api/v1/countAll-foundation/${get_found}`
+            )
+            .then((response) => {
+              this.getCount_all = parseInt(response.data.amount);
+            });
+        } catch (err) {
+          console.log(err);
+        }
       }
     },
-     async CountFemale_membermove(){
-    const user_status= 'admin'
-    const get_found="F0001-30062021"
-      if(user_status=="admin"){
-         try{
-         await axios.get(this.$store.getters.myHostname+"/api/v1/countfemale").then((response)=>{
-           this.getCount_female=parseInt(response.data.amount);
-         })
-       }catch(err){
-         console.log(err);
-       }
-      }else{
-         try{
-         await axios.get(`${this.$store.getters.myHostname}/api/v1/countfemale-found//${get_found}`).then((response)=>{
-           this.getCount_female=parseInt(response.data.amount);
-         })
-       }catch(err){
-         console.log(err);
-       }
+    async CountFemale_membermove() {
+      const user_status = "admin";
+      const get_found = "F0001-30062021";
+      if (user_status == "admin") {
+        try {
+          await axios
+            .get(this.$store.getters.myHostname + "/api/v1/countfemale")
+            .then((response) => {
+              this.getCount_female = parseInt(response.data.amount);
+            });
+        } catch (err) {
+          console.log(err);
+        }
+      } else {
+        try {
+          await axios
+            .get(
+              `${this.$store.getters.myHostname}/api/v1/countfemale-found//${get_found}`
+            )
+            .then((response) => {
+              this.getCount_female = parseInt(response.data.amount);
+            });
+        } catch (err) {
+          console.log(err);
+        }
       }
     },
   },

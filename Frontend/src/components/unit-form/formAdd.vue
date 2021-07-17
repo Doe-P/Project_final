@@ -34,7 +34,7 @@
                     :rules="[
                       required('ຊື່ໜ່ວຍ'),
                       minLength('ຊື່ໜ່ວຍ', 5),
-                      maxLength('ຊື່ໜ່ວຍ',50),
+                      maxLength('ຊື່ໜ່ວຍ', 50),
                     ]"
                     v-model="txt_unitname"
                   ></v-text-field>
@@ -66,7 +66,7 @@
                         ></v-text-field>
                       </template>
                       <v-date-picker
-                       class="calendar"
+                        class="calendar"
                         ref="picker"
                         v-model="unit_date"
                         :max="new Date().toISOString().substr(0, 10)"
@@ -180,7 +180,7 @@ export default {
     async getdata_found_selection() {
       try {
         let response = await axios.get(
-          this.$store.getters.myHostname+"/api/v1/getItem/foundations"
+          this.$store.getters.myHostname + "/api/v1/getItem/foundations"
         );
         this.get_foundationAll = response.data;
         for (let i = 0; i <= this.get_foundationAll.length; i++) {
@@ -198,7 +198,7 @@ export default {
           this.get_fund_id = this.get_foundationAll[i].fund_id;
           try {
             await axios
-              .post(this.$store.getters.myHostname+"/api/v1/units", {
+              .post(this.$store.getters.myHostname + "/api/v1/units", {
                 unit_id: this.$store.getters.getCustomID,
                 unit_name: this.txt_unitname,
                 fund_id: this.get_fund_id,
@@ -207,8 +207,8 @@ export default {
               })
               .then(() => {
                 this.close_form_add();
-                 this.Msg_done("ບັນທຶກຂໍ້ມູນສຳເລັດ");
-                 location.reload();
+                this.Msg_done("ບັນທຶກຂໍ້ມູນສຳເລັດ");
+                location.reload();
               });
           } catch (err) {
             console.log(err);
@@ -222,7 +222,7 @@ export default {
     async getMaxID() {
       try {
         await axios
-          .get(this.$store.getters.myHostname+"/api/v1/Units-MaxID")
+          .get(this.$store.getters.myHostname + "/api/v1/Units-MaxID")
           .then((response) => {
             const getid = response.data.id;
             this.$store.dispatch({
@@ -276,8 +276,8 @@ export default {
   font-weight: normal;
   font-size: 18px;
 }
-.calendar{
-   font-family: "boonhome-400";
+.calendar {
+  font-family: "boonhome-400";
   font-weight: normal;
   font-size: 14px;
 }

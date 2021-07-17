@@ -67,7 +67,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.text-tooltip{
+.text-tooltip {
   font-family: "boonhome-400";
   font-size: 14px;
 }

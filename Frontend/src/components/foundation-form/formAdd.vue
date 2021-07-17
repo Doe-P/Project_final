@@ -41,13 +41,13 @@
                   ></v-text-field>
                   <template>
                     <v-menu
-                        ref="menu1"
-                        v-model="memu_found_date"
-                        :close-on-content-click="false"
-                        transition="scale-transition"
-                        offset-y
-                        max-width="290px"
-                        min-width="auto"
+                      ref="menu1"
+                      v-model="memu_found_date"
+                      :close-on-content-click="false"
+                      transition="scale-transition"
+                      offset-y
+                      max-width="290px"
+                      min-width="auto"
                     >
                       <template v-slot:activator="{ on, attrs }">
                         <v-text-field
@@ -64,7 +64,7 @@
                         ></v-text-field>
                       </template>
                       <v-date-picker
-                       class="calendar"
+                        class="calendar"
                         ref="picker"
                         v-model="found_date"
                         :max="new Date().toISOString().substr(0, 10)"
@@ -173,15 +173,15 @@ export default {
       this.$store.dispatch({
         type: "clickShow_found_formAdd",
       });
-      this.txt_foundname=null;
-      this.format_found_date=null;
-      this.foundstatus="ບັນຈຸ";
+      this.txt_foundname = null;
+      this.format_found_date = null;
+      this.foundstatus = "ບັນຈຸ";
     },
     // submit form
     async submit_form() {
       try {
         await axios
-          .post(this.$store.getters.myHostname+"/api/v1/foundations", {
+          .post(this.$store.getters.myHostname + "/api/v1/foundations", {
             txt_found_ID: this.txt_foundID,
             txt_foundname: this.txt_foundname,
             found_date: this.found_date,
@@ -219,16 +219,16 @@ export default {
     async getMaxID() {
       try {
         await axios
-          .get(this.$store.getters.myHostname+"/api/v1/foundations-MaxID")
+          .get(this.$store.getters.myHostname + "/api/v1/foundations-MaxID")
           .then((response) => {
-           const getid = response.data.id;
-           this.$store.dispatch({
+            const getid = response.data.id;
+            this.$store.dispatch({
               type: "doCustomID",
               id: getid,
               str: "F0001",
             });
           });
-            this.txt_foundID = this.$store.getters.getCustomID;
+        this.txt_foundID = this.$store.getters.getCustomID;
       } catch (err) {
         console.log(err);
       }
@@ -253,8 +253,8 @@ export default {
   font-weight: normal;
   font-size: 18px;
 }
-.calendar{
-   font-family: "boonhome-400";
+.calendar {
+  font-family: "boonhome-400";
   font-weight: normal;
   font-size: 14px;
 }

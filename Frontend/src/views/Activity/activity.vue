@@ -51,9 +51,9 @@
                 <td>{{ item.acti_id }}</td>
                 <td>{{ item.acti_title }}</td>
                 <td>{{ item.typeAct_name }}</td>
-                <td>{{ item.place}}</td>
+                <td>{{ item.place }}</td>
                 <td>{{ item.amount_acti }}</td>
-                <td>{{ item.date_acti | formatDate}}</td>
+                <td>{{ item.date_acti | formatDate }}</td>
                 <td>
                   <v-tooltip bottom>
                     <template v-slot:activator="{ on, attrs }">
@@ -74,7 +74,12 @@
                         v-on="on"
                         v-bind="attrs"
                         small
-                        @click="$router.push({name:'activity-view',params:{activity_view:item.acti_id}})"
+                        @click="
+                          $router.push({
+                            name: 'activity-view',
+                            params: { activity_view: item.acti_id },
+                          })
+                        "
                         >table_view</v-icon
                       >
                     </template>
@@ -88,7 +93,7 @@
         <!-- Activity form Add -->
         <formAdd />
         <!-- Activity form Edit -->
-        <formEdit :myID='setID' />
+        <formEdit :myID="setID" />
       </v-row>
     </v-container>
   </div>
@@ -97,7 +102,7 @@
 <script>
 import formAdd from "@/components/activity/act_formAdd.vue";
 import formEdit from "@/components/activity/act_formEdit.vue";
-import axios from 'axios';
+import axios from "axios";
 export default {
   name: "Activity",
   components: {
@@ -107,8 +112,8 @@ export default {
   data() {
     return {
       searchData_act: null,
-      loading:true,
-      setID:null,
+      loading: true,
+      setID: null,
       myData_act: [
         {
           act_id: 1,
@@ -137,33 +142,34 @@ export default {
     },
     // open form edit
     edit_activity_item(id) {
-      this.setID=id;
+      this.setID = id;
       this.$store.dispatch({
         type: "clickShow_act_formEdit",
       });
     },
-    // get data activity 
-   async getData_activity(){
-     const user_status ='admin'
-     this.myData_act=[]
-        if(user_status=='admin'){
-          try{
-          let response = await axios.get(this.$store.getters.myHostname+"/api/v1/activity");
-          this.myData_act=response.data;
-          this.loading=false;
-        }catch(err){
+    // get data activity
+    async getData_activity() {
+      const user_status = "admin";
+      this.myData_act = [];
+      if (user_status == "admin") {
+        try {
+          let response = await axios.get(
+            this.$store.getters.myHostname + "/api/v1/activity"
+          );
+          this.myData_act = response.data;
+          this.loading = false;
+        } catch (err) {
           console.log(err);
         }
-        }else{
-           try{
+      } else {
+        try {
           let response = await axios.get(``);
-          this.myData_act=response.data;
-        }catch(err){
+          this.myData_act = response.data;
+        } catch (err) {
           console.log(err);
         }
-        }
+      }
     },
-    
   },
 };
 </script>

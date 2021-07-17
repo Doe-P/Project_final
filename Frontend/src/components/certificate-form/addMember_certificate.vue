@@ -32,23 +32,27 @@
                 @input="selectData($event)"
               >
                 <template v-slot:top>
-                 <v-container>
-                      <v-text-field
+                  <v-container>
+                    <v-text-field
                       label="ຄົ້ນຫາຂໍ້ມູນສະມາຊິກ"
                       append-icon="search"
                       hide-details
                       single-line
                       v-model="search_members"
-                  ></v-text-field>
-                 </v-container>
+                    ></v-text-field>
+                  </v-container>
                 </template>
               </v-data-table>
             </v-card-text>
             <v-card-actions class="justify-space-between btn_text">
-                <v-btn color="error" @click="close_dialog">ຍົກເລີກ</v-btn>
-                <v-btn @click.prevent="SaveData_Certificate" :disabled="checked" color="primary">ບັນທືກ</v-btn>
+              <v-btn color="error" @click="close_dialog">ຍົກເລີກ</v-btn>
+              <v-btn
+                @click.prevent="SaveData_Certificate"
+                :disabled="checked"
+                color="primary"
+                >ບັນທືກ</v-btn
+              >
             </v-card-actions>
-         
           </v-card>
         </v-dialog>
       </v-row>
@@ -57,7 +61,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import axios from "axios";
 export default {
   name: "AddmemberCertificate",
   data() {
@@ -85,13 +89,13 @@ export default {
       selected: [],
       single_select: false,
       checked: true,
-      loading:true,
-      getmemberID:[],
+      loading: true,
+      getmemberID: [],
     };
   },
 
   mounted() {
-      this.getData_member();
+    this.getData_member();
   },
 
   methods: {
@@ -100,63 +104,68 @@ export default {
         this.filter_member_ID();
         this.checked = false;
       } else {
-        this.getmemberID=[];
+        this.getmemberID = [];
         this.checked = true;
       }
     },
-    close_dialog(){
-        this.$store.dispatch({
-        type:"doClickAddmember_certificate",
-        data:""
-      })
+    close_dialog() {
+      this.$store.dispatch({
+        type: "doClickAddmember_certificate",
+        data: "",
+      });
     },
-    filter_member_ID(){
-     this.getmemberID=[];
-     this.getmemberID=this.selected.map(a=>a.member_id)
+    filter_member_ID() {
+      this.getmemberID = [];
+      this.getmemberID = this.selected.map((a) => a.member_id);
     },
     // get data member
-  async  getData_member(){
-       try{
-         await axios.get(this.$store.getters.myHostname+"/api/v1/getMembers").then((response)=>{
-           this.myData_members=response.data;
-           this.loading=false;
-         })
-       }catch(err){
-         console.log(err);
-       }
+    async getData_member() {
+      try {
+        await axios
+          .get(this.$store.getters.myHostname + "/api/v1/getMembers")
+          .then((response) => {
+            this.myData_members = response.data;
+            this.loading = false;
+          });
+      } catch (err) {
+        console.log(err);
+      }
     },
-  async  SaveData_Certificate(){
-      let getData_certificate=this.$store.getters.getaddMember_certificate.mydata;
+    async SaveData_Certificate() {
+      let getData_certificate = this.$store.getters.getaddMember_certificate
+        .mydata;
       let total = this.getmemberID.length;
-      let mydata_obj=[]
-      if(getData_certificate){
-        for(let i in this.getmemberID){
-         mydata_obj[i]={
-           certific_id:getData_certificate[0],
-           typeCerti_id:getData_certificate[1],
-           certific_NO:getData_certificate[2],
-           title:getData_certificate[3],
-           amount_cert:total,
-           locate:getData_certificate[4],
-           date_sign:getData_certificate[5],
-           sign_by:getData_certificate[6],
-           member_id:this.getmemberID[i]
-         }
+      let mydata_obj = [];
+      if (getData_certificate) {
+        for (let i in this.getmemberID) {
+          mydata_obj[i] = {
+            certific_id: getData_certificate[0],
+            typeCerti_id: getData_certificate[1],
+            certific_NO: getData_certificate[2],
+            title: getData_certificate[3],
+            amount_cert: total,
+            locate: getData_certificate[4],
+            date_sign: getData_certificate[5],
+            sign_by: getData_certificate[6],
+            member_id: this.getmemberID[i],
+          };
         }
         console.log(mydata_obj);
-        try{
-           await axios.post(this.$store.getters.myHostname+"/api/v1/new-certificate",{
-          data:mydata_obj
-        }).then(()=>{
-           this.Msg_done("ບັນທຶກຂໍ້ມູນການຍ້ອງຍໍສຳເລັດ")
-           location.reload();
-        })
-        }catch(err){
-          this.Msg_fail("ການບັນທຶກຂໍ້ມູນຍ້ອງຍໍຜິດພາດ")
+        try {
+          await axios
+            .post(this.$store.getters.myHostname + "/api/v1/new-certificate", {
+              data: mydata_obj,
+            })
+            .then(() => {
+              this.Msg_done("ບັນທຶກຂໍ້ມູນການຍ້ອງຍໍສຳເລັດ");
+              location.reload();
+            });
+        } catch (err) {
+          this.Msg_fail("ການບັນທຶກຂໍ້ມູນຍ້ອງຍໍຜິດພາດ");
           console.log(err);
         }
-      }else{
-        this.Msg_fail("ຂໍ້ມູນບໍ່ຄົບຖ້ວນ ກະລຸນາກວດສອບຄືນໃໝ່")
+      } else {
+        this.Msg_fail("ຂໍ້ມູນບໍ່ຄົບຖ້ວນ ກະລຸນາກວດສອບຄືນໃໝ່");
       }
     },
     // message done

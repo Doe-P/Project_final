@@ -70,18 +70,17 @@
               loading="true"
               loading-text="ກຳລັງໂຫຼດ.."
               items-per-page="All"
-
             >
             </v-data-table>
             <v-card-actions>
-                <v-tooltip bottom>
-            <template v-slot:activator="{ on, attrs }">
-              <v-btn color="primary" v-on="on" v-bind="attrs">
-                <v-icon>print</v-icon>
-              </v-btn>
-            </template>
-            <span class="text-tooltip">ສັ່ງພິມລາຍງານ</span>
-          </v-tooltip> 
+              <v-tooltip bottom>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn color="primary" v-on="on" v-bind="attrs">
+                    <v-icon>print</v-icon>
+                  </v-btn>
+                </template>
+                <span class="text-tooltip">ສັ່ງພິມລາຍງານ</span>
+              </v-tooltip>
             </v-card-actions>
           </v-card>
         </v-row>
@@ -95,18 +94,18 @@ export default {
   name: "Membersreport",
   data() {
     return {
-        headers:[
-           {text:"ລະຫັດ",align:"Left",value:"member_id"},
-           {text:"ຊື່",value:"member_name",sortable:false},
-           {text:"ນາມສະກຸນ",value:"member_surname",sortable:false},
-           {text:"ເພດ",value:"member_gender",sortable:false},
-           {text:"ປະເພດສະມາຊິກ",value:"memberType",sortable:true},
-           {text:"ລະດັບການສຶກສາ",value:"edulevel",sortable:true},
-           {text:"ສະຖານະ",value:"member_status",sortable:true},
-           {text:"ຈຸ",value:"section",sortable:true},
-           {text:"ໜ່ວຍ",value:"unit",sortable:true},
-           {text:"ຮາກຖານ",value:"foundation",sortable:false},
-        ],
+      headers: [
+        { text: "ລະຫັດ", align: "Left", value: "member_id" },
+        { text: "ຊື່", value: "member_name", sortable: false },
+        { text: "ນາມສະກຸນ", value: "member_surname", sortable: false },
+        { text: "ເພດ", value: "member_gender", sortable: false },
+        { text: "ປະເພດສະມາຊິກ", value: "memberType", sortable: true },
+        { text: "ລະດັບການສຶກສາ", value: "edulevel", sortable: true },
+        { text: "ສະຖານະ", value: "member_status", sortable: true },
+        { text: "ຈຸ", value: "section", sortable: true },
+        { text: "ໜ່ວຍ", value: "unit", sortable: true },
+        { text: "ຮາກຖານ", value: "foundation", sortable: false },
+      ],
       myData_foundation: [],
       myData_unit: [],
       myData_section: [],

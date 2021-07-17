@@ -52,9 +52,16 @@
               <td>{{ item.date_sect | formatDate }}</td>
               <td>{{ item.status_sect }}</td>
               <td>
-                <v-icon color="update" small @click="edit_section_item(item.sect_id,item.fund_name)">update</v-icon>
+                <v-icon
+                  color="update"
+                  small
+                  @click="edit_section_item(item.sect_id, item.fund_name)"
+                  >update</v-icon
+                >
                 <span class="ma-1"></span>
-                <v-icon color="delete" small @click="getSectionID(item.sect_id)">delete</v-icon>
+                <v-icon color="delete" small @click="getSectionID(item.sect_id)"
+                  >delete</v-icon
+                >
               </td>
             </tr>
           </template>
@@ -105,7 +112,7 @@
 <script>
 import formAdd from "@/components/section-form/formAdd.vue";
 import formEdit from "@/components/section-form/formEdit.vue";
-import axios from 'axios';
+import axios from "axios";
 export default {
   name: "Section",
   components: {
@@ -118,7 +125,7 @@ export default {
       searchData: null,
       myUnitnames: [],
       myData_section: [],
-      getSect_id:null,
+      getSect_id: null,
       headers: [
         { text: "ລະຫັດຈຸ", align: "Left", value: "sect_id" },
         { text: "ຊື່ຈຸ", value: "sect_name", sortable: true },
@@ -141,33 +148,36 @@ export default {
     reload_data() {
       return this.getData_Sections();
     },
-  
   },
   methods: {
     //edit data section
-    edit_section_item(value,fund_name) {
+    edit_section_item(value, fund_name) {
       this.$store.dispatch({
         type: "clickShow_sect_formEdit",
-        id:value,
-        name:fund_name
+        id: value,
+        name: fund_name,
       });
     },
-   async delete_section_item() {
-     try{
-      await axios.delete(`${this.$store.getters.myHostname}/api/v1/sections/${this.getSect_id}`).then(()=>{
-        this.confirm_dialog=false;
-        this.Msg_done("ລົບຂໍ້ມູນສຳເລັດແລ້ວ")
-        location.reload();
-      })
-     }catch(err){
-       console.log(err);
-       this.confirm_dialog=false;
-       this.Msg_fail("ລົບຂໍ້ມູນບໍ່ສຳເລັດ")
-     }
+    async delete_section_item() {
+      try {
+        await axios
+          .delete(
+            `${this.$store.getters.myHostname}/api/v1/sections/${this.getSect_id}`
+          )
+          .then(() => {
+            this.confirm_dialog = false;
+            this.Msg_done("ລົບຂໍ້ມູນສຳເລັດແລ້ວ");
+            location.reload();
+          });
+      } catch (err) {
+        console.log(err);
+        this.confirm_dialog = false;
+        this.Msg_fail("ລົບຂໍ້ມູນບໍ່ສຳເລັດ");
+      }
     },
-    getSectionID(id){
-     this.confirm_dialog = true;
-     this.getSect_id=id;
+    getSectionID(id) {
+      this.confirm_dialog = true;
+      this.getSect_id = id;
     },
     //open form add
     open_form_add() {
@@ -176,15 +186,17 @@ export default {
       });
     },
     // get all data sections
-   async getData_Sections(){
-       try{
-        const response= await axios.get(this.$store.getters.myHostname+"/api/v1/sections");
-         this.myData_section= response.data;
-       }catch(err){
-         console.log(err);
-       }
+    async getData_Sections() {
+      try {
+        const response = await axios.get(
+          this.$store.getters.myHostname + "/api/v1/sections"
+        );
+        this.myData_section = response.data;
+      } catch (err) {
+        console.log(err);
+      }
     },
-     // message done
+    // message done
     Msg_done(text) {
       // Message show
       this.$store.dispatch({

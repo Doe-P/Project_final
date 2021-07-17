@@ -106,8 +106,8 @@
 
 <script>
 //import axios from "axios";
-import dateformat from 'dateformat';
-import axios from 'axios';
+import dateformat from "dateformat";
+import axios from "axios";
 export default {
   name: "foundation",
   data() {
@@ -136,13 +136,11 @@ export default {
       txt_foundname_edit: null,
       getFound_id: null,
       get_item_edit: null,
-      get_date:null,
+      get_date: null,
     };
   },
   created() {},
-  mounted() {
-     
-  },
+  mounted() {},
   watch: {
     // form edit
     found_date_edit() {
@@ -167,14 +165,13 @@ export default {
     // form edit
     formatfound_date_edit(date) {
       if (!date) return null;
-       this.get_date=dateformat(date,"yyyy-mm-dd")
+      this.get_date = dateformat(date, "yyyy-mm-dd");
       const [year, month, day] = date.split("-");
-     return `${day}-${month}-${year}`;
+      return `${day}-${month}-${year}`;
     },
     parsefound_date_edit(date) {
       if (!date) return null;
-         
-          
+
       const [month, day, year] = date.split("/");
       return `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
     },
@@ -212,19 +209,24 @@ export default {
       this.loading = false;
     },
     // edit data
-   async submit_edit() {
-     //const date =this.get_date
-      try{
-        await axios.put(`${this.$store.getters.myHostname}/api/v1/foundations/${this.getFound_id}`,{
-        fund_name:this.txt_foundname_edit,
-        date_fund:this.get_date,
-        status_fund:this.statusSelected,
-        }).then(()=>{
-         this.Msg_done();
-         this.close_form();
-         location.reload();
-       })
-      }catch(err){
+    async submit_edit() {
+      //const date =this.get_date
+      try {
+        await axios
+          .put(
+            `${this.$store.getters.myHostname}/api/v1/foundations/${this.getFound_id}`,
+            {
+              fund_name: this.txt_foundname_edit,
+              date_fund: this.get_date,
+              status_fund: this.statusSelected,
+            }
+          )
+          .then(() => {
+            this.Msg_done();
+            this.close_form();
+            location.reload();
+          });
+      } catch (err) {
         console.log(err);
         this.Msg_fail();
         this.close_form();
@@ -238,8 +240,14 @@ export default {
     async getData_byID() {
       this.getFound_id = this.$store.getters.getfound_formEdit.id;
       this.txt_foundname_edit = this.$store.getters.getfound_formEdit.name;
-      this.format_found_date_edit = dateformat(this.$store.getters.getfound_formEdit.date,"dd-mm-yyyy")
-      this.get_date=dateformat(this.$store.getters.getfound_formEdit.date,"yyyy-mm-dd");
+      this.format_found_date_edit = dateformat(
+        this.$store.getters.getfound_formEdit.date,
+        "dd-mm-yyyy"
+      );
+      this.get_date = dateformat(
+        this.$store.getters.getfound_formEdit.date,
+        "yyyy-mm-dd"
+      );
       this.statusSelected = this.$store.getters.getfound_formEdit.status;
     },
   },
@@ -261,8 +269,8 @@ export default {
   font-weight: normal;
   font-size: 18px;
 }
-.calendar{
-   font-family: "boonhome-400";
+.calendar {
+  font-family: "boonhome-400";
   font-weight: normal;
   font-size: 14px;
 }

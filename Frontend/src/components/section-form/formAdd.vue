@@ -189,7 +189,7 @@ export default {
     async getMaxID() {
       try {
         await axios
-          .get(this.$store.getters.myHostname+"/api/v1/Sections-MaxID")
+          .get(this.$store.getters.myHostname + "/api/v1/Sections-MaxID")
           .then((response) => {
             const getid = response.data.id;
             this.$store.dispatch({
@@ -204,8 +204,8 @@ export default {
     },
     // get unit name
     async getData_Unit() {
-      this.myUnitnames=[];
-      this.unit_name=null;
+      this.myUnitnames = [];
+      this.unit_name = null;
       for (let a = 0; a <= this.get_found_All.length; a++) {
         if (
           String(this.found_name).valueOf() ==
@@ -230,7 +230,7 @@ export default {
     async getdata_found_selection() {
       try {
         let response = await axios.get(
-          this.$store.getters.myHostname+"/api/v1/getItem/foundations"
+          this.$store.getters.myHostname + "/api/v1/getItem/foundations"
         );
         this.get_found_All = response.data;
         for (let i = 0; i <= this.get_found_All.length; i++) {
@@ -252,17 +252,19 @@ export default {
         ) {
           const id = this.getUnitnameAll[i].unit_id;
           try {
-            await axios.post(this.$store.getters.myHostname+"/api/v1/sections",{
-            sect_id:this.$store.getters.getCustomID,
-            sect_name:this.txt_sectname,
-            unit_id:id,
-            date_sect:this.sect_date,
-            status_sect:this.statusSelected,
-            }).then(()=>{
-              this.close_form_add();
-              this.Msg_done("ບັນທຶກຂໍ້ມູນສຳເລັດແລ້ວ");
-              location.reload();
-            })
+            await axios
+              .post(this.$store.getters.myHostname + "/api/v1/sections", {
+                sect_id: this.$store.getters.getCustomID,
+                sect_name: this.txt_sectname,
+                unit_id: id,
+                date_sect: this.sect_date,
+                status_sect: this.statusSelected,
+              })
+              .then(() => {
+                this.close_form_add();
+                this.Msg_done("ບັນທຶກຂໍ້ມູນສຳເລັດແລ້ວ");
+                location.reload();
+              });
           } catch (err) {
             console.log(err);
             this.close_form_add();
