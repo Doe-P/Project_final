@@ -195,7 +195,7 @@ export default {
     async getdata_found_selection() {
       try {
         let response = await axios.get(
-          "http://localhost:5000/api/v1/getItem/foundations"
+          this.$store.getters.myHostname+"/api/v1/getItem/foundations"
         );
         this.get_foundationAll = response.data;
         for (let i = 0; i <= this.get_foundationAll.length; i++) {
@@ -210,7 +210,7 @@ export default {
       const get_unit_id = this.$store.getters.getunit_formEdit.id;
       try {
         await axios
-          .get(`http://localhost:5000/api/v1/units/${get_unit_id}`)
+          .get(`${this.$store.getters.myHostname}/api/v1/units/${get_unit_id}`)
           .then((response) => {
             (this.txt_unitname_edit = response.data.unit_name),
               (this.found_name = response.data.fund_name),
@@ -236,7 +236,7 @@ export default {
           try {
             this.select_fund_id = this.get_foundationAll[i].fund_id;
             await axios
-              .put(`http://localhost:5000/api/v1/units/${get_unit_id}`, {
+              .put(`${this.$store.getters.myHostname}/api/v1/units/${get_unit_id}`, {
                 unit_name: this.txt_unitname_edit,
                 fund_id: this.select_fund_id,
                 date_unit: this.get_id,

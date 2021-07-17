@@ -180,7 +180,7 @@ export default {
     async getdata_found_selection() {
       try {
         let response = await axios.get(
-          "http://localhost:5000/api/v1/getItem/foundations"
+          this.$store.getters.myHostname+"/api/v1/getItem/foundations"
         );
         this.get_foundationAll = response.data;
         for (let i = 0; i <= this.get_foundationAll.length; i++) {
@@ -198,7 +198,7 @@ export default {
           this.get_fund_id = this.get_foundationAll[i].fund_id;
           try {
             await axios
-              .post("http://localhost:5000/api/v1/units", {
+              .post(this.$store.getters.myHostname+"/api/v1/units", {
                 unit_id: this.$store.getters.getCustomID,
                 unit_name: this.txt_unitname,
                 fund_id: this.get_fund_id,
@@ -222,7 +222,7 @@ export default {
     async getMaxID() {
       try {
         await axios
-          .get("http://localhost:5000/api/v1/Units-MaxID")
+          .get(this.$store.getters.myHostname+"/api/v1/Units-MaxID")
           .then((response) => {
             const getid = response.data.id;
             this.$store.dispatch({

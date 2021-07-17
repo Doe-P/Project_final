@@ -138,7 +138,7 @@ export default {
     //get data member
     async getData_member(){
       try{
-       let response = await axios.get("http://localhost:5000/api/v1/member-status");
+       let response = await axios.get(this.$store.getters.myHostname+"/api/v1/member-status");
        this.myData_member=response.data;
       }catch(err){
         console.log(err);
@@ -154,13 +154,11 @@ export default {
     // save
    async SaveData_move_detail(){
       const get_id=this.$route.params.id;
-      const get_NO=this.$route.params.move_NO;
      if(this.filter_member_id&&this.$route.params.id&&this.$route.params.move_NO){
         for(let i=0;i<this.filter_member_id.length;i++){
         const member_id = this.filter_member_id[i];
         try{
-          await axios.post("http://localhost:5000/api/v1/move-detail",{
-           move_NO:get_NO,
+          await axios.post(this.$store.getters.myHostname+"/api/v1/move-detail",{
            move_id:get_id,
            member_id:member_id,
          }).then(()=>{
@@ -174,8 +172,9 @@ export default {
       }
        // check amount on section 
       try{
-        await axios.put(`http://localhost:5000/api/v1/Update-Status/section/${this.get_sect_id}`).then(()=>{
+        await axios.put(`${this.$store.getters.myHostname}/api/v1/Update-Status/section/${this.get_sect_id}`).then(()=>{
           this.Msg_done("ບໍ່ມີສະມາຊິກໃນຈຸ"+this.selected_sect+"ອັບເດດສະຖານະຈຸເປັນລົບລ້າງ")
+           this.$router.push("/member-move")
         })
       }catch(err){
         console.log(err);
@@ -208,7 +207,7 @@ export default {
    async get_foundations(){
      this.myFoundation_all=[];
       try{
-        await axios.get("http://localhost:5000/api/v1/foundations").then((response)=>{
+        await axios.get(this.$store.getters.myHostname+"/api/v1/foundations").then((response)=>{
           this.myFoundation_all=response.data;
           for(let i=0;i<=this.myFoundation_all.length;i++){
             this.myFoundations.push(this.myFoundation_all[i].fund_name);
@@ -234,7 +233,7 @@ export default {
          const get_fund=this.myFoundation_all[i].fund_id;
          this.get_fund_id=get_fund;
           try{
-       await axios.get(`http://localhost:5000/api/v1/getItem-units/${get_fund}`).then((response)=>{
+       await axios.get(`${this.$store.getters.myHostname}/api/v1/getItem-units/${get_fund}`).then((response)=>{
          this.myUnit_all=response.data;
           for(let i=0;i<=this.myUnit_all.length;i++){
             this.myUnits.push(this.myUnit_all[i].unit_name)
@@ -256,7 +255,7 @@ export default {
        const get_unit_id=this.myUnit_all[i].unit_id;
        this.get_unit_id=get_unit_id;
        try{
-      await axios.get(`http://localhost:5000/api/v1/allsections/${get_unit_id}`).then((response)=>{
+      await axios.get(`${this.$store.getters.myHostname}/api/v1/allsections/${get_unit_id}`).then((response)=>{
         this.mySection_all=response.data;
          for(let i=0;i<=this.mySection_all.length;i++){
            this.mySections.push(this.mySection_all[i].sect_name)
@@ -277,7 +276,7 @@ export default {
             this.get_sect_id=id;
             this.myData_member=[];
              try{
-            await axios.get(`http://localhost:5000/api/v1/getMember/move-detail/${id}`,{
+            await axios.get(`${this.$store.getters.myHostname}/api/v1/getMember/move-detail/${id}`,{
           }).then((response)=>{
             this.myData_member=response.data;
           })

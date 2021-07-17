@@ -263,7 +263,7 @@ export default {
      const getmember_age = this.$store.getters.getmyData_retire.member_age;
      if(getmember_id&&getmember_age&&this.retirement_id&&this.txt_Noask&&this.txt_reason&&this.txt_portfolio&&this.ask_date&&this.retire_date){
         try{
-        await axios.post("http://localhost:5000/api/v1/retirements",{
+        await axios.post(this.$store.getters.myHostname+"/api/v1/retirements",{
            retire_id:this.retirement_id,
            member_id:getmember_id,
            No_Ask:this.txt_Noask,
@@ -288,7 +288,7 @@ export default {
     },
    async getMaxID(){
        try{
-        await axios.get("http://localhost:5000/api/v1/Retire-MaxID").then((response)=>{
+        await axios.get(this.$store.getters.myHostname+"/api/v1/Retire-MaxID").then((response)=>{
           let get_id = response.data.id;
           if(get_id){
            var  conID = parseInt(get_id)+1;

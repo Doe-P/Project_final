@@ -6,8 +6,8 @@
           <v-data-table
             :headers="headers"
             :items="myData_certificate"
-            class="elevation-1 table-content"
-            loading="true"
+            class="elevation-3 table-content"
+            :loading="loading"
             loading-text="ກຳລັງໂຫຼດ.."
             :search="searchData_certificate"
           >
@@ -42,17 +42,17 @@
                 </v-tooltip>
               </v-toolbar>
             </template>
-            <template v-slot:item="{ item }">
+            <template v-slot:item="{ item,index }">
               <tr>
                 <td>
-                  {{ item.certifi_id }}
+                  {{ index + 1 }}
                 </td>
-                <td>{{ item.cert_NO }}</td>
-                <td>{{ item.cert_title }}</td>
-                <td>{{ item.typecerti_name }}</td>
+                <td>{{ item.certific_NO }}</td>
+                <td>{{ item.title }}</td>
+                <td>{{ item.typeCerti_name }}</td>
                 <td>{{ item.amount_cert }}</td>
-                <td>{{ item.cert_locate }}</td>
-                <td>{{ item.sign_date }}</td>
+                <td>{{ item.locate }}</td>
+                <td>{{ item.date_sign | formatDate }}</td>
                 <td>{{ item.sign_by }}</td>
                 <td>
                   <v-tooltip bottom>
@@ -60,7 +60,7 @@
                       <v-icon
                         v-on="on"
                         v-bind="attrs"
-                        medium
+                        small
                         @click="editcertificate_item"
                         >update</v-icon
                       >
@@ -70,14 +70,7 @@
                   <span class="ma-1"></span>
                   <v-tooltip bottom>
                     <template v-slot:activator="{ on, attrs }">
-                      <v-icon @click="openform_addMember_certi" medium v-on="on" v-bind="attrs">group_add</v-icon>
-                    </template>
-                    <span class="text-tooltip">ເພີ່ມສະມາຊິກທີ່ຕ້ອງຍ້ອງຍໍ</span>
-                  </v-tooltip>
-                  <span class="ma-1"></span>
-                  <v-tooltip bottom>
-                    <template v-slot:activator="{ on, attrs }">
-                      <v-icon @click="$router.push('/certificate-detail')" medium v-on="on" v-bind="attrs"
+                      <v-icon @click="$router.push('/certificate-detail')" small v-on="on" v-bind="attrs"
                         >table_view</v-icon
                       >
                     </template>
@@ -100,6 +93,7 @@
 import formAdd from "@/components/certificate-form/certificate-formAdd.vue";
 import formEdit from "@/components/certificate-form/certificate-formEdit.vue";
 import addMembercertificate from "@/components/certificate-form/addMember_certificate.vue";
+import axios from 'axios';
 export default {
   name: "CertificateView",
   components: {
@@ -110,13 +104,13 @@ export default {
   data() {
     return {
       headers: [
-        { text: "ລະຫັດໃບຍ້ອງຍໍ", value: "certi_id", sortable: false },
-        { text: "ເລກທີໃບຍ້ອງຍໍ", value: "certi_NO", sortable: false },
-        { text: "ເນື້ອໃນການຍ້ອງຍໍ", value: "certi_content", sortable: false },
-        { text: "ປະເພດການຍ້ອງຍໍ", value: "certiType_name", sortable: true },
-        { text: "ຈຳນວນສະມາຊິກ", value: "certi_amount", sortable: false },
-        { text: "ອອກທີ່", value: "certi_locate", sortable: false },
-        { text: "ວັນທີອອກ", value: "certi_date", sortable: false },
+        { text: "ລຳດັບ", value: "NO", sortable: false },
+        { text: "ເລກທີໃບຍ້ອງຍໍ", value: "certific_NO", sortable: false },
+        { text: "ເນື້ອໃນການຍ້ອງຍໍ", value: "title", sortable: false },
+        { text: "ປະເພດການຍ້ອງຍໍ", value: "typeCerti_name", sortable: true },
+        { text: "ຈຳນວນສະມາຊິກ", value: "amount_cert", sortable: false },
+        { text: "ອອກທີ່", value: "locate", sortable: false },
+        { text: "ວັນທີອອກ", value: "date_sign", sortable: false },
         { text: "ອອກໃຫ້ໂດຍ", value: "sign_by", sortable: false },
         { text: "Actions", value: "action", sortable: false, align: "center" },
       ],
@@ -125,10 +119,13 @@ export default {
       myFoundation: [],
       myUnit: [],
       show: true,
+      loading:true,
     };
   },
 
-  mounted() {},
+  mounted() {
+    this.getData_certificate();
+  },
 
   methods: {
     open_dialog() {
@@ -149,7 +146,30 @@ export default {
         value:true,
       })
     },
-     
+     //get data certificate
+     async getData_certificate(){
+       this.myData_certificate=[]
+       let user_status="admin"
+       if(user_status=="admin"){
+          try{
+         await axios.get(this.$store.getters.myHostname+"/api/v1/geCertificate/admin").then((response)=>{
+           this.myData_certificate=response.data;
+           this.loading=false;
+         })
+       }catch(err){
+         console.log(err);
+       }
+       }else{
+           try{
+         await axios.get(`${this.$store.getters.myHostname}/`).then((response)=>{
+           this.myData_certificate=response.data;
+           this.loading=false;
+         })
+       }catch(err){
+         console.log(err);
+       }
+       }
+     }
   },
 };
 </script>

@@ -150,11 +150,11 @@ export default {
       this.user_status="admin";
      try{
       if(this.user_status=="admin"){
-      let response = await axios.get("http://localhost:5000/api/v1/moves");
+      let response = await axios.get(this.$store.getters.myHostname+"/api/v1/moves");
       this.myData_move=response.data;
       this.value=false;
       }else{
-      let response = await axios.get("http://localhost:5000/api/v1/moves");
+      let response = await axios.get(this.$store.getters.myHostname+"/api/v1/moves");
       this.myData_move=response.data;
       this.value=false;
       }
@@ -181,7 +181,7 @@ export default {
     const get_found="F0001-30062021"
       if(user_status=="admin"){
          try{
-         await axios.get("http://localhost:5000/api/v1/countAll").then((response)=>{
+         await axios.get(this.$store.getters.myHostname+"/api/v1/countAll").then((response)=>{
            this.getCount_all=parseInt(response.data.amount);
          })
        }catch(err){
@@ -189,7 +189,7 @@ export default {
        }
       }else{
          try{
-         await axios.get(`http://localhost:5000/api/v1/countAll-foundation/${get_found}`).then((response)=>{
+         await axios.get(`${this.$store.getters.myHostname}/api/v1/countAll-foundation/${get_found}`).then((response)=>{
            this.getCount_all=parseInt(response.data.amount);
          })
        }catch(err){
@@ -202,7 +202,7 @@ export default {
     const get_found="F0001-30062021"
       if(user_status=="admin"){
          try{
-         await axios.get("http://localhost:5000/api/v1/countfemale").then((response)=>{
+         await axios.get(this.$store.getters.myHostname+"/api/v1/countfemale").then((response)=>{
            this.getCount_female=parseInt(response.data.amount);
          })
        }catch(err){
@@ -210,7 +210,7 @@ export default {
        }
       }else{
          try{
-         await axios.get(`http://localhost:5000/api/v1/countfemale-found//${get_found}`).then((response)=>{
+         await axios.get(`${this.$store.getters.myHostname}/api/v1/countfemale-found//${get_found}`).then((response)=>{
            this.getCount_female=parseInt(response.data.amount);
          })
        }catch(err){

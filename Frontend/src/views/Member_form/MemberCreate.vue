@@ -984,7 +984,7 @@ export default {
         ) {
           if (String(this.gender).valueOf() == "ຍິງ" && this.format_Date_w) {
             await axios
-              .post("http://localhost:5000/api/v1/members", {
+              .post(this.$store.getters.myHostname+"/api/v1/members", {
                 member_id: this.$store.getters.getCustomID,
                 member_name: this.txt_Membername,
                 surname: this.txt_surname,
@@ -1020,7 +1020,7 @@ export default {
               });
           } else {
             await axios
-              .post("http://localhost:5000/api/v1/members", {
+              .post(this.$store.getters.myHostname+"/api/v1/members", {
                 member_id: this.$store.getters.getCustomID,
                 member_name: this.txt_Membername,
                 surname: this.txt_surname,
@@ -1073,7 +1073,7 @@ export default {
     async getMaxID() {
       try {
         await axios
-          .get("http://localhost:5000/api/v1/members-MaxID")
+          .get(this.$store.getters.myHostname+"/api/v1/members-MaxID")
           .then((response) => {
             const getid = response.data.id;
             this.$store.dispatch({
@@ -1111,7 +1111,7 @@ export default {
     async get_TypeMember_selection() {
       try {
         await axios
-          .get("http://localhost:5000/api/v1/type-members")
+          .get(this.$store.getters.myHostname+"/api/v1/type-members")
           .then((response) => {
             this.typeMember_item_All = response.data;
             for (let i = 0; i <= this.typeMember_item_All.length; i++) {
@@ -1138,7 +1138,7 @@ export default {
     async get_educationLevel() {
       try {
         await axios
-          .get("http://localhost:5000/api/v1/education-levels")
+          .get(this.$store.getters.myHostname+"/api/v1/education-levels")
           .then((response) => {
             this.level_item_All = response.data;
             for (let i = 0; i <= this.level_item_All.length; i++) {
@@ -1164,7 +1164,7 @@ export default {
       const found_id = this.$store.getters.getData_user.user_foundation;
       try {
         await axios
-          .get(`http://localhost:5000/api/v1/getItem-units/${found_id}`)
+          .get(`${this.$store.getters.myHostname}/api/v1/getItem-units/${found_id}`)
           .then((response) => {
             this.unit_items_all = response.data;
             for (let i = 0; i <= this.unit_items_all.length; i++) {
@@ -1187,7 +1187,7 @@ export default {
             const id = this.unit_items_all[i].unit_id;
             try {
               await axios
-                .get(`http://localhost:5000/api/v1/allsections/${id}`)
+                .get(`${this.$store.getters.myHostname}/api/v1/allsections/${id}`)
                 .then((response) => {
                   this.section_items_all = response.data;
                   for (let a = 0; a <= this.section_items_all.length; a++) {

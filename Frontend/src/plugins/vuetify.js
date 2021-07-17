@@ -8,8 +8,8 @@ export default new Vuetify({
         themes: {
           light: {
            primary:'#0779E4',
-           btn_edit:'#2CF58B',
-           btn_del:'#EF4F4F',
+           update:'#35D0BA',
+           delete:'#F05945',
            btn_save:'#0779E4',
            btn_cancel:'#ff9642',
            btn_add:'#0779E4',

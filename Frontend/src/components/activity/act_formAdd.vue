@@ -16,7 +16,7 @@
             </v-toolbar>
             <v-card-text>
               <v-container>
-                <v-form class="table-content" v-model="valid">
+                <v-form @submit.prevent="SavaData_Activity" class="table-content" v-model="valid">
                   <v-text-field
                     label="ລະຫັດກິດຈະກຳ"
                     :value="this.$store.getters.getCustomID"
@@ -38,6 +38,7 @@
                     :rules="[required('ປະເພດກິດຈະກຳ')]"
                     v-model="typeact_selected"
                     label="ປະເພດກິດຈະກຳ"
+                    @input="select_Actid"
                   ></v-select>
                   <template>
                     <v-menu
@@ -63,8 +64,9 @@
                         ref="picker"
                         v-model="act_date"
                         :max="new Date().toISOString().substr(0, 10)"
-                        min="1950-01-01"
-                        @change="save"
+                        min="2000-01-01"
+                        locale="lao"
+                        class="calendar"
                       >
                       </v-date-picker>
                     </v-menu>
@@ -74,7 +76,7 @@
                     :rules="[
                       required('ສະຖານທີ່'),
                       minLength('ສະຖານທີ່', 5),
-                      minLength('ສະຖານທີ່', 30),
+                      maxLength('ສະຖານທີ່', 30),
                     ]"
                     counter="30"
                     required
@@ -100,6 +102,7 @@
 </template>
 
 <script>
+import axios from "axios"
 export default {
   name: "ActFormadd",
   data() {
@@ -123,14 +126,18 @@ export default {
       },
       // valid form
       valid: false,
+      Data_typeActivity:[],
+      Data_typeActivity_all:[],
+      typeact_selected:null,
+      get_typeAct_id:null,
+      //-------------
+      txt_actTitle:null,
+      txt_actLocate:null,
     };
   },
   mounted() {
-        this.$store.dispatch({
-      type: "doCustomID",
-      id: "",
-      str: "AC0001",
-    });
+   this.getMaxID();
+   this.getActivity_type();   
   },
   watch: {
     act_date() {
@@ -161,6 +168,91 @@ export default {
         type: "clickShow_act_formAdd",
       });
     },
+      // get max id from foundation
+    async getMaxID() {
+      try {
+        await axios
+          .get(this.$store.getters.myHostname+"/api/v1/Activity-MaxID")
+          .then((response) => {
+           const getid = response.data.id;
+           this.$store.dispatch({
+              type: "doCustomID",
+              id: getid,
+              str: "C0001",
+            });
+          });
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    //
+    select_Actid(){
+     for(let i=0;i<=this.Data_typeActivity_all.length;i++){
+       if(String(this.typeact_selected).valueOf()==String(this.Data_typeActivity_all[i].typeAct_name).valueOf()){
+         this.get_typeAct_id=this.Data_typeActivity_all[i].typeAct_id;
+       }
+     }
+    },
+      // message done
+    Msg_done(text) {
+      // Message show
+      this.$store.dispatch({
+        type: "doClick_myMsg",
+        mshow: true,
+        mcolor: "success",
+        micon: "check_circle",
+        message: text,
+      });
+    },
+    //message fail
+    Msg_fail(text) {
+      // Message show
+      this.$store.dispatch({
+        type: "doClick_myMsg",
+        mshow: true,
+        mcolor: "error",
+        micon: "error",
+        message: text,
+      });
+    },
+   async getActivity_type(){
+       try{
+         await axios.get(this.$store.getters.myHostname+"/api/v1/typeActivity").then((response)=>{
+          this.Data_typeActivity_all=response.data;
+          for(let i=0;i<=this.Data_typeActivity_all.length;i++){
+            this.Data_typeActivity.push(this.Data_typeActivity_all[i].typeAct_name);
+          }
+         })
+       }catch(err){
+         console.log(err);
+       }
+    },
+   async SavaData_Activity(){
+     const activity_id = this.$store.getters.getCustomID;
+     let Activity_array=[];
+     Activity_array.push(activity_id,this.txt_actTitle,this.get_typeAct_id,this.txt_actLocate,0,this.act_date)
+    let conActivity = Activity_array.toString();
+      this.$router.push({name:'activity-create',params:{data:conActivity}})
+
+      /* try{
+         await axios.post("http://localhost:5000",{
+            acti_id:activity_id,
+            acti_title:this.txt_actTitle,
+            typeAct_id:this.get_typeAct_id,
+            place:this.txt_actLocate,
+            amount_acti:0,
+            date_acti:this.act_date
+         }).then(()=>{
+           this.Msg_done("ບັນທຶກຂໍ້ມູນກິດຈະກຳສຳເລັດ");
+           this.router.push("/activity-create")
+           location.reload();
+         })
+       }catch(err){
+         this.Msg_fail("ບັນທຶກຂໍ້ມູນກິດຈະກຳບໍ໋ສຳເລັດ");
+         console.log(err);
+       }
+       */
+    }
   },
 };
 </script>
@@ -175,5 +267,9 @@ export default {
 .text-header-dialog {
   font-family: "boonhome-400";
   font-weight: 24px;
+}
+.calendar{
+   font-family: "boonhome-400";
+  font-weight: 14px;
 }
 </style>

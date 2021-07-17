@@ -2,14 +2,14 @@
   <div id="Educationlevel">
     <v-container fluid>
       <v-row justify="center" class="my-10">
-        <v-card width="700">
+        <v-card width="700" class="my-card-tatble">
           <v-data-table
             :headers="headers"
             :items="myData_edu_level"
             loading="true"
             loading-text="ກຳລັງໂຫຼດຂໍ້ມູນ.."
             :search="searchData"
-            class="header-col"
+            class="elevation-3 header-col"
           >
             <template v-slot:top>
               <v-toolbar>
@@ -49,9 +49,9 @@
                 <td>{{ item.level_id }}</td>
                 <td>{{ item.level_name }}</td>
                 <td>
-                  <v-icon small @click="edit_edulevel_item(item.level_id,item.level_name)">edit</v-icon>
+                  <v-icon color="update" small @click="edit_edulevel_item(item.level_id,item.level_name)">update</v-icon>
                   <span class="ma-1"></span>
-                  <v-icon small @click="delete_edulevel_item(item.level_id)">delete</v-icon>
+                  <v-icon color="delete" small @click="delete_edulevel_item(item.level_id)">delete</v-icon>
                 </td>
               </tr>
             </template>
@@ -258,7 +258,7 @@ export default {
     // get all data education level
    async getData_edulevel(){
        try{
-        let response = await axios.get("http://localhost:5000/api/v1/education-levels");
+        let response = await axios.get(this.$store.getters.myHostname+"/api/v1/education-levels");
         this.myData_edu_level=response.data;
        }catch(err){
          console.log(err);
@@ -267,7 +267,7 @@ export default {
     // save data
    async SaveData_educationlevel(){
        try{
-        await axios.post("http://localhost:5000/api/v1/education-levels",{
+        await axios.post(this.$store.getters.myHostname+"/api/v1/education-levels",{
         level_id:this.$store.getters.getCustomID,
         level_name:this.txt_edulevel_name
         }).then(()=>{
@@ -285,7 +285,7 @@ export default {
     // Update data education
   async  Update_data_education(){
        try{
-         await axios.put(`http://localhost:5000/api/v1/education-levels/${this.get_id}`,{
+         await axios.put(`${this.$store.getters.myHostname}/api/v1/education-levels/${this.get_id}`,{
           level_name:this.txt_edulevel_name_edit,
          }).then(()=>{
            this.form_edit_dialog=false;
@@ -301,7 +301,7 @@ export default {
     // delete data 
    async Delete_Data_education(){
        try{
-       await axios.delete(`http://localhost:5000/api/v1/education-levels/${this.delete_id}`).then(()=>{
+       await axios.delete(`${this.$store.getters.myHostname}/api/v1/education-levels/${this.delete_id}`).then(()=>{
          this.confirm_dialog=false;
          this.Msg_done("ລົບຂໍ້ມູນສຳເລັດແລ້ວ");
          location.reload();
@@ -316,7 +316,7 @@ export default {
      async getMaxID() {
       try {
         await axios
-          .get("http://localhost:5000/api/v1/Degree-MaxID")
+          .get(this.$store.getters.myHostname+"/api/v1/Degree-MaxID")
           .then((response) => {
             const getid = response.data.id;
             this.$store.dispatch({
@@ -389,5 +389,8 @@ export default {
 .text-tooltip {
   font-family: "boonhome-400";
   font-size: 14px;
+}
+.my-card-tatble{
+box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
 }
 </style>

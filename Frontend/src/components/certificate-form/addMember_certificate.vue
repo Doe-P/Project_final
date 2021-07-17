@@ -3,11 +3,12 @@
     <v-container fluid>
       <v-row justify="center">
         <v-dialog
-          v-model="this.$store.getters.getaddMember_certificate"
+          v-model="$store.getters.getaddMember_certificate.isShow"
           persistent
           :overlay="false"
-          max-width="1000px"
+          max-width="100%"
           transition="dialog-transition"
+          scrollable
         >
           <v-card>
             <v-toolbar color="primary" height="45" dark>
@@ -20,12 +21,11 @@
                 v-model="selected"
                 :headers="headers"
                 :items="myData_members"
-                hide-actions
-                class="elevation-1 mt-5 table-content"
+                class="elevation-3 mt-5 table-content"
                 :single-select="single_select"
                 show-select
                 item-key="member_id"
-                loading="true"
+                :loading="loading"
                 loading-text="ກຳລັງໂຫຼດ.."
                 :search="search_members"
                 full-width
@@ -46,8 +46,9 @@
             </v-card-text>
             <v-card-actions class="justify-space-between btn_text">
                 <v-btn color="error" @click="close_dialog">ຍົກເລີກ</v-btn>
-                <v-btn :disabled="checked" color="primary">ບັນທືກ</v-btn>
+                <v-btn @click.prevent="SaveData_Certificate" :disabled="checked" color="primary">ບັນທືກ</v-btn>
             </v-card-actions>
+         
           </v-card>
         </v-dialog>
       </v-row>
@@ -56,20 +57,21 @@
 </template>
 
 <script>
+import axios from 'axios';
 export default {
   name: "AddmemberCertificate",
   data() {
     return {
       headers: [
-        { text: "ລະຫັດສະມາຊິກ", value: "member_id", sortable: false },
+        { text: "ລຳດັບ", value: "No", sortable: false },
         { text: "ຊື່", value: "member_name", sortable: false },
-        { text: "ນາມສະກຸນ", value: "member_surname", sortable: false },
-        { text: "ເພດ", value: "member_gender", sortable: false },
-        { text: "ປະເພດສະມາຊິກ", value: "memberType", sortable: true },
-        { text: "ລະດັບການສຶກສາ", value: "edulevel_member", sortable: true },
-        { text: "ຈຸ", value: "section", sortable: true },
-        { text: "ໜ່ວຍ", value: "unit", sortable: true },
-        { text: "ຮາກຖານ", value: "foundation", sortable: true },
+        { text: "ນາມສະກຸນ", value: "surname", sortable: false },
+        { text: "ເພດ", value: "gender", sortable: false },
+        { text: "ປະເພດສະມາຊິກ", value: "typemember", sortable: true },
+        { text: "ລະດັບການສຶກສາ", value: "level_name", sortable: true },
+        { text: "ຈຸ", value: "sect_name", sortable: true },
+        { text: "ໜ່ວຍ", value: "unit_name", sortable: true },
+        { text: "ຮາກຖານ", value: "fund_name", sortable: true },
       ],
       myData_members: [
         {
@@ -83,25 +85,102 @@ export default {
       selected: [],
       single_select: false,
       checked: true,
+      loading:true,
+      getmemberID:[],
     };
   },
 
-  mounted() {},
+  mounted() {
+      this.getData_member();
+  },
 
   methods: {
     selectData(value) {
       if (value != "") {
+        this.filter_member_ID();
         this.checked = false;
       } else {
+        this.getmemberID=[];
         this.checked = true;
       }
     },
     close_dialog(){
         this.$store.dispatch({
         type:"doClickAddmember_certificate",
-        value:false,
+        data:""
       })
-    }
+    },
+    filter_member_ID(){
+     this.getmemberID=[];
+     this.getmemberID=this.selected.map(a=>a.member_id)
+    },
+    // get data member
+  async  getData_member(){
+       try{
+         await axios.get(this.$store.getters.myHostname+"/api/v1/getMembers").then((response)=>{
+           this.myData_members=response.data;
+           this.loading=false;
+         })
+       }catch(err){
+         console.log(err);
+       }
+    },
+  async  SaveData_Certificate(){
+      let getData_certificate=this.$store.getters.getaddMember_certificate.mydata;
+      let total = this.getmemberID.length;
+      let mydata_obj=[]
+      if(getData_certificate){
+        for(let i in this.getmemberID){
+         mydata_obj[i]={
+           certific_id:getData_certificate[0],
+           typeCerti_id:getData_certificate[1],
+           certific_NO:getData_certificate[2],
+           title:getData_certificate[3],
+           amount_cert:total,
+           locate:getData_certificate[4],
+           date_sign:getData_certificate[5],
+           sign_by:getData_certificate[6],
+           member_id:this.getmemberID[i]
+         }
+        }
+        console.log(mydata_obj);
+        try{
+           await axios.post(this.$store.getters.myHostname+"/api/v1/new-certificate",{
+          data:mydata_obj
+        }).then(()=>{
+           this.Msg_done("ບັນທຶກຂໍ້ມູນການຍ້ອງຍໍສຳເລັດ")
+           location.reload();
+        })
+        }catch(err){
+          this.Msg_fail("ການບັນທຶກຂໍ້ມູນຍ້ອງຍໍຜິດພາດ")
+          console.log(err);
+        }
+      }else{
+        this.Msg_fail("ຂໍ້ມູນບໍ່ຄົບຖ້ວນ ກະລຸນາກວດສອບຄືນໃໝ່")
+      }
+    },
+    // message done
+    Msg_done(text) {
+      // Message show
+      this.$store.dispatch({
+        type: "doClick_myMsg",
+        mshow: true,
+        mcolor: "success",
+        micon: "check_circle",
+        message: text,
+      });
+    },
+    //message fail
+    Msg_fail(text) {
+      // Message show
+      this.$store.dispatch({
+        type: "doClick_myMsg",
+        mshow: true,
+        mcolor: "error",
+        micon: "error",
+        message: text,
+      });
+    },
   },
 };
 </script>

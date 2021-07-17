@@ -468,7 +468,7 @@ export default {
     async get_TypeMember_selection() {
       try {
         await axios
-          .get("http://localhost:5000/api/v1/type-members")
+          .get(this.$store.getters.myHostname+"/api/v1/type-members")
           .then((response) => {
             this.typeMember_item_All = response.data;
             for (let i = 0; i <= this.typeMember_item_All.length; i++) {
@@ -484,7 +484,7 @@ export default {
     async get_educationLevel() {
       try {
         await axios
-          .get("http://localhost:5000/api/v1/education-levels")
+          .get(this.$store.getters.myHostname+"/api/v1/education-levels")
           .then((response) => {
             this.level_item_All = response.data;
             for (let i = 0; i <= this.level_item_All.length; i++) {
@@ -500,7 +500,7 @@ export default {
       try {
         await axios
           .get(
-            `http://localhost:5000/api/v1/getItem-units/${this.$route.params.fund_id}`
+            `${this.$store.getters.myHostname}/api/v1/getItem-units/${this.$route.params.fund_id}`
           )
           .then((response) => {
             this.unit_items_all = response.data;
@@ -524,7 +524,7 @@ export default {
             const id = this.unit_items_all[i].unit_id;
             try {
               await axios
-                .get(`http://localhost:5000/api/v1/allsections/${id}`)
+                .get(`${this.$store.getters.myHostname}/api/v1/allsections/${id}`)
                 .then((response) => {
                   this.section_items_all = response.data;
                   for (let a = 0; a <= this.section_items_all.length; a++) {
@@ -555,7 +555,7 @@ export default {
       let levelid="";
       try {
         await axios
-          .get(`http://localhost:5000/api/v1/members/${this.$route.params.id}`)
+          .get(`${this.$store.getters.myHostname}/api/v1/members/${this.$route.params.member_detail}`)
           .then((response) => {
             this.member_id=response.data.member_id;
             this.txt_Membername = response.data.member_name;
@@ -670,7 +670,7 @@ export default {
           this.selected_unit_Item = this.unit_items_all[i].unit_name;
            try {
               await axios
-                .get(`http://localhost:5000/api/v1/allsections/${unitid}`)
+                .get(`${this.$store.getters.myHostname}/api/v1/allsections/${unitid}`)
                 .then((response) => {
                   this.section_items_all = response.data;
                   for (let a = 0; a <= this.section_items_all.length; a++) {

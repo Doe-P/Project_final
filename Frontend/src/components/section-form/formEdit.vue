@@ -203,7 +203,7 @@ export default {
     async getdata_found_selection() {
       try {
         let response = await axios.get(
-          "http://localhost:5000/api/v1/getItem/foundations"
+          this.$store.getters.myHostname+"/api/v1/getItem/foundations"
         );
         this.get_found_all = response.data;
         for (let i = 0; i <= this.get_found_all.length; i++) {
@@ -223,7 +223,7 @@ export default {
           const id = this.get_found_all[a].fund_id;
           try {
             let response = await axios.get(
-              `http://localhost:5000/api/v1/getItem-units/${id}`
+              `${this.$store.getters.myHostname}/api/v1/getItem-units/${id}`
             );
             this.myUnitnames = [];
             this.get_unit_all = response.data;
@@ -245,7 +245,7 @@ export default {
       const id = this.$store.getters.getsect_formEdit.id;
       try {
         await axios
-          .get(`http://localhost:5000/api/v1/sections/${id}`)
+          .get(`${this.$store.getters.myHostname}/api/v1/sections/${id}`)
           .then((response) => {
             (this.txt_sectname_edit = response.data.sect_name),
              this.format_sect_date_edit=dateformat(response.data.date_sect,"dd-mm-yyyy"),
@@ -260,7 +260,7 @@ export default {
                 const id = this.get_found_all[i].fund_id;
 
                 axios
-                  .get(`http://localhost:5000/api/v1/getItem-units/${id}`)
+                  .get(`${this.$store.getters.myHostname}/api/v1/getItem-units/${id}`)
                   .then((res) => {
                     this.get_unit_all = res.data;
                     for (let i = 0; i <= this.get_unit_all.length; i++) {
@@ -288,7 +288,7 @@ export default {
       if(String(this.unit_name).valueOf()==String(this.get_unit_all[i].unit_name).valueOf()){
         this.unitID = this.get_unit_all[i].unit_id;
          try{
-      await axios.put(`http://localhost:5000/api/v1/sections/${get_id_sect}`,{
+      await axios.put(`${this.$store.getters.myHostname}/api/v1/sections/${get_id_sect}`,{
        sect_name:this.txt_sectname_edit,
        unit_id:this.unitID,
        date_sect: this.get_date,

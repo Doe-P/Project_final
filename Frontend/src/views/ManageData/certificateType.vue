@@ -246,7 +246,7 @@ export default {
      async getMaxID() {
       try {
         await axios
-          .get("http://localhost:5000/api/v1/certificateType-MaxID")
+          .get(this.$store.getters.myHostname+"/api/v1/certificateType-MaxID")
           .then((response) => {
             const getid = response.data.id;
             this.$store.dispatch({
@@ -261,7 +261,7 @@ export default {
     },
    async getData_All(){
      try{
-      let response = await axios.get("http://localhost:5000/api/v1/typecertificate");
+      let response = await axios.get(this.$store.getters.myHostname+"/api/v1/typecertificate");
       this.myData_certificateType=response.data;
      }catch(err){
        console.log(err);
@@ -270,7 +270,7 @@ export default {
     // save data 
    async Save_Data(){
       try{
-        await axios.post("http://localhost:5000/api/v1/typeCertificate",{
+        await axios.post(this.$store.getters.myHostname+"/api/v1/typeCertificate",{
          typeCerti_id:this.$store.getters.getCustomID,
          typeCerti_name:this.txt_certi_name
         }).then(()=>{
@@ -287,7 +287,7 @@ export default {
     // Update data
   async  Update_data(){
        try{
-        await axios.put(`http://localhost:5000/api/v1/typeCertificate/${this.get_id}`,{
+        await axios.put(`${this.$store.getters.myHostname}/api/v1/typeCertificate/${this.get_id}`,{
          typeCerti_name:this.txt_certi_name_edit,
         }).then(()=>{
           this.form_edit_dialog=false;
@@ -303,7 +303,7 @@ export default {
      // delete data
    async  confirm_delete(){
         try{
-         await axios.delete(`http://localhost:5000/api/v1/typeCertificate/${this.delete_id}`).then(()=>{
+         await axios.delete(`${this.$store.getters.myHostname}/api/v1/typeCertificate/${this.delete_id}`).then(()=>{
           this.confirm_dialog=false;
           this.Msg_done("ລົບຂໍ້ມູນສຳເລັດແລ້ວ");
           location.reload();

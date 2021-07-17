@@ -3,7 +3,7 @@
     <template>
       <v-row justify="center">
         <v-dialog
-          v-model="this.$store.getters.getformAdd_certificate"
+          v-model="$store.getters.getformAdd_certificate"
           persistent
           :overlay="false"
           max-width="800px"
@@ -19,12 +19,12 @@
               <v-container>
                 <v-form class="text-content" v-model="valid">
                   <v-row>
-                    <v-col cols="6">
-                      <v-text-field label="ລະຫັດໃບຍ້ອງຍໍ" readonly value="xxx">
+                    <v-col cols="12">
+                      <v-text-field label="ລະຫັດໃບຍ້ອງຍໍ" readonly :value="$store.getters.getCustomID">
                       </v-text-field>
                     </v-col>
                     <v-col cols="6">
-                      <v-text-field label="ເລກທີໃບຍ້ອງຍໍ" readonly value="xxx">
+                      <v-text-field label="ເລກທີໃບຍ້ອງຍໍ" focusable v-model="txt_certi_NO"   :rules="[required('ເລກທີໃບຍ້ອງຍໍ'),minLength('ເລກທີໃບຍ້ອງຍໍ',3),maxLength('ເລກທີໃບຍ້ອງຍໍ',20)]">
                       </v-text-field>
                     </v-col>
                     <v-col cols="6">
@@ -34,6 +34,7 @@
                         label="ເລືອກປະເພດກິດຈະກຳ"
                         class="text-content pt-6"
                         :rules="[required('ປະເພດກິດຈະກຳ')]"
+                        @input="isCertificateType"
                       ></v-select>
                     </v-col>
                     <v-col cols="6">
@@ -106,7 +107,7 @@
                 <v-btn @click="close_dialog"  color="error">
                     ຍົກເລີກ
                 </v-btn>
-                <v-btn :disabled="!valid"  color="primary">
+                <v-btn @click.prevent="saveData_Certificate" :disabled="!valid"  color="primary">
                     ບັນທືກ
                 </v-btn>
             </v-card-actions>
@@ -118,6 +119,7 @@
 </template>
 
 <script>
+import axios from "axios"
 export default {
   name: "CertificateFormadd",
   data() {
@@ -127,8 +129,8 @@ export default {
       certi_date_menu: false,
       certi_date_format: null,
       certi_type: [],
+      mytypeCertificate:null,
       certiType_select: "",
-      txt_locate: null,
       Datasign_by:['ຮາກຖານ','ຄຊປປລ ມຊ','ກະຊວງສຶກສາ ແລະ ກິລາ','ສູນກາງຊາວໝຸ່ມ'],
        //Valid input
       required(propertyType) {
@@ -146,11 +148,18 @@ export default {
       },
       // valid form
       valid: false,
-    
+      //------
+      txt_certi_NO:null,
+      txt_title:null,
+      txt_locate:null,
+      signBy_select:null,
+      get_typeCerti_id:null,
     };
   },
 
   mounted() {
+    this.getMaxID();
+    this.typeCertificate();
   },
   watch: {
     certi_date() {
@@ -181,6 +190,56 @@ export default {
         type:"doClickFormadd_certificate",
         value:false,
       })
+    },
+    async typeCertificate(){
+       try{
+         await axios.get(this.$store.getters.myHostname+"/api/v1/typecertificate").then((response)=>{
+            this.mytypeCertificate = response.data;
+           for(let i in this.mytypeCertificate){
+             this.certi_type.push(this.mytypeCertificate[i].typeCerti_name)
+           }
+         })
+       }catch(err){
+         console.log(err);
+       }
+    },
+    isCertificateType(){
+     for(let i in this.mytypeCertificate){
+       if(String(this.certiType_select).valueOf()==String(this.mytypeCertificate[i].typeCerti_name).valueOf()){
+         this.get_typeCerti_id=this.mytypeCertificate[i].typeCerti_id;
+       }
+     }
+    },
+    saveData_Certificate(){
+     let Certificate_arr=[
+     this.$store.getters.getCustomID,
+     this.get_typeCerti_id,
+     this.txt_certi_NO,
+     this.txt_title,
+     this.txt_locate,
+     this.certi_date,
+     this.signBy_select]
+      this.$store.dispatch({
+        type:"doClickAddmember_certificate",
+        data:Certificate_arr
+      })
+      this.close_dialog();
+    },
+    async getMaxID(){
+       try {
+        await axios
+          .get(this.$store.getters.myHostname+"/api/v1/getCerti/MaxID")
+          .then((response) => {
+           const getid = response.data.id;
+           this.$store.dispatch({
+              type: "doCustomID",
+              id: getid,
+              str: "G0001",
+            });
+          });
+      } catch (err) {
+        console.log(err);
+      }
     }
   },
 };

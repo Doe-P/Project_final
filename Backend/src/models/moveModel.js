@@ -109,8 +109,8 @@ exports.AddMove = (data, result) => {
 //add move detail
 exports.addMove_detail = (data, result) => {
   let sql =
-    "INSERT INTO tb_move_detail (move_NO,move_id,member_id) VALUES(?,?,?)";
-  dbCon.query(sql, [data.move_NO, data.move_id, data.member_id], (err, res) => {
+    "INSERT INTO tb_move_detail (move_id,member_id) VALUES(?,?)";
+  dbCon.query(sql, [data.move_id, data.member_id], (err, res) => {
     if (err) {
       console.log("Error:" + err);
       return result(err, null);
@@ -316,7 +316,7 @@ exports.getMember = (id, result) => {
 
 // Get single move and movedetail by id
 exports.getmovedetailByid = (id, result) => {
-  let sql = `SELECT tb_move_detail.move_id,tb_move_detail.move_NO,tb_member.member_name,tb_member.surname,tb_member.gender,tb_move.reason,tb_move.m_Year,tb_section.sect_name,tb_unit.unit_name,tb_foundation.fund_name 
+  let sql = `SELECT tb_move_detail.move_id,tb_move.move_NO,tb_member.member_name,tb_member.surname,tb_member.gender,tb_move.reason,tb_move.m_Year,tb_section.sect_name,tb_unit.unit_name,tb_foundation.fund_name 
     FROM tb_move_detail 
     INNER JOIN tb_move ON tb_move_detail.move_id=tb_move.move_id 
     INNER JOIN tb_member ON tb_move_detail.member_id=tb_member.member_id 

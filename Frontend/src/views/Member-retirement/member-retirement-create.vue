@@ -154,10 +154,10 @@ export default {
      this.myData_memRetire=[];
       try{
         if(user_status=='admin'){
-         let response = await axios.get("http://localhost:5000/api/v1/membersWhere-Status-Age");
+         let response = await axios.get(this.$store.getters.myHostname+"/api/v1/membersWhere-Status-Age");
          this.myData_memRetire=response.data;
       }else if(user_status=='user'){
-         let response =await axios.get(`http://localhost:5000/api/v1/membersWhere-Status-Age-client/${fund_id}`);
+         let response =await axios.get(`${this.$store.getters.myHostname}/api/v1/membersWhere-Status-Age-client/${fund_id}`);
          this.myData_memRetire=response.data;
       }else{
          this.Msg_fail("ສະຖານະຜູ້ໃຊ້ລະບົບບໍ່ຖືກຕ້ອງ");

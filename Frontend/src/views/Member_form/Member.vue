@@ -52,7 +52,7 @@
             <v-data-table
               :headers="headers"
               :items="myData_member"
-              loading="true"
+              :loading="loading"
               loading-text="ກຳລັງໂຫຼດຂໍ້ມູນ.."
               :search="searchData"
               class="table-header"
@@ -69,7 +69,6 @@
                   <!--search ຮາກຖານ -->
                   <v-text-field
                     class="table-search ml-3"
-                    box
                     label="ຄົ້ນຫາ.."
                     single-line
                     hide-details=""
@@ -97,8 +96,9 @@
                 </v-toolbar>
               </template>
               <!-- Section tr Table -->
-              <template v-slot:item="{ item }">
+              <template v-slot:item="{ item,index }">
                   <tr class="table-header">
+                  <td>{{ index + 1 }}</td>
                   <td>{{ item.member_name }}</td>
                   <td>{{ item.surname }}</td>
                   <td>{{ item.gender }}</td>
@@ -111,8 +111,8 @@
                   <td>
                     <v-tooltip bottom>
                     <template v-slot:activator="{ on, attrs }">
-                      <v-icon v-on="on" v-bind="attrs" small @click="$router.push({name:'member-edit',params:{id:item.member_id,fund_id:item.fund_id}})"
-                      >edit</v-icon
+                      <v-icon color="update" v-on="on" v-bind="attrs" small @click="$router.push({name:'member-edit',params:{member_edit:item.member_id,fund_id:item.fund_id}})"
+                      >update</v-icon
                     >
                     </template>
                     <span class="text-tooltip">ແກ້ໄຂສະມາຊິກ</span>
@@ -121,6 +121,7 @@
                      <v-tooltip bottom>
                     <template v-slot:activator="{ on, attrs }">
                       <v-icon
+                       color="delete"
                       v-bind="attrs"
                       v-on="on"
                       small
@@ -134,10 +135,11 @@
                     <v-tooltip bottom>
                     <template v-slot:activator="{ on, attrs }">
                       <v-icon
+                      color="#4FB783"
                       v-bind="attrs"
                       v-on="on"
                       small
-                      @click="$router.push({name:'member-detail',params:{id:item.member_id,fund_id:item.fund_id,fund_name:item.fund_name}})"
+                      @click="$router.push({name:'member-detail',params:{member_detail:item.member_id,fund_id:item.fund_id,fund_name:item.fund_name}})"
                       >table_view</v-icon>
                     </template>
                     <span class="text-tooltip">ສະແດງລາຍລະອຽດ</span>
@@ -200,6 +202,12 @@ export default {
       searchData: null,
       myData_member: [],
       headers: [
+         {
+          text: "ລຳດັບ",
+          align:"Left",
+          value: "No",
+          sortable: false,
+        },
         {
           text: "ຊື່",
           align:"Left",
@@ -260,6 +268,8 @@ export default {
      //-----
      get_member_id:null,
      countColumn:0,
+     //
+     loading:true,
     };
   },
   mounted() {
@@ -276,10 +286,10 @@ export default {
        const fund_id=this.$store.getters.getData_user.user_foundation;
        this.myData_member=[];
       if(user_status=='admin'){
-        let response = await axios.get("http://localhost:5000/api/v1/members");
+        let response = await axios.get(this.$store.getters.myHostname+"/api/v1/members");
         this.myData_member=response.data;
       }else{
-        let response = await axios.get(`http://localhost:5000/api/v1/members-foundation/${fund_id}`);
+        let response = await axios.get(`${this.$store.getters.myHostname}/api/v1/members-foundation/${fund_id}`);
         this.myData_member=response.data;
       }
      }catch(err){
@@ -289,15 +299,16 @@ export default {
     // get count all member
    async getCount_allmember(){
       try{
-        let response = await axios.get("http://localhost:5000/api/v1/count-allmembers");
+        let response = await axios.get(this.$store.getters.myHostname+"/api/v1/count-allmembers");
         this.Count_allmember=parseInt(response.data.count_member);
+        this.loading=false;
       }catch(err){
         console.log(err);
       }
     },
     async getCount_femalemember(){
       try{
-       let response = await axios.get("http://localhost:5000/api/v1/count-femalemembers");
+       let response = await axios.get(this.$store.getters.myHostname+"/api/v1/count-femalemembers");
        this.Count_femalemember=parseInt(response.data.count_member);
       }catch(err){
         console.log(err);
@@ -306,7 +317,7 @@ export default {
     ,
     async getCount_retirementmember(){
       try{
-       let response = await axios.get("http://localhost:5000/api/v1/retirement-members");
+       let response = await axios.get(this.$store.getters.myHostname+"/api/v1/retirement-members");
        this.Count_retiremember=parseInt(response.data.count_member);
       }catch(err){
         console.log(err);
@@ -315,7 +326,7 @@ export default {
     ,
     async getCount_movemember(){
       try{
-       let response = await axios.get("http://localhost:5000/api/v1/count-movemembers");
+       let response = await axios.get(this.$store.getters.myHostname+"/api/v1/count-movemembers");
        this.Count_movemember=parseInt(response.data.count_member);
       }catch(err){
         console.log(err);
@@ -328,7 +339,7 @@ export default {
     //delete data
   async  delete_member_item(){
        try{
-        await axios.delete(`http://localhost:5000/api/v1/members/${this.get_member_id}`).then(()=>{
+        await axios.delete(`${this.$store.getters.myHostname}/api/v1/members/${this.get_member_id}`).then(()=>{
           this.Msg_done("ຂໍ້ມູນຖືກລົບອອກແລ້ວ")
           location.reload();
         })

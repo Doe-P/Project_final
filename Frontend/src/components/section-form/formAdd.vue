@@ -189,7 +189,7 @@ export default {
     async getMaxID() {
       try {
         await axios
-          .get("http://localhost:5000/api/v1/Sections-MaxID")
+          .get(this.$store.getters.myHostname+"/api/v1/Sections-MaxID")
           .then((response) => {
             const getid = response.data.id;
             this.$store.dispatch({
@@ -214,7 +214,7 @@ export default {
           const id = this.get_found_All[a].fund_id;
           try {
             let response = await axios.get(
-              `http://localhost:5000/api/v1/getItem-units/${id}`
+              `${this.$store.getters.myHostname}/api/v1/getItem-units/${id}`
             );
             this.getUnitnameAll = response.data;
             for (let i = 0; i <= this.getUnitnameAll.length; i++) {
@@ -230,7 +230,7 @@ export default {
     async getdata_found_selection() {
       try {
         let response = await axios.get(
-          "http://localhost:5000/api/v1/getItem/foundations"
+          this.$store.getters.myHostname+"/api/v1/getItem/foundations"
         );
         this.get_found_All = response.data;
         for (let i = 0; i <= this.get_found_All.length; i++) {
@@ -252,7 +252,7 @@ export default {
         ) {
           const id = this.getUnitnameAll[i].unit_id;
           try {
-            await axios.post("http://localhost:5000/api/v1/sections",{
+            await axios.post(this.$store.getters.myHostname+"/api/v1/sections",{
             sect_id:this.$store.getters.getCustomID,
             sect_name:this.txt_sectname,
             unit_id:id,

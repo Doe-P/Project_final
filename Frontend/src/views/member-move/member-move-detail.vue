@@ -25,7 +25,6 @@
             :headers="headers"
             :items="moveDetail"
             class="elevation-1 table-content"
-            select-all
             item-key="id"
             :loading="load_data"
             loading-text="ກຳລັງໂຫຼດຂໍ້ມູນ...."
@@ -74,7 +73,7 @@ export default {
         getCount_all:0,
         getCount_female:0,
         headers:[
-            {text:"ລະຫັດຍົກຍ້າຍ",value:"move_id",sortable:false},
+            {text:"ລຳດັບ",value:"move_id",sortable:false},
             {text:"ເລກທີໃບຍົກຍ້າຍ",value:"move_NO",sortable:false},
             {text:"ຊື່",value:"member_name",sortable:false},
             {text:"ນາມສະກຸນ",value:"surname",sortable:false},
@@ -98,7 +97,7 @@ export default {
    async CountAll_move(){
      const id =this.$route.params.id;
       try{
-        await axios.get(`http://localhost:5000/api/v1/countAll/${id}`).then((response)=>{
+        await axios.get(`${this.$store.getters.myHostname}/api/v1/countAll/${id}`).then((response)=>{
           this.getCount_all=parseInt(response.data.amount);
         })
       }catch(err){
@@ -109,7 +108,7 @@ export default {
    async Countfemale_move(){
      const id =this.$route.params.id;
       try{
-        await axios.get(`http://localhost:5000/api/v1/countfemale/${id}`).then((response)=>{
+        await axios.get(`${this.$store.getters.myHostname}/api/v1/countfemale/${id}`).then((response)=>{
           this.getCount_female=parseInt(response.data.amount)
         })
       }catch(err){
@@ -120,7 +119,7 @@ export default {
    async getMember_movedetail(){
      const id=this.$route.params.id
       try{
-       await axios.get(`http://localhost:5000/api/v1/move/getmove-detail/${id}`).then((response)=>{
+       await axios.get(`${this.$store.getters.myHostname}/api/v1/move/getmove-detail/${id}`).then((response)=>{
          this.moveDetail=response.data;
          this.load_data=false;
        })
@@ -133,6 +132,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
 .text-title {
   font-family: "boonhome-400";
   font-size: 18px;

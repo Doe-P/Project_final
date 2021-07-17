@@ -3,7 +3,7 @@
     <template>
       <v-row justify="center">
         <v-dialog
-          v-model="this.$store.getters.getformEdit_certificate"
+          v-model="$store.getters.getformEdit_certificate"
           persistent
           :overlay="false"
           max-width="800px"
@@ -24,7 +24,7 @@
                       </v-text-field>
                     </v-col>
                     <v-col cols="6">
-                      <v-text-field label="ເລກທີໃບຍ້ອງຍໍ" readonly value="xxx">
+                      <v-text-field label="ເລກທີໃບຍ້ອງຍໍ" readonly v-model="txt_certi_NO">
                       </v-text-field>
                     </v-col>
                     <v-col cols="6">
@@ -128,7 +128,6 @@ export default {
       certi_date_format: null,
       certi_type: [],
       certiType_select: "",
-      txt_locate: null,
       Datasign_by:['ຮາກຖານ','ຄຊປປລ ມຊ','ກະຊວງສຶກສາ ແລະ ກິລາ','ສູນກາງຊາວໝຸ່ມ'],
        //Valid input
       required(propertyType) {
@@ -146,7 +145,11 @@ export default {
       },
       // valid form
       valid: false,
-    
+      //------
+      txt_certi_NO:null,
+      txt_title:null,
+      txt_locate:null,
+      signBy_select:null
     };
   },
 

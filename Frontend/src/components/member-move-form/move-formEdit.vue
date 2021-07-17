@@ -202,7 +202,7 @@ export default {
      const moveID=this.$store.getters.getmoveFormEdit.id;
  if(moveID&&this.txt_moveNO&&this.moveReason&&this.moveLocate&&this.moveSign_by&&this.move_date&&this.year_selected){
        try{
-        await axios.put(`http://localhost:5000/api/v1/moves/${moveID}`,{
+        await axios.put(`${this.$store.getters.myHostname}/api/v1/moves/${moveID}`,{
           move_NO:this.txt_moveNO,
           m_Year:this.year_selected,
           reason:this.moveReason,
@@ -227,7 +227,7 @@ export default {
      const get_id=this.$store.getters.getmoveFormEdit.id;
      if(get_id){
         try{
-        await axios.get(`http://localhost:5000/api/v1/moves/${get_id}`).then((response)=>{
+        await axios.get(`${this.$store.getters.myHostname}/api/v1/moves/${get_id}`).then((response)=>{
           this.txt_moveNO=response.data.move_NO;
           this.moveReason=response.data.reason;
           this.year_selected=response.data.m_Year;

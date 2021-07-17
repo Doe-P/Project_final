@@ -73,7 +73,10 @@ export default new Vuex.Store({
     // form add certificate
     formAdd_certificate: false,
     //form add member certificate
-    addMember_certificate: false,
+    addMember_certificate: {
+      isShow:false,
+      mydata:[]
+    },
     // form edit certificate
     formEdit_certificate: false,
     //auto id
@@ -83,8 +86,14 @@ export default new Vuex.Store({
       user_status: "",
       user_foundation: "",
     },
+    // server host
+    myHost:"http://localhost:5000"
   },
   getters: {
+    // returnn server host
+    myHostname(state){
+      return state.myHost;
+    },
     //get auto id
     getCustomID(state) {
       return state.custom_id;
@@ -330,8 +339,15 @@ export default new Vuex.Store({
       state.formEdit_certificate = value;
     },
     //form add members certificate
-    setaddMember_certificate(state, value) {
-      state.addMember_certificate = value;
+    setaddMember_certificate(state,data) {
+     if(data){
+      state.addMember_certificate.isShow = true;
+      state.addMember_certificate.mydata=data;
+     }else{
+      state.addMember_certificate.isShow = false;
+       return null
+      
+     }
     },
     // set value for  customID
     setCustomID(state, values) {
@@ -490,8 +506,8 @@ export default new Vuex.Store({
     doClickFormedit_certificate({ commit }, { value }) {
       commit("setformEdit_certificate", value);
     },
-    doClickAddmember_certificate({ commit }, { value }) {
-      commit("setaddMember_certificate", value);
+    doClickAddmember_certificate({ commit },{data}) {
+      commit("setaddMember_certificate", data);
     },
     // action customid
     doCustomID({ commit }, { id, str }) {

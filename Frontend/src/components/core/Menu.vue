@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <v-navigation-drawer
-      v-model="this.$store.getters.getShowmenu"
+      v-model="$store.getters.getShowmenu"
       fixed
       absolute
       temporary

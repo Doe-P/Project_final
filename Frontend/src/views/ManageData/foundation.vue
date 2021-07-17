@@ -6,7 +6,7 @@
           :headers="headers"
           :items="foundation_Data"
           :search="searchData"
-          loading="true"
+          :loading="loading"
           loading-text="ກຳລັງໂຫຼດຂໍ້ມູນ.."
           class="header-col"
         >
@@ -45,15 +45,17 @@
             </v-toolbar>
           </template>
           <!-- table content -->
-          <template v-slot:item="{ item }">
+          <template v-slot:item="{ item, index }">
             <tr class="table-content">
-              <td>{{ item.fund_id }}</td>
+              <td>{{ index + 1 }}</td>
+               <td>{{ item.fund_id }}</td>
               <td>{{ item.fund_name }}</td>
               <td>{{ item.date_fund | formatDate }}</td>
               <td>{{ item.status_fund }}</td>
               <td>
                 <v-icon
                   small
+                  color="update"
                   @click="
                     edit_found_item(
                       item.fund_id,
@@ -62,10 +64,10 @@
                       item.status_fund
                     )
                   "
-                  >edit</v-icon
+                  >update</v-icon
                 >
                 <span class="ma-1"></span>
-                <v-icon small @click="getID_delete(item.fund_id)"
+                <v-icon color="delete" small @click="getID_delete(item.fund_id)"
                   >delete</v-icon
                 >
               </td>
@@ -134,8 +136,10 @@ export default {
       get_ID: "",
       searchData: "",
       foundation_Data: [],
+      loading:true,
       headers: [
-        { text: "ລະຫັດ", align: "Left", value: "fund_id" },
+        { text: "ລຳດັບ", align: "Left", value: "No" },
+         { text: "ລະຫັດ", align: "Left", value: "fund_id" },
         { text: "ຊື່ຮາກຖານ", value: "fund_name", sortable: true },
         {
           text: "ວັນເດືອນປີຂະຫຍາຍຮາກຖານ",
@@ -169,7 +173,7 @@ export default {
       try {
         if (this.get_ID) {
           await axios
-            .delete(`http://localhost:5000/api/v1/foundations/${this.get_ID}`)
+            .delete(`${this.$store.getters.myHostname}/api/v1/foundations/${this.get_ID}`)
             .then(() => {
               this.confirm_dialog = false;
               this.Msg_done();
@@ -237,9 +241,10 @@ export default {
     async getData_foundations() {
       try {
         let response = await axios.get(
-          "http://localhost:5000/api/v1/foundations"
+          this.$store.getters.myHostname+"/api/v1/foundations"
         );
         this.foundation_Data = response.data;
+        this.loading=false;
       } catch (err) {
         console.log(err);
       }

@@ -161,7 +161,6 @@ export default {
       moveReason:null,
       moveLocate:null,
       moveSign_by:null,
-      moveAmount:0,
     };
   },
   mounted() {
@@ -193,20 +192,21 @@ export default {
     },
    async saveData_Move(){
      const moveID=this.$store.getters.getCustomID;
- if(moveID&&this.txt_moveNO&&this.move_NO&&this.moveReason&&this.moveLocate&&this.moveSign_by&&this.moveAmount&&this.move_date&&this.year_selected){
+     alert(moveID)
+ if(moveID&&this.txt_moveNO&&this.moveReason&&this.moveLocate&&this.moveSign_by&&this.move_date&&this.year_selected){
        try{
-        await axios.post("http://localhost:5000/api/v1/add-move",{
+        await axios.post(this.$store.getters.myHostname+"/api/v1/add-move",{
           move_id:moveID,
           move_NO:this.txt_moveNO,
           m_Year:this.year_selected,
           reason:this.moveReason,
-          amount_move:this.moveAmount,
           locate:this.moveLocate,
           sign_by:this.moveSign_by,
           date_move:this.move_date
         }).then(()=>{
          this.Msg_done("ບັນທຶກຂໍ້ມູນກິດຈະກຳສຳເລັດແລ້ວ")
          this.$router.push({name:"member-move-create",params:{id:moveID,move_NO:this.txt_moveNO}})
+         location.reload();
         })
      }catch(err){
        this.Msg_fail("ບັນທຶກຂໍ້ມູນກິດຈະກຳບໍ່ສຳເລັດ")
@@ -242,13 +242,13 @@ export default {
     async getMaxID() {
       try {
         await axios
-          .get("http://localhost:5000/api/v1/Move-MaxID")
+          .get(this.$store.getters.myHostname+"/api/v1/Move-MaxID")
           .then((response) => {
            const getid = response.data.id;
            this.$store.dispatch({
               type: "doCustomID",
               id: getid,
-              str: "A0001",
+              str: "V0001",
             });
           });
       } catch (err) {

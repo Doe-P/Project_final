@@ -113,7 +113,7 @@ export default {
       const id = this.$store.getters.getMemberType_formEdit.id;
       try {
         await axios
-          .get(`http://localhost:5000/api/v1/type-members/${id}`)
+          .get(`${this.$store.getters.myHostname}/api/v1/type-members/${id}`)
           .then((response) => {
             (this.txt_memberType_name_edit = response.data.typemember),
               (this.txt_memType_price_edit = (response.data.money).toString());
@@ -125,7 +125,7 @@ export default {
    async Update_data(){
      const id = this.$store.getters.getMemberType_formEdit.id;
       try{
-         await axios.put(`http://localhost:5000/api/v1/type-members/${id}`,{
+         await axios.put(`${this.$store.getters.myHostname}/api/v1/type-members/${id}`,{
          typemember:this.txt_memberType_name_edit,
          money:parseInt(this.txt_memType_price_edit)
        }).then(()=>{

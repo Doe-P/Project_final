@@ -52,9 +52,9 @@
               <td>{{ item.date_sect | formatDate }}</td>
               <td>{{ item.status_sect }}</td>
               <td>
-                <v-icon small @click="edit_section_item(item.sect_id,item.fund_name)">edit</v-icon>
+                <v-icon color="update" small @click="edit_section_item(item.sect_id,item.fund_name)">update</v-icon>
                 <span class="ma-1"></span>
-                <v-icon small @click="getSectionID(item.sect_id)">delete</v-icon>
+                <v-icon color="delete" small @click="getSectionID(item.sect_id)">delete</v-icon>
               </td>
             </tr>
           </template>
@@ -154,7 +154,7 @@ export default {
     },
    async delete_section_item() {
      try{
-      await axios.delete(`http://localhost:5000/api/v1/sections/${this.getSect_id}`).then(()=>{
+      await axios.delete(`${this.$store.getters.myHostname}/api/v1/sections/${this.getSect_id}`).then(()=>{
         this.confirm_dialog=false;
         this.Msg_done("ລົບຂໍ້ມູນສຳເລັດແລ້ວ")
         location.reload();
@@ -178,7 +178,7 @@ export default {
     // get all data sections
    async getData_Sections(){
        try{
-        const response= await axios.get("http://localhost:5000/api/v1/sections");
+        const response= await axios.get(this.$store.getters.myHostname+"/api/v1/sections");
          this.myData_section= response.data;
        }catch(err){
          console.log(err);

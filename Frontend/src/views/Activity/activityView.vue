@@ -1,12 +1,12 @@
 <template>
   <div id="Activitydetail">
     <v-container fluid>
-      <v-row justify="center" class="my-10">
-        <v-card width="1000">
+      <v-row justify="center" class="my-10 mx-5">
+        <v-card width="100%">
           <v-data-table
             :headers="headers"
             :items="myData_act_detaill"
-            loading="true"
+            :loading="loading"
             loading-text="ກຳລັງໂຫຼດຂໍ້ມູນ.."
             :search="searchData"
             class="table-content"
@@ -27,37 +27,21 @@
                   class="text-search"
                 ></v-text-field>
                 <v-spacer></v-spacer>
-                <v-tooltip bottom>
-                  <template v-slot:activator="{ on, attrs }">
-                    <v-btn
-                      v-bind="attrs"
-                      v-on="on"
-                      fab
-                      small
-                      @click="$router.push('/activity-create')"
-                      color="primary"
-                    >
-                      <v-icon>add</v-icon>
-                    </v-btn>
-                  </template>
-                  <span class="text-tooltip">ເພີ່ມສະມາຊິກເຂົ້າຮ່ວມ</span>
-                </v-tooltip>
               </v-toolbar>
             </template>
-            <template v-slot:item="{ item }">
+            <template v-slot:item="{item,index}">
               <tr class="table-content">
-                <td>{{ item.mem_name }}</td>
-                <td>{{ item.mem_surname }}</td>
-                <td>{{ item.mem_gender }}</td>
-                <td>{{ item.mem_eduLevel }}</td>
-                <td>{{ item.actTitle }}</td>
-                <td>{{ item.typeactivity }}</td>
-                <td>{{ item.unitname }}</td>
-                <td>{{ item.section }}</td>
-                <td>{{ item.foundation }}</td>
-                <td>
-                  <v-icon medium @click="delete_actDetaill_item">delete</v-icon>
-                </td>
+                <td>{{index + 1}}</td>
+                <td>{{ item.acti_title }}</td>
+                <td>{{ item.typeAct_name }}</td>
+                 <td>{{ item.member_name }}</td>
+                <td>{{ item.member_surname }}</td>
+                <td>{{ item.gender }}</td>
+                 <td>{{ item.typemember }}</td>
+                <td>{{ item.unit_name}}</td>
+                <td>{{ item.sect_name }}</td>
+                <td>{{ item.fund_name }}</td>
+               
               </tr>
             </template>
           </v-data-table>
@@ -77,28 +61,48 @@
 </template>
 
 <script>
+import axios from 'axios';
 export default {
   name: "Activitydetail",
+  props:['myID'],
   data() {
     return {
       myData_act_detaill: [],
       searchData: null,
+      loading:true,
       headers: [
-        { text: "ຊື່", value: "mem_name", sortable: false },
-        { text: "ນາມສະກຸນ", value: "mem_surname", sortable: false },
-        { text: "ເພດ", value: "mem_gender", sortable: true },
-        { text: "ລະດັບການສຶກສາ", value: "mem_eduLevel", sortable: true },
-        { text: "ຫົວຂໍ້ກິດຈະກຳ", value: "actTitle", sortable: false },
-        { text: "ປະເພດກິດຈະກຳ", value: "typeActivity", sortable: true },
-        { text: "ໜ່ວຍ", value: "unitname", sortable: true },
-        { text: "ຈຸ", value: "section", sortable: true },
-        { text: "ຮາກຖານ", value: "foundation", sortable: true },
-        { text: "Action", value: "action", sortable: false },
+        { text: "ລຳດັບ", value: "NO", sortable: false },
+         { text: "ຫົວຂໍ້ກິດຈະກຳ", value: "acti_title", sortable: false },
+        { text: "ປະເພດກິດຈະກຳ", value: "typeAct_name", sortable: true },
+        { text: "ຊື່", value: "name", sortable: false },
+        { text: "ນາມສະກຸນ", value: "surname", sortable: false },
+        { text: "ເພດ", value: "gender", sortable: true },
+        { text: "ປະເພດສະມາຊິກ", value: "typemember", sortable: true },
+        { text: "ໜ່ວຍ", value: "unit_name", sortable: true },
+        { text: "ຈຸ", value: "sect_name", sortable: true },
+        { text: "ຮາກຖານ", value: "fund_name", sortable: true },
       ],
     };
   },
-  mounted() {},
-  methods: {},
+  mounted() {
+    this.getActivity_detail();
+  },
+  methods: {
+    async getActivity_detail(){
+      try{
+      await axios.get(`${this.$store.getters.myHostname}/api/v1/activityDetail/${this.$route.params.activity_view}`).then((response)=>{
+       this.myData_act_detaill=response.data;
+       this.loading=false;
+      })
+      }catch(err){
+        console.log(err);
+      }
+    },
+  },
+
+  created(){
+    console.log(this.$route.params.activity_view);
+  }
 };
 </script>
 

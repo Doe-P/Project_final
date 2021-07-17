@@ -19,6 +19,7 @@ import Header from "@/components/core/Header.vue";
 import Menu from "@/components/core/Menu.vue";
 import Content from "@/components/core/Content.vue";
 import Msg from "@/components/AlertMessage/alertmessage.vue";
+
 export default {
   name: "App",
 

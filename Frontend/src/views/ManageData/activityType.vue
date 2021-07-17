@@ -9,7 +9,7 @@
             loading="true"
             loading-text="ກຳລັງໂຫຼດຂໍ້ມູນ.."
             :search="searchData"
-            class="table-content"
+            class="elevation-3  table-content"
           >
             <template v-slot:top>
               <v-toolbar>
@@ -49,9 +49,9 @@
                 <td>{{ item.typeAct_id }}</td>
                 <td>{{ item.typeAct_name }}</td>
                 <td>
-                  <v-icon small @click="edit_actiType_item(item.typeAct_id,item.typeAct_name)">edit</v-icon>
+                  <v-icon color="update" small @click="edit_actiType_item(item.typeAct_id,item.typeAct_name)">update</v-icon>
                   <span class="ma-1"></span>
-                  <v-icon small @click="delete_actiType_item(item.typeAct_id)">delete</v-icon>
+                  <v-icon color="delete" small @click="delete_actiType_item(item.typeAct_id)">delete</v-icon>
                 </td>
               </tr>
             </template>
@@ -85,7 +85,7 @@
                     counter="30"
                     :rules="[
                       required('ປະເພດກິດຈະກຳ'),
-                      minLength('ປະເພດກິດຈະກຳ', 5),
+                      minLength('ປະເພດກິດຈະກຳ', 3),
                       maxLength('ປະເພດກິດຈະກຳ', 30),
                     ]"
                   ></v-text-field>
@@ -128,7 +128,7 @@
                     counter="30"
                     :rules="[
                       required('ປະເພດກິດຈະກຳ'),
-                      minLength('ປະເພດກິດຈະກຳ', 5),
+                      minLength('ປະເພດກິດຈະກຳ', 3),
                       maxLength('ປະເພດກິດຈະກຳ', 30),
                     ]"
                   ></v-text-field>

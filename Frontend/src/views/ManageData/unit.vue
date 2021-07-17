@@ -52,9 +52,9 @@
               <td>{{ item.date_unit | formatDate }}</td>
               <td>{{ item.status_unit }}</td>
               <td>
-                <v-icon small @click="edit_unit_item(item.unit_id)">edit</v-icon>
+                <v-icon color="update" small @click="edit_unit_item(item.unit_id)">update</v-icon>
                 <span class="ma-1"></span>
-                <v-icon small @click="getID_delete(item.unit_id)">delete</v-icon>
+                <v-icon color="delete" small @click="getID_delete(item.unit_id)">delete</v-icon>
               </td>
             </tr>
           </template>
@@ -164,7 +164,7 @@ export default {
     // get unit data from api
     async getData_Units() {
       try {
-        let response = await axios.get("http://localhost:5000/api/v1/units");
+        let response = await axios.get(this.$store.getters.myHostname+"/api/v1/units");
         this.myData_unit = response.data;
       } catch (err) {
         console.log(err);
@@ -196,7 +196,7 @@ export default {
     // delete data
   async  delete_unit_item(){
      try{
-        await axios.delete(`http://localhost:5000/api/v1/units/${this.id_delete}`).then(()=>{
+        await axios.delete(`${this.$store.getters.myHostname}/api/v1/units/${this.id_delete}`).then(()=>{
         this.confirm_dialog=false
         this.Msg_done("ລົບຂໍ້ມູນສຳເລັດ")
         this.getData_Units();

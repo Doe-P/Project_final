@@ -3,7 +3,7 @@
     <template>
       <v-row justify="center">
         <v-dialog
-          v-model="this.$store.getters.getfound_formEdit.isShow"
+          v-model="$store.getters.getfound_formEdit.isShow"
           persistent
           max-width="500px"
           transition="dialog-transition"
@@ -23,7 +23,7 @@
                 >
                   <v-text-field
                     label="ລະຫັດຮາກຖານ"
-                    :value="this.$store.getters.getfound_formEdit.id"
+                    :value="$store.getters.getfound_formEdit.id"
                     readonly
                     name="txt_found_ID"
                   ></v-text-field>
@@ -43,6 +43,8 @@
                       :close-on-content-click="false"
                       transition="scale-transition"
                       offset-y
+                      max-width="290px"
+                      min-width="auto"
                     >
                       <template v-slot:activator="{ on, attrs }">
                         <v-text-field
@@ -213,7 +215,7 @@ export default {
    async submit_edit() {
      //const date =this.get_date
       try{
-        await axios.put(`http://localhost:5000/api/v1/foundations/${this.getFound_id}`,{
+        await axios.put(`${this.$store.getters.myHostname}/api/v1/foundations/${this.getFound_id}`,{
         fund_name:this.txt_foundname_edit,
         date_fund:this.get_date,
         status_fund:this.statusSelected,

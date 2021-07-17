@@ -3,7 +3,7 @@
     <template>
       <v-row justify="center">
         <v-dialog
-          v-model="this.$store.getters.getfound_formAdd"
+          v-model="$store.getters.getfound_formAdd"
           persistent
           max-width="500px"
           transition="dialog-transition"
@@ -23,7 +23,7 @@
                 >
                   <v-text-field
                     label="ລະຫັດຮາກຖານ"
-                    :value="this.$store.getters.getCustomID"
+                    :value="$store.getters.getCustomID"
                     readonly
                     name="txt_found_ID"
                   ></v-text-field>
@@ -41,11 +41,13 @@
                   ></v-text-field>
                   <template>
                     <v-menu
-                      ref="menu1"
-                      v-model="menu_found_date"
-                      :close-on-content-click="false"
-                      transition="scale-transition"
-                      offset-y
+                        ref="menu1"
+                        v-model="memu_found_date"
+                        :close-on-content-click="false"
+                        transition="scale-transition"
+                        offset-y
+                        max-width="290px"
+                        min-width="auto"
                     >
                       <template v-slot:activator="{ on, attrs }">
                         <v-text-field
@@ -179,7 +181,7 @@ export default {
     async submit_form() {
       try {
         await axios
-          .post("http://localhost:5000/api/v1/foundations", {
+          .post(this.$store.getters.myHostname+"/api/v1/foundations", {
             txt_found_ID: this.txt_foundID,
             txt_foundname: this.txt_foundname,
             found_date: this.found_date,
@@ -217,7 +219,7 @@ export default {
     async getMaxID() {
       try {
         await axios
-          .get("http://localhost:5000/api/v1/foundations-MaxID")
+          .get(this.$store.getters.myHostname+"/api/v1/foundations-MaxID")
           .then((response) => {
            const getid = response.data.id;
            this.$store.dispatch({

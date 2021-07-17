@@ -54,14 +54,16 @@ const routes = [
     component: MemberCreate,
   },
   {
-    path: "/member-edit",
+    path: '/member/edit/:member_edit',
     name: "member-edit",
     component: MemberEdit,
+    props:true
   },
   {
-    path: "/member-detail",
+    path: '/member/detail/:member_detail',
     name: "member-detail",
     component: MemberDetail,
+    props:true
   },
   {
     path: "/foundation",
@@ -99,9 +101,10 @@ const routes = [
     component: certificateType,
   },
   {
-    path: "/activity",
+    path: '/activity',
     name: "activity",
     component: Activity,
+    props:true,
   },
   {
     path: "/activity-create",
@@ -109,7 +112,7 @@ const routes = [
     component: ActivityCreate,
   },
   {
-    path: "/activity-view",
+    path: '/activity/view/:activity_view',
     name: "activity-view",
     component: Activityview,
   },
@@ -134,7 +137,7 @@ const routes = [
     component:member_move_create
   },
  {
-  path:"/member-move-detail",
+  path:"/member/move/detail/:id",
   name:"member-move-detail",
   component:member_move_detail
  },
@@ -220,6 +223,8 @@ const routes = [
 
 const router = new VueRouter({
   routes,
+  mode:'history',
+  base:process.env.BASE_URL
 });
 
 export default router;

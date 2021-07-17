@@ -1,12 +1,12 @@
 <template>
   <div id="Activity">
     <v-container fluid>
-      <v-row justify="center" class="my-7">
-        <v-card width="1000">
+      <v-row justify="center" class="my-7 mx-7">
+        <v-card width="100%">
           <v-data-table
             :headers="headers"
             :items="myData_act"
-            loading="true"
+            :loading="loading"
             loading-text="ກຳລັງໂຫຼດຂໍ້ມູນ..."
             :search="searchData_act"
             class="table-content"
@@ -48,12 +48,12 @@
             </template>
             <template v-slot:item="{ item }">
               <tr class="table-content">
-                <td>{{ item.act_id }}</td>
-                <td>{{ item.act_title }}</td>
-                <td>{{ item.typeactivity_name }}</td>
-                <td>{{ item.act_locate }}</td>
-                <td>{{ item.act_amount }}</td>
-                <td>{{ item.act_date }}</td>
+                <td>{{ item.acti_id }}</td>
+                <td>{{ item.acti_title }}</td>
+                <td>{{ item.typeAct_name }}</td>
+                <td>{{ item.place}}</td>
+                <td>{{ item.amount_acti }}</td>
+                <td>{{ item.date_acti | formatDate}}</td>
                 <td>
                   <v-tooltip bottom>
                     <template v-slot:activator="{ on, attrs }">
@@ -61,8 +61,8 @@
                         v-bind="attrs"
                         v-on="on"
                         small
-                        @click="edit_activity_item"
-                        >edit</v-icon
+                        @click="edit_activity_item(item.acti_id)"
+                        >update</v-icon
                       >
                     </template>
                     <span class="text-tooltip">ແກ້ໄຂຫົວຂໍ້ກິດຈະກຳ</span>
@@ -74,7 +74,7 @@
                         v-on="on"
                         v-bind="attrs"
                         small
-                        @click="$router.push('/activity-view')"
+                        @click="$router.push({name:'activity-view',params:{activity_view:item.acti_id}})"
                         >table_view</v-icon
                       >
                     </template>
@@ -88,7 +88,7 @@
         <!-- Activity form Add -->
         <formAdd />
         <!-- Activity form Edit -->
-        <formEdit />
+        <formEdit :myID='setID' />
       </v-row>
     </v-container>
   </div>
@@ -97,6 +97,7 @@
 <script>
 import formAdd from "@/components/activity/act_formAdd.vue";
 import formEdit from "@/components/activity/act_formEdit.vue";
+import axios from 'axios';
 export default {
   name: "Activity",
   components: {
@@ -106,23 +107,27 @@ export default {
   data() {
     return {
       searchData_act: null,
+      loading:true,
+      setID:null,
       myData_act: [
         {
           act_id: 1,
         },
       ],
       headers: [
-        { text: "ລະຫັດ", align: "Left", value: "act_id" },
-        { text: "ຫົວຂໍ້ກິດຈະກຳ", value: "act_title", sortable: false },
-        { text: "ປະເພດກິດຈະກຳ", value: "typeActivity", sortable: true },
-        { text: "ສະຖານທີ່", value: "act_locate", sortable: true },
-        { text: "ຈຳນວນເຂົ້າຮ່ວມ", value: "act_amount", sortable: false },
-        { text: "ວັນທີ", value: "act_date", sortable: false },
+        { text: "ລະຫັດ", align: "Left", value: "acti_id" },
+        { text: "ຫົວຂໍ້ກິດຈະກຳ", value: "acti_title", sortable: false },
+        { text: "ປະເພດກິດຈະກຳ", value: "typeAct_name", sortable: true },
+        { text: "ສະຖານທີ່", value: "place", sortable: true },
+        { text: "ຈຳນວນເຂົ້າຮ່ວມ", value: "amount_acti", sortable: false },
+        { text: "ວັນທີ", value: "date_acti", sortable: false },
         { text: "Action", value: "act_action", sortable: false },
       ],
     };
   },
-  mounted() {},
+  mounted() {
+    this.getData_activity();
+  },
   methods: {
     // open form add from component
     open_formAdd() {
@@ -131,11 +136,34 @@ export default {
       });
     },
     // open form edit
-    edit_activity_item() {
+    edit_activity_item(id) {
+      this.setID=id;
       this.$store.dispatch({
         type: "clickShow_act_formEdit",
       });
     },
+    // get data activity 
+   async getData_activity(){
+     const user_status ='admin'
+     this.myData_act=[]
+        if(user_status=='admin'){
+          try{
+          let response = await axios.get(this.$store.getters.myHostname+"/api/v1/activity");
+          this.myData_act=response.data;
+          this.loading=false;
+        }catch(err){
+          console.log(err);
+        }
+        }else{
+           try{
+          let response = await axios.get(``);
+          this.myData_act=response.data;
+        }catch(err){
+          console.log(err);
+        }
+        }
+    },
+    
   },
 };
 </script>

@@ -275,7 +275,7 @@ export default {
      const id =this.$store.getters.getmyData_retireEdit.retire_id;
      if(id&&this.txt_Noask&&this.txt_reason&&this.txt_portfolio&&this.getDate_Ask&&this.getDate_retire){
        try{
-        await axios.put(`http://localhost:5000/api/v1/retirements/${id}`,{
+        await axios.put(`${this.$store.getters.myHostname}/api/v1/retirements/${id}`,{
            No_Ask:this.txt_Noask,
            reason:this.txt_reason,
            portfolio:this.txt_portfolio,
@@ -322,7 +322,7 @@ export default {
     async getData_retire_item(){
       const id=this.$store.getters.getmyData_retireEdit.retire_id;
       try{
-        await axios.get(`http://localhost:5000/api/v1/retirements/${id}`).then((response)=>{
+        await axios.get(`${this.$store.getters.myHostname}/api/v1/retirements/${id}`).then((response)=>{
           this.txt_member_id=response.data.member_id;
           this.txt_member_name=response.data.member_name;
           this.txt_member_surname=response.data.surname;

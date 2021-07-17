@@ -9,7 +9,7 @@
             loading="true"
             loading-text="ກຳລັງໂຫຼດຂໍ້ມູນ.."
             :search="searchData"
-            class="table-content"
+            class="elevation-3 table-content"
           >
             <template v-slot:top>
               <v-toolbar>
@@ -50,9 +50,9 @@
                 <td>{{ item.typemember }}</td>
                 <td>{{ item.money }}</td>
                 <td>
-                  <v-icon small @click="edit_memberType_item(item.typemember_id)">edit</v-icon>
+                  <v-icon color="update" small @click="edit_memberType_item(item.typemember_id)">update</v-icon>
                   <span class="ma-1"></span>
-                  <v-icon small @click="delete_memberType_item(item.typemember_id)">delete</v-icon>
+                  <v-icon color="delete" small @click="delete_memberType_item(item.typemember_id)">delete</v-icon>
                 </td>
               </tr>
             </template>
@@ -163,7 +163,7 @@ export default {
     async getAll_dataTypeMember() {
       try {
         let response = await axios.get(
-          "http://localhost:5000/api/v1/type-members"
+          this.$store.getters.myHostname+"/api/v1/type-members"
         );
         this.myData_memberType = response.data;
       } catch (err) {
@@ -173,7 +173,7 @@ export default {
     // delete data
    async confirm_delete_item(){
      try{
-       await axios.delete(`http://localhost:5000/api/v1/type-members/${this.get_id}`).then(()=>{
+       await axios.delete(`${this.$store.getters.myHostname}/api/v1/type-members/${this.get_id}`).then(()=>{
           this.confirm_dialog=false;
           this.Msg_done("ລົບຂໍ້ມູນສຳເລັດແລ້ວ");
           location.reload();

@@ -111,7 +111,7 @@ export default {
     async getMaxID() {
       try {
         await axios
-          .get("http://localhost:5000/api/v1/MemberType-MaxID")
+          .get(this.$store.getters.myHostname+"/api/v1/MemberType-MaxID")
           .then((response) => {
             const getid = response.data.id;
             this.$store.dispatch({
@@ -127,7 +127,7 @@ export default {
     async SaveData_memberType() {
       var price = parseInt(this.txt_memType_price);
       try {
-        await axios.post("http://localhost:5000/api/v1/type-members", {
+        await axios.post(this.$store.getters.myHostname+"/api/v1/type-members", {
           typemember_id:this.$store.getters.getCustomID,
           typemember:this.txt_memType_name,
           money:price

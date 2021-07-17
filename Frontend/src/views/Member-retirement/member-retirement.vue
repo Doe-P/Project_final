@@ -132,7 +132,7 @@ export default {
   methods: {
     async getData_retirements(){
       try{
-        let response = await axios.get("http://localhost:5000/api/v1/retirements");
+        let response = await axios.get(this.$store.getters.myHostname+"/api/v1/retirements");
         this.myData_menberRetire=response.data;
       }catch(err){
         console.log(err);
@@ -140,7 +140,7 @@ export default {
     },
     async Count_allmember(){
        try{
-        await axios.get("http://localhost:5000/api/v1/count-allmembers-retire").then((response)=>{
+        await axios.get(this.$store.getters.myHostname+"/api/v1/count-allmembers-retire").then((response)=>{
           this.getCount_allmember=response.data.count_member;
         })
        }catch(err){
@@ -149,7 +149,7 @@ export default {
     },
      async Count_femalemember(){
        try{
-        await axios.get("http://localhost:5000/api/v1/count-femalemembers-retire").then((response)=>{
+        await axios.get(this.$store.getters.myHostname+"/api/v1/count-femalemembers-retire").then((response)=>{
           this.getCount_femalemember=response.data.count_member;
         })
        }catch(err){
