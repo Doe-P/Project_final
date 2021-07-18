@@ -54,6 +54,8 @@
                       :close-on-content-click="false"
                       transition="scale-transition"
                       offset-y
+                      max-width="290px"
+                      min-width="auto"
                     >
                       <template v-slot:activator="{ on, attrs }">
                         <v-text-field
@@ -87,7 +89,7 @@
                     <v-radio label="ບັນຈຸ" value="ບັນຈຸ"></v-radio>
                     <v-radio label="ບໍ່ໄດ້ບັນຈຸ" value="ບໍ່ໄດ້ບັນຈຸ"></v-radio>
                   </v-radio-group>
-                  <v-btn @click="close_form_edit" color="error">ຍົກເລີກ</v-btn>
+                  <v-btn text @click="close_form_edit" color="error">ຍົກເລີກ</v-btn>
                   <span></span>
                   <v-btn
                     type="submit"

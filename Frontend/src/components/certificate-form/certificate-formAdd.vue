@@ -24,8 +24,11 @@
                         label="ລະຫັດໃບຍ້ອງຍໍ"
                         readonly
                         :value="$store.getters.getCustomID"
+                        outlined
+                        dense
                       >
                       </v-text-field>
+                      <v-divider></v-divider>
                     </v-col>
                     <v-col cols="6">
                       <v-text-field
@@ -124,8 +127,8 @@
                 </v-form>
               </v-container>
             </v-card-text>
-            <v-card-actions class="justify-space-between btn_text">
-              <v-btn @click="close_dialog" color="error"> ຍົກເລີກ </v-btn>
+            <v-card-actions class="justify-end btn_text">
+              <v-btn text @click="close_dialog" color="error"> ຍົກເລີກ </v-btn>
               <v-btn
                 @click.prevent="saveData_Certificate"
                 :disabled="!valid"

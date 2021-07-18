@@ -26,7 +26,10 @@
                     :value="$store.getters.getfound_formEdit.id"
                     readonly
                     name="txt_found_ID"
+                    outlined
+                    dense
                   ></v-text-field>
+                  <v-divider></v-divider>
                   <v-text-field
                     label="ຮາກຖານ"
                     :rules="[
@@ -85,7 +88,7 @@
                       @click="isSelected"
                     ></v-radio>
                   </v-radio-group>
-                  <v-btn @click="close_form" color="error">ຍົກເລີກ</v-btn>
+                  <v-btn text @click="close_form" color="error">ຍົກເລີກ</v-btn>
                   <span></span>
                   <v-btn
                     type="submit"

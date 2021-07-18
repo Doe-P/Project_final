@@ -17,7 +17,7 @@
               id="card"
               title="ສະມາຊິກຍິງທັງໝົດ"
               :subtitle="getCount_femalemember"
-              bg_color="primary"
+              bg_color="women"
               avatar_ic="people"
             />
           </v-col>

@@ -58,6 +58,7 @@
                   <v-tooltip bottom>
                     <template v-slot:activator="{ on, attrs }">
                       <v-icon
+                      color="update"
                         v-bind="attrs"
                         v-on="on"
                         small
@@ -71,6 +72,7 @@
                   <v-tooltip bottom>
                     <template v-slot:activator="{ on, attrs }">
                       <v-icon
+                      color="primary"
                         v-on="on"
                         v-bind="attrs"
                         small

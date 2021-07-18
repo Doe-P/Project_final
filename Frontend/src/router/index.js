@@ -157,7 +157,7 @@ const routes = [
     component: certificate_view,
   },
   {
-    path: "/certificate-detail",
+    path: "/certificate/detail/:id",
     name: "certificate-datail",
     component: certificate_detail,
   },

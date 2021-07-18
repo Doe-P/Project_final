@@ -26,7 +26,10 @@
                     :value="$store.getters.getCustomID"
                     readonly
                     name="txt_found_ID"
+                    outlined
+                    dense
                   ></v-text-field>
+                  <v-divider></v-divider>
                   <v-text-field
                     label="ຊື່ຮາກຖານ"
                     name="txt_foundname"
@@ -86,7 +89,7 @@
                       @click="isSelected"
                     ></v-radio>
                   </v-radio-group>
-                  <v-btn @click="close_form_dialog" color="error"
+                  <v-btn text @click="close_form_dialog" color="error"
                     >ຍົກເລີກ</v-btn
                   >
                   <span></span>

@@ -19,15 +19,20 @@
               <v-container>
                 <v-form class="text-content" v-model="valid">
                   <v-row>
-                    <v-col cols="6">
-                      <v-text-field label="ລະຫັດໃບຍ້ອງຍໍ" readonly value="xxx">
+                    <v-col cols="12">
+                      <v-text-field outlined dense label="ລະຫັດໃບຍ້ອງຍໍ" readonly :value="myID">
                       </v-text-field>
+                      <v-divider></v-divider>
                     </v-col>
                     <v-col cols="6">
                       <v-text-field
                         label="ເລກທີໃບຍ້ອງຍໍ"
-                        readonly
                         v-model="txt_certi_NO"
+                        :rules="[
+                          required('ເລກທີໃບຍ້ອງຍໍ'),
+                          minLength('ເລກທີໃບຍ້ອງຍໍ', 3),
+                          maxLength('ເລກທີໃບຍ້ອງຍໍ', 20),
+                        ]"
                       >
                       </v-text-field>
                     </v-col>
@@ -38,6 +43,7 @@
                         label="ເລືອກປະເພດກິດຈະກຳ"
                         class="text-content pt-6"
                         :rules="[required('ປະເພດກິດຈະກຳ')]"
+                        @input="GettypeCertificateID"
                       ></v-select>
                     </v-col>
                     <v-col cols="6">
@@ -114,9 +120,9 @@
                 </v-form>
               </v-container>
             </v-card-text>
-            <v-card-actions class="justify-space-between btn_text">
-              <v-btn @click="close_dialog" color="error"> ຍົກເລີກ </v-btn>
-              <v-btn :disabled="!valid" color="primary"> ບັນທືກ </v-btn>
+            <v-card-actions class="justify-end btn_text">
+              <v-btn  text @click="close_dialog" color="error"> ຍົກເລີກ </v-btn>
+              <v-btn @click.prevent="UpdateCertificate" :disabled="!valid" color="primary"> ບັນທືກ </v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -126,8 +132,11 @@
 </template>
 
 <script>
+import axios from 'axios';
+import dateformat from 'dateformat'
 export default {
   name: "CertificateFormadd",
+  props: ["myID"],
   data() {
     return {
       // certificate date
@@ -135,6 +144,7 @@ export default {
       certi_date_menu: false,
       certi_date_format: null,
       certi_type: [],
+      certi_type_all:[],
       certiType_select: "",
       Datasign_by: [
         "ຮາກຖານ",
@@ -159,28 +169,46 @@ export default {
       // valid form
       valid: false,
       //------
-      txt_certi_NO: null,
       txt_title: null,
       txt_locate: null,
       signBy_select: null,
+      txt_certi_NO:null,
+      getDate:null,
+      typecerti_id:null,
     };
   },
 
-  mounted() {},
+  mounted() {
+     this.typeCertificate();
+     this.DataCertificate();
+  },
   watch: {
     certi_date() {
       this.certi_date_format = this.formatCerti_date(this.certi_date);
     },
+    load_typeCerificate(){
+      this.typeCertificate();
+    },
+    load_dataCertificate(){
+      this.DataCertificate();
+    }
   },
   computed: {
     CertiDateFormatted() {
       return this.formatCerti_date(this.certi_date);
     },
+    load_typeCerificate(){
+      return this.typeCertificate();
+    },
+    load_dataCertificate(){
+      return this.DataCertificate();
+    }
   },
   methods: {
     // certificate date
     formatCerti_date(date) {
       if (!date) return null;
+      this.getDate=dateformat(date,"yyyy-mm-dd")
       const [year, month, day] = date.split("-");
       return `${day}-${month}-${year}`;
     },
@@ -195,6 +223,97 @@ export default {
       this.$store.dispatch({
         type: "doClickFormedit_certificate",
         value: false,
+      });
+    },
+    GettypeCertificateID(){
+      for(let i in this.certi_type_all){
+         if(String(this.certiType_select).valueOf()==String(this.certi_type_all[i].typeCerti_name).valueOf()){
+           this.typecerti_id=this.certi_type_all[i].typeCerti_id;
+           console.log(this.typecerti_id);
+         }
+      }
+    },
+    // update certificate
+   async UpdateCertificate(){
+     if(this.myID && this.txt_certi_NO && this.txt_title && this.txt_locate && this.certiType_select && this.signBy_select && this.getDate){
+      try{
+         await axios.put(`${this.$store.getters.myHostname}/api/v1/certificate/${this.myID}`,{
+          typeCerti_id:this.typecerti_id,
+          certific_NO:this.txt_certi_NO,
+          title:this.txt_title,
+          locate:this.txt_locate,
+          sign_by:this.signBy_select,
+          date_sign:this.getDate,
+         }).then(()=>{
+           this.Msg_done("ແກ້ໄຂຂໍ້ມູນສຳເລັດ")
+           location.reload();
+       })
+      }catch(err){
+        this.Msg_fail("ການແກ້ໄຂຂໍ້ມູນເກີດຂໍ້ຜິດພາດ")
+        console.log(err);
+      }
+     }else{
+       this.Msg_fail("ຂໍ້ມູນບໍ່ຄົບຖ້ວນ ກະລຸນາກວດສອບຄືນໃໝ່")
+     }
+    },
+    //get typecertificate
+    async typeCertificate(){
+     if(this.$store.getters.getformEdit_certificate==true){
+        try{
+       await  axios.get(this.$store.getters.myHostname+"/api/v1/typecertificate").then((response)=>{
+         this.certi_type_all=response.data;
+         for(let i in this.certi_type_all){
+           this.certi_type.push(this.certi_type_all[i].typeCerti_name)
+         }
+       })
+      }catch(err){
+        console.log(err);
+      }
+     }
+    },
+    // get data certificate by id
+    async DataCertificate(){
+     if(this.myID && this.$store.getters.getformEdit_certificate==true){
+        try{
+        await axios.get(`${this.$store.getters.myHostname}/api/v1/getCertificate-byID/${this.myID}`).then((response)=>{
+          this.txt_certi_NO=response.data.certific_NO;
+          this.txt_title=response.data.title;
+          this.txt_locate=response.data.locate;
+          this.signBy_select=response.data.sign_by;
+          this.getDate=response.data.date_sign;
+          this.certi_date_format=dateformat(this.getDate,"dd-mm-yyyy");
+          this.typecerti_id =response.data.typeCerti_id;
+          for(let i in this.certi_type_all){
+            if(String(this.typecerti_id).valueOf()==String(this.certi_type_all[i].typeCerti_id).valueOf()){
+              this.certiType_select=this.certi_type_all[i].typeCerti_name;
+            }
+          }
+        })
+      }catch(err){
+        console.log(err);
+      }
+     }
+    },
+     // message done
+    Msg_done(text) {
+      // Message show
+      this.$store.dispatch({
+        type: "doClick_myMsg",
+        mshow: true,
+        mcolor: "success",
+        micon: "check_circle",
+        message: text,
+      });
+    },
+    //message fail
+    Msg_fail(text) {
+      // Message show
+      this.$store.dispatch({
+        type: "doClick_myMsg",
+        mshow: true,
+        mcolor: "error",
+        micon: "error",
+        message: text,
       });
     },
   },

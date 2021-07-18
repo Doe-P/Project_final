@@ -25,7 +25,10 @@
                     label="ລະຫັດຈຸ"
                     :value="this.$store.getters.getCustomID"
                     readonly
+                    outlined
+                    dense
                   ></v-text-field>
+                  <v-divider></v-divider>
                   <v-text-field
                     label="ຊື່ຈຸ"
                     required
@@ -59,6 +62,8 @@
                       :close-on-content-click="false"
                       transition="scale-transition"
                       offset-y
+                      max-width="290px"
+                      min-width="auto"
                     >
                       <template v-slot:activator="{ on, attrs }">
                         <v-text-field
@@ -96,7 +101,7 @@
                       @click="isSelected"
                     ></v-radio>
                   </v-radio-group>
-                  <v-btn @click="close_form_add" color="error">ຍົກເລີກ</v-btn>
+                  <v-btn text @click="close_form_add" color="error">ຍົກເລີກ</v-btn>
                   <span></span>
                   <v-btn
                     type="submit"

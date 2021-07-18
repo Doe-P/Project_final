@@ -78,7 +78,7 @@
                     required
                     v-model="txt_actLocate"
                   ></v-text-field>
-                  <v-btn @click="close_formEdit" color="error">ຍົກເລີກ</v-btn>
+                  <v-btn text @click="close_formEdit" color="error">ຍົກເລີກ</v-btn>
                   <span></span>
                   <v-btn
                     type="submit"

@@ -2,7 +2,7 @@
   <div>
     <template>
       <v-dialog
-        v-model="this.$store.getters.getmyData_retireEdit.showForm"
+        v-model="$store.getters.getmyData_retireEdit.showForm"
         persistent
         max-width="550"
         transition="dialog-transition"
@@ -25,13 +25,15 @@
               <v-container>
                 <v-form v-model="valid" class="px-3 text-header-dialog">
                   <v-row>
-                    <v-col cols="12" class="pt-0">
+                    <v-col cols="12" class="pt-5">
                       <v-text-field
                         label="ໃບພົ້ນກະສຽນເລກທີ"
                         :value="
                           this.$store.getters.getmyData_retireEdit.retire_id
                         "
                         readonly
+                        outlined
+                        dense
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12" class="pt-0">
@@ -40,6 +42,8 @@
                         :value="txt_member_id"
                         readonly
                         height="20"
+                        outlined
+                        dense
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12" class="pt-0">
@@ -48,6 +52,8 @@
                         :value="txt_member_name"
                         readonly
                         height="20"
+                        outlined
+                        dense
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12" class="pt-0">
@@ -56,7 +62,10 @@
                         :value="txt_member_surname"
                         readonly
                         height="20"
+                         outlined
+                        dense
                       ></v-text-field>
+                      <v-divider></v-divider>
                     </v-col>
                     <v-col cols="12">
                       <v-text-field
@@ -75,6 +84,9 @@
                         <v-menu
                           v-model="menu_ask_date"
                           :close-on-content-click="false"
+                          offset-y
+                          min-width="auto"
+                          max-width="290px"
                         >
                           <template v-slot:activator="{ on, attrs }">
                             <v-text-field
@@ -164,11 +176,10 @@
                 </v-form>
               </v-container>
             </v-card-text>
-            <v-card-actions class="justify-space-between text-header-dialog">
+            <v-card-actions class="justify-end text-header-dialog">
               <v-btn text @click="close_dialog" color="error">ຍົກເລີກ</v-btn>
               <v-spacer></v-spacer>
               <v-btn
-                text
                 color="primary"
                 :disabled="!valid"
                 @click="UpdateData_retire"

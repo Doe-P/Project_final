@@ -44,8 +44,8 @@
                 </template>
               </v-data-table>
             </v-card-text>
-            <v-card-actions class="justify-space-between btn_text">
-              <v-btn color="error" @click="close_dialog">ຍົກເລີກ</v-btn>
+            <v-card-actions class="justify-end btn_text">
+              <v-btn text color="error" @click="close_dialog">ຍົກເລີກ</v-btn>
               <v-btn
                 @click.prevent="SaveData_Certificate"
                 :disabled="checked"

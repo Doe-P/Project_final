@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 // import function from model
-const { insert, update, getCerti_admin, getCerti_client, getCerti_detail_admin, getCerti_detail_client, getMember_client, getCerti_maxID } = require('../models/certificModel');
+const { insert, update, getCertificateByID, CountFemale, CountAll, getCerti_admin, getCerti_client, getCerti_detail_admin, getCerti_detail_client, getMember_client, getCerti_maxID } = require('../models/certificModel');
 
 // Create new certificate and certificate_detail
 router.post('/api/v1/new-certificate', (req, res) => {
@@ -71,6 +71,17 @@ router.get('/api/v1/geCertificate/admin', (req, res) => {
     });
 });
 
+// Get certificate by id
+router.get('/api/v1/getCertificate-byID/:id', (req, res) => {
+    const id = req.params.id;
+    getCertificateByID(id,(err, result) => {
+        if (err) {
+            return res.status(500).send({ msg: `Some error while retrieving certificate by ${id} !` });
+        }
+        res.json(result[0]);
+    });
+});
+
 // Get data certificate_detail for client
 router.get('/api/v1/getCertificate_detail/client/:id', (req, res) => {
     const id = req.params.id;
@@ -87,15 +98,33 @@ router.get('/api/v1/getCertificate_detail/client/:id', (req, res) => {
 });
 
 // Get data certificate_detail for admin
-router.get('/api/v1/getCertificate_detail/admin', (req, res) => {
-    getCerti_detail_admin((err, result) => {
+router.get('/api/v1/getCertificate_detail/admin/:id', (req, res) => {
+    const id = req.params.id;
+    getCerti_detail_admin(id,(err, result) => {
         if (err) {
             return res.status(500).send({ msg: `Some error while retrieving data !` });
         }
         res.json(result);
     });
 });
-
+// count all
+router.get('/api/v1/CountAll/Member/Certificate',(req,res)=>{
+    CountAll((err,result)=>{
+        if(err){
+            return res.status(500).send({ msg: `Count all member certificate error:`+err }); 
+        }
+        res.json(result[0])
+    })
+})
+// count female
+router.get('/api/v1/CountFemale/Member/Certificate',(req,res)=>{
+    CountFemale((err,result)=>{
+        if(err){
+            return res.status(500).send({ msg: `Count female member certificate error:`+err }); 
+        }
+        res.json(result[0])
+    })
+})
 // Get certificate maxID
 router.get('/api/v1/getCerti/MaxID', (req, res) => {
     getCerti_maxID((err, result) => {

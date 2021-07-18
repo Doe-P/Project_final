@@ -25,7 +25,10 @@
                     label="ລະຫັດກິດຈະກຳ"
                     :value="this.$store.getters.getCustomID"
                     readonly
+                    outlined
+                    dense
                   ></v-text-field>
+                  <v-divider></v-divider>
                   <v-text-field
                     label="ຫົວຂໍ້ກິດຈະກຳ"
                     :rules="[
@@ -86,7 +89,7 @@
                     required
                     v-model="txt_actLocate"
                   ></v-text-field>
-                  <v-btn @click="close_formAdd" color="error">ຍົກເລີກ</v-btn>
+                  <v-btn text @click="close_formAdd" color="error">ຍົກເລີກ</v-btn>
                   <span></span>
                   <v-btn
                     type="submit"

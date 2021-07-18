@@ -2,7 +2,7 @@
   <div>
     <template>
       <v-dialog
-        v-model="this.$store.getters.getMemberType_formAdd"
+        v-model="$store.getters.getMemberType_formAdd"
         persistent
         max-width="500px"
         transition="dialog-transition"
@@ -17,9 +17,13 @@
             <v-form v-model="valid" @submit.prevent="SaveData_memberType">
               <v-text-field
                 label="ລະຫັດປະເພດສະມາຊິກ"
-                :value="this.$store.getters.getCustomID"
+                :value="$store.getters.getCustomID"
                 readonly
+                outlined
+                dense
+                class="pt-3"
               ></v-text-field>
+              <v-divider></v-divider>
               <v-text-field
                 label="ຊື່ປະເພດສະມາຊິກ"
                 v-model="txt_memType_name"
@@ -45,7 +49,7 @@
                 ]"
                 @keypress.native="isNumberonly($event)"
               ></v-text-field>
-              <v-btn @click="close_form_add" color="error">ຍົກເລີກ</v-btn>
+              <v-btn text @click="close_form_add" color="error">ຍົກເລີກ</v-btn>
               <span></span>
               <v-btn
                 type="submit"

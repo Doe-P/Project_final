@@ -49,7 +49,7 @@ exports.insert = (data, result) => {
 // Update certificate by id
 exports.update = (data, id, result) => {
     let sql = 'UPDATE tb_certificate SET typeCerti_id = ?, certific_NO = ?, title = ?, date_sign = ?, sign_by = ? WHERE certific_id = ?';
-    dbCon.query(sql, [data.typeCerti_id, data.certifi_NO, data.title, data.date_sign, data.sign_by, id], (err, res) => {
+    dbCon.query(sql, [data.typeCerti_id, data.certific_NO, data.title, data.date_sign, data.sign_by, id], (err, res) => {
         if (err) {
             console.log(`Error while updating tb_certificate with ID${id}` + err);
             return result(err, null);
@@ -137,6 +137,24 @@ exports.getCerti_admin = (result) => {
     }
 }
 
+
+// Get data certificate by id
+exports.getCertificateByID = (id,result) => {
+    try {
+        let sql = `SELECT tb_certificate.certific_id, tb_certificate.certific_NO, tb_certificate.title, tb_typecertificate.typeCerti_id, tb_certificate.amount_cert,tb_certificate.locate, tb_certificate.sign_by, tb_certificate.date_sign FROM tb_certificate
+        INNER JOIN tb_typecertificate ON tb_typecertificate.typeCerti_id = tb_certificate.typeCerti_id
+        WHERE tb_certificate.certific_id=?`;
+        dbCon.query(sql,[id], (err, res) => {
+            if (err) {
+                console.log(`error while fetching data certificate by ${id}` + err);
+                return result(err, null);
+            }
+            result(null, res);
+        });
+    } catch (error) {
+        console.log();
+    }
+}
 // Get data certificate_detail for client where fund_name
 
 exports.getCerti_detail_client = (id, result) => {
@@ -169,19 +187,21 @@ exports.getCerti_detail_client = (id, result) => {
 }
 
 // Get data certificate_detail for admin
-exports.getCerti_detail_admin = (result) => {
+exports.getCerti_detail_admin = (id,result) => {
     try {
-        let sql = `SELECT tb_certificate.certific_NO, tb_member.member_name, tb_member.surname, tb_section.sect_name, tb_unit.unit_name, tb_foundation.fund_name, tb_typemember.typemember_name, tb_certificate.title, tb_typecertificate.typeCerti_name, tb_certificate.sign_by, tb_certificate.date_sign FROM tb_member
-        INNER JOIN tb_certificate_detail ON tb_member.member_id = tb_certificate_detail.member_id
-        INNER JOIN tb_section ON tb_section.sect_id = tb_member.sect_id
-        INNER JOIN tb_unit ON tb_unit.unit_id = tb_section.unit_id
-        INNER JOIN tb_foundation ON tb_foundation.fund_id = tb_unit.fund_id
-        INNER JOIN tb_typemember ON tb_typemember.typemember_id = tb_member.typemember_id
-        INNER JOIN tb_certificate ON tb_certificate.certific_id = tb_certificate_detail.certific_id
-        INNER JOIN tb_typecertificate ON tb_typecertificate.typeCerti_id = tb_certificate.typeCerti_id`;
-        dbCon.query(sql, (err, res) => {
+        let sql = `SELECT tb_certificate.certific_id,tb_certificate.certific_NO,tb_certificate.title,tb_certificate_detail.member_id,tb_typecertificate.typeCerti_name,tb_member.member_name,tb_member.surname,tb_member.gender,tb_typemember.typemember,tb_section.sect_name,tb_unit.unit_name,tb_foundation.fund_name 
+        FROM tb_certificate_detail 
+        INNER JOIN tb_certificate ON tb_certificate_detail.certific_id=tb_certificate.certific_id 
+        INNER JOIN tb_typecertificate ON tb_certificate.typeCerti_id=tb_typecertificate.typeCerti_id 
+        INNER JOIN tb_member ON tb_certificate_detail.member_id=tb_member.member_id 
+        INNER JOIN tb_typemember ON tb_member.typemember_id=tb_typemember.typemember_id 
+        INNER JOIN tb_section ON tb_member.sect_id=tb_section.sect_id 
+        INNER JOIN tb_unit ON tb_section.unit_id=tb_unit.unit_id 
+        INNER JOIN tb_foundation ON tb_unit.fund_id=tb_foundation.fund_id 
+        WHERE tb_certificate_detail.certific_id=?`;
+        dbCon.query(sql,[id], (err, res) => {
             if (err) {
-                console.log(`error while fetching data certificate_detail for admin` + err);
+                console.log(`error while fetching data certificate_detail by ${id}` + err);
                 return result(err, null);
             }
             result(null, res);
@@ -190,7 +210,36 @@ exports.getCerti_detail_admin = (result) => {
         console.log(error);
     }
 }
-
+// count member all
+exports.CountAll=(result)=>{
+    try{
+      let sql=`SELECT COUNT(tb_certificate_detail.member_id) AS amount FROM tb_certificate_detail INNER JOIN tb_member ON tb_certificate_detail.member_id=tb_member.member_id`;
+      dbCon.query(sql,(err,res)=>{
+          if(err){
+              console.log(`error count all`+err);
+              return result(res,null);
+          }
+          return result(null,res)
+      })
+    }catch(err){
+        console.log(err);
+    }
+}
+// count member female 
+exports.CountFemale=(result)=>{
+    try{
+      let sql=`SELECT COUNT(tb_certificate_detail.member_id) AS amount FROM tb_certificate_detail INNER JOIN tb_member ON tb_certificate_detail.member_id=tb_member.member_id WHERE tb_member.gender='ຍິງ'`;
+      dbCon.query(sql,(err,res)=>{
+          if(err){
+              console.log(`error count female`+err);
+              return result(res,null);
+          }
+          return result(null,res)
+      })
+    }catch(err){
+        console.log(err);
+    }
+}
 // Get Max certificate ID
 exports.getCerti_maxID = (result) => {
     try {

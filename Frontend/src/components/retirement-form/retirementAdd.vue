@@ -2,7 +2,7 @@
   <div>
     <template>
       <v-dialog
-        v-model="this.$store.getters.getmyData_retire.showForm"
+        v-model="$store.getters.getmyData_retire.showForm"
         persistent
         max-width="550"
         transition="dialog-transition"
@@ -30,35 +30,44 @@
                         label="ໃບພົ້ນກະສຽນເລກທີ"
                         :value="retirement_id"
                         readonly
+                        outlined
+                        dense
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12" class="pt-0">
                       <v-text-field
                         label="ລະຫັດສະມາຊິກ"
-                        :value="this.$store.getters.getmyData_retire.member_id"
+                        :value="$store.getters.getmyData_retire.member_id"
                         readonly
                         height="20"
+                        outlined
+                        dense
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12" class="pt-0">
                       <v-text-field
                         label="ຊື່ສະມາຊິກ"
                         :value="
-                          this.$store.getters.getmyData_retire.member_name
+                          $store.getters.getmyData_retire.member_name
                         "
                         readonly
                         height="20"
+                        outlined
+                        danse
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12" class="pt-0">
                       <v-text-field
                         label="ນາມສະກຸນ"
                         :value="
-                          this.$store.getters.getmyData_retire.member_surname
+                          $store.getters.getmyData_retire.member_surname
                         "
                         readonly
                         height="20"
+                        outlined
+                        dense
                       ></v-text-field>
+                      <v-divider></v-divider>
                     </v-col>
                     <v-col cols="12">
                       <v-text-field
@@ -133,6 +142,9 @@
                         <v-menu
                           v-model="menu_retire_date"
                           :close-on-content-click="false"
+                          offset-y
+                          min-width="auto"
+                          max-width="290px"
                         >
                           <template v-slot:activator="{ on, attrs }">
                             <v-text-field
@@ -166,11 +178,10 @@
                 </v-form>
               </v-container>
             </v-card-text>
-            <v-card-actions class="justify-space-between text-header-dialog">
+            <v-card-actions class="justify-end text-header-dialog">
               <v-btn text @click="close_dialog" color="error">ຍົກເລີກ</v-btn>
               <v-spacer></v-spacer>
               <v-btn
-                text
                 color="primary"
                 :disabled="!valid"
                 @click="SaveData_retire"

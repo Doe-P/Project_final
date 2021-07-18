@@ -58,6 +58,7 @@
                   <v-tooltip bottom>
                     <template v-slot:activator="{ on, attrs }">
                       <v-icon
+                       color="update"
                         v-on="on"
                         v-bind="attrs"
                         small
@@ -71,7 +72,8 @@
                   <v-tooltip bottom>
                     <template v-slot:activator="{ on, attrs }">
                       <v-icon
-                        @click="$router.push('/certificate-detail')"
+                       color="primary"
+                        @click="$router.push({name:'certificate-datail',params:{id:item.certific_id}})"
                         small
                         v-on="on"
                         v-bind="attrs"
@@ -88,7 +90,7 @@
       </v-row>
       <formAdd />
       <addMembercertificate />
-      <formEdit />
+      <formEdit :myID="Certificate_id"/>
     </v-container>
   </div>
 </template>
@@ -140,11 +142,11 @@ export default {
       });
     },
     editcertificate_item(id) {
-      this.Certificate_id = id;
       this.$store.dispatch({
         type: "doClickFormedit_certificate",
         value: true,
       });
+       this.Certificate_id = id;
     },
     openform_addMember_certi() {
       this.$store.dispatch({

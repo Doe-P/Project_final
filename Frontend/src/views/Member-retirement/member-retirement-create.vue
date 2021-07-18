@@ -10,7 +10,7 @@
             :headers="headers"
             :items="myData_memRetire"
             hide-actions
-            class="elevation-1"
+            class="elevation-5"
             loading="true"
             loading-text="ກຳລັງໂຫຼດຂໍ້ມູນ.."
             :search="search_memberRetire"
