@@ -62,7 +62,7 @@
                         :value="txt_member_surname"
                         readonly
                         height="20"
-                         outlined
+                        outlined
                         dense
                       ></v-text-field>
                       <v-divider></v-divider>

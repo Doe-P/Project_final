@@ -15,7 +15,7 @@ export default new Vuetify({
         btn_add: "#0779E4",
         font_color: "#5F5F5F",
         font_header: "#0779E4",
-        women:"#7C83FD"
+        women: "#7C83FD",
       },
     },
   },

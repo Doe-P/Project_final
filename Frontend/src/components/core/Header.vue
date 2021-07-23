@@ -1,6 +1,12 @@
 <template>
   <div id="Header">
-    <v-app-bar app color="#0779E4" dark height="60px">
+    <v-app-bar
+      app
+      color="#0779E4"
+      dark
+      height="60px"
+      v-show="$store.getters.getLogin"
+    >
       <v-app-bar-nav-icon @click="ClickShowmenu"> </v-app-bar-nav-icon>
       <v-divider class="" inset vertical></v-divider>
       <span></span>
@@ -28,7 +34,7 @@
             outlined
             small
             color="white"
-            @click="logout"
+            @click.prevent="logout"
             dark
           >
             <v-icon>power_settings_new</v-icon>
@@ -44,9 +50,7 @@
 export default {
   name: "Header",
   data() {
-    return {
-      drawer: false,
-    };
+    return {};
   },
   mounted() {},
   methods: {
@@ -57,9 +61,9 @@ export default {
     },
     logout() {
       this.$store.dispatch({
-        type: "doLogin",
-        status: false,
+        type: "doLogOut",
       });
+      localStorage.clear();
       this.$router.push("/");
     },
   },

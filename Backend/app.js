@@ -88,6 +88,9 @@ app.use(certificate_Route);
 const activity_Route = require('./src/routes/activRoute');
 app.use(activity_Route);
 
+const authenticate_Route = require('./src/routes/authRoute');
+app.use(authenticate_Route)
+
 // server listen to the port
 app.listen(PORT, () => {
     console.log(`Server running at http://localhost:${PORT}`);

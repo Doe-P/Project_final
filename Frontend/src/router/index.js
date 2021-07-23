@@ -207,7 +207,7 @@ const routes = [
     component: register_create,
   },
   {
-    path: "/register-edit",
+    path: "/register/edit/:username",
     name: "register-edit",
     component: register_edit,
   },

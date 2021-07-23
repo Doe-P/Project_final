@@ -46,9 +46,9 @@
                 </v-tooltip>
               </v-toolbar>
             </template>
-            <template v-slot:item="{ item }">
+            <template v-slot:item="{ item, index }">
               <tr class="table-content">
-                <td>{{ item.acti_id }}</td>
+                <td>{{ index + 1 }}</td>
                 <td>{{ item.acti_title }}</td>
                 <td>{{ item.typeAct_name }}</td>
                 <td>{{ item.place }}</td>
@@ -58,7 +58,7 @@
                   <v-tooltip bottom>
                     <template v-slot:activator="{ on, attrs }">
                       <v-icon
-                      color="update"
+                        color="update"
                         v-bind="attrs"
                         v-on="on"
                         small
@@ -72,7 +72,7 @@
                   <v-tooltip bottom>
                     <template v-slot:activator="{ on, attrs }">
                       <v-icon
-                      color="primary"
+                        color="primary"
                         v-on="on"
                         v-bind="attrs"
                         small
@@ -122,7 +122,7 @@ export default {
         },
       ],
       headers: [
-        { text: "ລະຫັດ", align: "Left", value: "acti_id" },
+        { text: "#ລຳດັບ", align: "Left", value: "index" },
         { text: "ຫົວຂໍ້ກິດຈະກຳ", value: "acti_title", sortable: false },
         { text: "ປະເພດກິດຈະກຳ", value: "typeAct_name", sortable: true },
         { text: "ສະຖານທີ່", value: "place", sortable: true },

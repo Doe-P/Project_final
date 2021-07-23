@@ -1,6 +1,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import moment from "moment";
+import Usermodule from "./modules/user";
 
 Vue.use(Vuex);
 
@@ -8,6 +9,7 @@ export default new Vuex.Store({
   state: {
     showMenu: false,
     islogin: false,
+    status: null,
     // foundation form add
     found_form_add: false,
     // foundation form edit
@@ -189,10 +191,13 @@ export default new Vuex.Store({
         state.showMenu = true;
       }
     },
-    setLogin(state, value) {
-      state.islogin = value;
+    setLogin(state) {
+      state.islogin = true;
     },
 
+    setLogout(state) {
+      state.islogin = false;
+    },
     //set value for show foundation form add
     setfound_formAdd(state) {
       if (state.found_form_add == true) {
@@ -428,11 +433,18 @@ export default new Vuex.Store({
     doClickshow({ commit }) {
       commit("setShowmenu");
     },
-    doLogin({ commit }, { status }) {
-      commit("setLogin", status);
+    doLogin({ commit }) {
+      commit("setLogin");
+    },
+    doLogOut({ commit }) {
+      commit("setLogout");
     },
     restoreLogin({ commit }) {
-      commit("setLogin", true);
+      if (localStorage.getItem("accessToken") != null) {
+        commit("setLogin");
+      } else {
+        commit("setLogout");
+      }
     },
     // action for foundation form add
     clickShow_found_formAdd({ commit }) {
@@ -518,5 +530,7 @@ export default new Vuex.Store({
     },
   },
 
-  modules: {},
+  modules: {
+    User: Usermodule,
+  },
 });

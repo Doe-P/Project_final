@@ -16,10 +16,17 @@ exports.getAllRetire = (result) => {
 }
 
 // Get all member retirement from tb_member where status
-exports.getAllRetire_byFoundation = (result) => {
+exports.getAllRetire_byFoundation = (id,result) => {
     //let status = 'retired' // ໝາຍເຖິງສະຖານະສະມາຊິກທີ່ົພົ້ນກະສຽນ
-    let sql = 'SELECT tb_retirement.retire_id,tb_retirement.No_Ask,tb_retirement.member_id,tb_retirement.reason,tb_retirement.portfolio,tb_retirement.date_Ask,tb_retirement.age,tb_retirement.date_retire,tb_typemember.typemember,tb_member.member_name,tb_member.surname,tb_member.gender,tb_section.sect_name,tb_unit.unit_name,tb_foundation.fund_name FROM tb_retirement INNER JOIN tb_member ON tb_retirement.member_id=tb_member.member_id INNER JOIN tb_typemember ON tb_member.typemember_id=tb_typemember.typemember_id INNER JOIN tb_section ON tb_member.sect_id=tb_section.sect_id INNER JOIN tb_unit ON tb_section.unit_id=tb_unit.unit_id INNER JOIN tb_foundation ON tb_unit.fund_id=tb_foundation.fund_id WHERE tb_foundation.fund_id=?';
-    dbCon.query(sql, (err, res) => {
+    let sql = `SELECT tb_retirement.retire_id,tb_retirement.No_Ask,tb_retirement.member_id,tb_retirement.reason,tb_retirement.portfolio,tb_retirement.date_Ask,tb_retirement.age,tb_retirement.date_retire,tb_typemember.typemember,tb_member.member_name,tb_member.surname,tb_member.gender,tb_section.sect_name,tb_unit.unit_name,tb_foundation.fund_name
+     FROM tb_retirement 
+     INNER JOIN tb_member ON tb_retirement.member_id=tb_member.member_id 
+     INNER JOIN tb_typemember ON tb_member.typemember_id=tb_typemember.typemember_id 
+     INNER JOIN tb_section ON tb_member.sect_id=tb_section.sect_id 
+     INNER JOIN tb_unit ON tb_section.unit_id=tb_unit.unit_id 
+     INNER JOIN tb_foundation ON tb_unit.fund_id=tb_foundation.fund_id
+      WHERE tb_foundation.fund_id=?`;
+    dbCon.query(sql,[id], (err, res) => {
         if (err) {
             console.log('Error while fetching retirements', err);
             result(err, null);
@@ -53,7 +60,7 @@ exports.getMemberByStatus = (result) => {
 // Get data from tb_member where fund_name and status and age >= 35
 exports.getMemberByStatus_client = (id, result) => {
     try {
-        let status = 'member';
+        let status = 'ສະມາຊິກ';
     let age = 35;
     let sql = `SELECT M.member_id, M.member_name, M.surname, M.responsible,M.birthday,(YEAR(CURDATE())-YEAR(M.birthday)) AS age , S.sect_name, U.unit_name, F.fund_name FROM tb_section AS S 
     INNER JOIN tb_member AS M 
@@ -62,7 +69,7 @@ exports.getMemberByStatus_client = (id, result) => {
     ON U.unit_id = S.unit_id
     INNER JOIN tb_foundation AS F
     ON F.fund_id = U.fund_id
-    WHERE  M.status = ? AND (YEAR(CURDATE())-YEAR(M.birthday)) >= ? AND F.fund_name = ?`;
+    WHERE  M.status = ? AND (YEAR(CURDATE())-YEAR(M.birthday)) >= ? AND F.fund_id = ?`;
     dbCon.query(sql, [status, age, id], (err, res) => {
         if (err) {
             console.log('Error while fetching data from tb_member where status and age=' + err);

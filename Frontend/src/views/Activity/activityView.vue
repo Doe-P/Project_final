@@ -25,6 +25,7 @@
                   hide-details
                   v-model="searchData"
                   class="text-search"
+                  append-icon="search"
                 ></v-text-field>
                 <v-spacer></v-spacer>
               </v-toolbar>

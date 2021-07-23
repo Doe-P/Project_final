@@ -47,9 +47,7 @@
                     <v-col cols="12" class="pt-0">
                       <v-text-field
                         label="ຊື່ສະມາຊິກ"
-                        :value="
-                          $store.getters.getmyData_retire.member_name
-                        "
+                        :value="$store.getters.getmyData_retire.member_name"
                         readonly
                         height="20"
                         outlined
@@ -59,9 +57,7 @@
                     <v-col cols="12" class="pt-0">
                       <v-text-field
                         label="ນາມສະກຸນ"
-                        :value="
-                          $store.getters.getmyData_retire.member_surname
-                        "
+                        :value="$store.getters.getmyData_retire.member_surname"
                         readonly
                         height="20"
                         outlined
@@ -181,10 +177,7 @@
             <v-card-actions class="justify-end text-header-dialog">
               <v-btn text @click="close_dialog" color="error">ຍົກເລີກ</v-btn>
               <v-spacer></v-spacer>
-              <v-btn
-                color="primary"
-                :disabled="!valid"
-                @click="SaveData_retire"
+              <v-btn color="primary" :disabled="!valid" @click="SaveData_retire"
                 >ຕົກລົງ</v-btn
               >
             </v-card-actions>

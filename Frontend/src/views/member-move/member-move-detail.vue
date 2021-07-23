@@ -46,6 +46,19 @@
                 <v-spacer></v-spacer>
               </v-toolbar>
             </template>
+
+            <!----- number of rows --->
+            <template #body="{ items, headers }">
+              <tbody>
+                <tr v-for="(item, index) in items" :key="index">
+                  <td v-for="n in headers" :key="n">
+                    {{ n.value === "index" ? index + 1 : item[n.value] }}
+                  </td>
+                </tr>
+              </tbody>
+            </template>
+
+            <!-------------->
           </v-data-table>
           <v-card-actions class="justify-space-between table-content">
             <v-btn color="primary" dark @click="$router.push('/member-move')">
@@ -72,7 +85,7 @@ export default {
       getCount_all: 0,
       getCount_female: 0,
       headers: [
-        { text: "ລຳດັບ", value: "move_id", sortable: false },
+        { text: "ລຳດັບ", value: "index", sortable: false },
         { text: "ເລກທີໃບຍົກຍ້າຍ", value: "move_NO", sortable: false },
         { text: "ຊື່", value: "member_name", sortable: false },
         { text: "ນາມສະກຸນ", value: "surname", sortable: false },

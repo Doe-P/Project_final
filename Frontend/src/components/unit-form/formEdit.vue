@@ -89,7 +89,9 @@
                       @click="isSelected"
                     ></v-radio>
                   </v-radio-group>
-                  <v-btn text @click="close_form_edit" color="error">ຍົກເລີກ</v-btn>
+                  <v-btn text @click="close_form_edit" color="error"
+                    >ຍົກເລີກ</v-btn
+                  >
                   <span></span>
                   <v-btn
                     type="submit"

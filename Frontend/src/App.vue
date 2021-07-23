@@ -19,7 +19,7 @@ import Header from "@/components/core/Header.vue";
 import Menu from "@/components/core/Menu.vue";
 import Content from "@/components/core/Content.vue";
 import Msg from "@/components/AlertMessage/alertmessage.vue";
-
+import { mapActions } from "vuex";
 export default {
   name: "App",
 
@@ -29,10 +29,20 @@ export default {
     Content,
     Msg,
   },
+  computed: {},
   mounted() {
+    this.show();
     this.$store.dispatch({
       type: "restoreLogin",
     });
+  },
+  methods: {
+    ...mapActions("User", {
+      actionsGetUser: "getUser",
+    }),
+    async show() {
+      await this.actionsGetUser(localStorage.getItem("accessToken"));
+    },
   },
   data: () => ({
     //

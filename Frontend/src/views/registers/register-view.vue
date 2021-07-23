@@ -2,14 +2,13 @@
   <div>
     <v-container fluid>
       <v-row justify="center" class="my-5 mx-10">
-        <v-card width="100%">
+        <v-card width="70%">
           <v-data-table
             :headers="headers"
             :items="userData"
-            hide-actions
-            class="elevation-1 table-content"
+            class="elevation-5 table-content"
             item-key="user_id"
-            loading="true"
+            :loading="loading"
             :search="search_user"
           >
             <template v-slot:top>
@@ -43,32 +42,33 @@
                 </v-tooltip>
               </v-toolbar>
             </template>
-            <template v-slot:item="{ item }">
+            <template v-slot:item="{ item, index }">
               <tr>
-                <td>{{ item.user_id }}</td>
-                <td>{{ item.user_name }}</td>
-                <td>{{ item.user_password }}</td>
-                <td>{{ item.user_foundation }}</td>
-                <td>{{ item.user_status }}</td>
+                <td>{{ index + 1 }}</td>
+                <td>{{ item.username }}</td>
+                <td>{{ item.fund_name }}</td>
+                <td>{{ item.status }}</td>
                 <td>
                   <v-tooltip bottom>
                     <template v-slot:activator="{ on, attrs }">
                       <v-icon
-                        @click="edit_user_item"
-                        medium
+                        @click="edit_user_item(item.username)"
+                        small
+                        color="update"
                         v-on="on"
                         v-bind="attrs"
-                        >update</v-icon
+                        >restore</v-icon
                       >
                     </template>
-                    <span class="text-tooltip">ແກ້ໄຂຂໍ້ມູນຜູ້ໃຊ້</span>
+                    <span class="text-tooltip">ປ່ຽນລະຫັດຜ່ານ</span>
                   </v-tooltip>
                   <span class="ma-1"></span>
                   <v-tooltip bottom>
                     <template v-slot:activator="{ on, attrs }">
                       <v-icon
-                        @click="delete_user_item"
-                        medium
+                        @click="delete_user_item(item.id)"
+                        small
+                        color="delete"
                         v-on="on"
                         v-bind="attrs"
                         >delete</v-icon
@@ -107,7 +107,7 @@
                     >ຍົກເລີກ</v-btn
                   >
                   <v-spacer></v-spacer>
-                  <v-btn text color="primary" @click="message_confirm = true"
+                  <v-btn text color="primary" @click="confirmDelete"
                     >ຕົກລົງ</v-btn
                   >
                 </v-card-actions>
@@ -121,36 +121,92 @@
 </template>
 
 <script>
+import axios from "axios";
 export default {
   name: "RegisterView",
   data() {
     return {
       headers: [
-        { text: "ລະຫັດ", value: "user_id", sortable: false },
-        { text: "ຊື່ຜູ້ໃຊ້", value: "user_name", sortable: false },
-        { text: "ລະຫັດຜ່ານ", value: "user_password", sortable: false },
+        { text: "ລຳດັບ", value: "index", sortable: false },
+        { text: "ຊື່ຜູ້ໃຊ້", value: "username", sortable: false },
         {
           text: "ຮັບຜີດຊອບຮາກຖານ",
-          value: "ustatusser_foundation",
+          value: "fund_name",
           sortable: false,
         },
-        { text: "ສະຖານະຜູ້ໃຊ້", value: "user_status", sortable: false },
+        { text: "ສະຖານະຜູ້ໃຊ້", value: "status", sortable: false },
         { text: "Actions", value: "action", sortable: false },
       ],
-      userData: [{ user_id: 1 }, { user_id: 2 }],
+      userData: [],
       search_user: null,
       confirm_dialog: false,
+      loading: true,
+      getID: null,
     };
   },
 
-  mounted() {},
+  mounted() {
+    this.dataUser();
+  },
 
   methods: {
-    edit_user_item() {
-      this.$router.push("/register-edit");
+    edit_user_item(user) {
+      this.$router.push({ name: "register-edit", params: { username: user } });
     },
-    delete_user_item() {
+    delete_user_item(id) {
       this.confirm_dialog = true;
+      this.getID = id;
+    },
+    // get data
+    async dataUser() {
+      await axios
+        .get(this.$store.getters.myHostname + "/api/v1/getUser")
+        .then((response) => {
+          this.userData = response.data;
+          this.loading = false;
+        });
+    },
+    async confirmDelete() {
+      if (this.getID && this.confirm_dialog == true) {
+        try {
+          await axios
+            .delete(
+              `${this.$store.getters.myHostname}/api/v1/user/${this.getID}`
+            )
+            .then(() => {
+              this.Msg_done("ລົບຂໍ້ມູນຜູ້ໃຊ້ສຳເລັດ");
+              this.confirm_dialog = false;
+              location.reload();
+            });
+        } catch (err) {
+          this.Msg_fail("ລົບຂໍ້ມູນຜູ້ໃຊ້ບໍ່ສຳເລັດ");
+          console.log(err);
+        }
+      } else {
+        this.Msg_fail("ບໍ່ພົບຂໍ້ມູນໃນລະຫັດນີ້:" + this.getID);
+      }
+    },
+    // message done
+    Msg_done(text) {
+      // Message show
+      this.$store.dispatch({
+        type: "doClick_myMsg",
+        mshow: true,
+        mcolor: "success",
+        micon: "check_circle",
+        message: text,
+      });
+    },
+    //message fail
+    Msg_fail(text) {
+      // Message show
+      this.$store.dispatch({
+        type: "doClick_myMsg",
+        mshow: true,
+        mcolor: "error",
+        micon: "error",
+        message: text,
+      });
     },
   },
 };

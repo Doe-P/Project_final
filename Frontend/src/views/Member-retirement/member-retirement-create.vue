@@ -39,9 +39,9 @@
                 </v-tooltip>
               </v-toolbar>
             </template>
-            <template v-slot:item="{ item }">
+            <template v-slot:item="{ item, index }">
               <tr>
-                <td>{{ item.member_id }}</td>
+                <td>{{ index + 1 }}</td>
                 <td>{{ item.member_name }}</td>
                 <td>{{ item.surname }}</td>
                 <td>{{ item.gender }}</td>
@@ -106,7 +106,7 @@ export default {
   data() {
     return {
       headers: [
-        { text: "ລະຫັດ", align: "Left", value: "member_id" },
+        { text: "#ລຳດັບ", align: "Left", value: "index" },
         { text: "ຊື່", value: "member_name", sortable: false },
         { text: "ນາມສະກຸນ", value: "surname", sortable: false },
         { text: "ເພດ", value: "gender", sortable: true },
@@ -140,8 +140,22 @@ export default {
       openForm: false,
     };
   },
+  created() {
+    this.getmemberRetirement();
+  },
+
   mounted() {
     this.getmemberRetirement();
+  },
+  watch: {
+    User() {
+      this.getmemberRetirement();
+    },
+  },
+  computed: {
+    User() {
+      return this.$store.getters["User/getmyUser"];
+    },
   },
   methods: {
     // setvalue to form retireAdd
@@ -156,22 +170,20 @@ export default {
       });
     },
     async getmemberRetirement() {
-      const user_status = "admin";
-      const fund_id = this.$store.getters.getData_user.user_foundation;
+      const user_status = this.User.status;
+      const fund_id = this.User.fund_id;
       this.myData_memRetire = [];
       try {
-        if (user_status == "admin") {
+        if (user_status == "Admin") {
           let response = await axios.get(
             this.$store.getters.myHostname + "/api/v1/membersWhere-Status-Age"
           );
           this.myData_memRetire = response.data;
-        } else if (user_status == "user") {
+        } else if (user_status == "User") {
           let response = await axios.get(
             `${this.$store.getters.myHostname}/api/v1/membersWhere-Status-Age-client/${fund_id}`
           );
           this.myData_memRetire = response.data;
-        } else {
-          this.Msg_fail("ສະຖານະຜູ້ໃຊ້ລະບົບບໍ່ຖືກຕ້ອງ");
         }
       } catch (err) {
         console.log(err);

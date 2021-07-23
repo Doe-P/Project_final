@@ -2,7 +2,7 @@
   <div id="MemberRetirement">
     <v-app>
       <v-container fluid>
-        <v-row justify="center" class="my-5 mx-5">
+        <v-row justify="center" class="my-5 mx-3">
           <v-col lg="6" md="6" sm="12" cols="12">
             <MemberCard
               id="card"
@@ -61,8 +61,9 @@
                   </v-tooltip>
                 </v-toolbar>
               </template>
-              <template v-slot:item="{ item }">
+              <template v-slot:item="{ item, index }">
                 <tr>
+                  <td>{{ index + 1 }}</td>
                   <td>{{ item.retire_id }}</td>
                   <td>{{ item.member_name }}</td>
                   <td>{{ item.surname }}</td>
@@ -112,6 +113,12 @@ export default {
     return {
       headers: [
         {
+          text: "ລຳດັບ",
+          align: "Left",
+          value: "index",
+          sortable: false,
+        },
+        {
           text: "ເລກທີໃບພົ້ນກະສຽນ",
           align: "Left",
           value: "retire_id",
@@ -145,18 +152,42 @@ export default {
       getCount_femalemember: null,
     };
   },
-  mounted() {
+  watch: {
+    User() {
+      this.getData_retirements();
+    },
+  },
+  computed: {
+    User() {
+      return this.$store.getters["User/getmyUser"];
+    },
+  },
+  created() {
     this.getData_retirements();
+  },
+
+  mounted() {
     this.Count_allmember();
     this.Count_femalemember();
   },
   methods: {
     async getData_retirements() {
+      const user_status = this.User.status;
+      const fund_id = this.User.fund_id;
       try {
-        let response = await axios.get(
-          this.$store.getters.myHostname + "/api/v1/retirements"
-        );
-        this.myData_menberRetire = response.data;
+        if (user_status == "Admin") {
+          console.log("dd");
+          let response = await axios.get(
+            this.$store.getters.myHostname + "/api/v1/retirements"
+          );
+          this.myData_menberRetire = response.data;
+        } else if (user_status == "User") {
+          let response = await axios.get(
+            this.$store.getters.myHostname +
+              `/api/v1/retirements/foundations/${fund_id}`
+          );
+          this.myData_menberRetire = response.data;
+        }
       } catch (err) {
         console.log(err);
       }

@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <v-navigation-drawer
-      v-model="$store.getters.getShowmenu"
+      v-model="$store.state.showMenu"
       fixed
       absolute
       temporary
@@ -21,9 +21,16 @@
           </v-list-item-avatar>
         </v-list-item>
         <v-list-item>
-          <v-list-item-content>
-            <v-list-item-title> ຊື່ຜູ້ໃຊ້:</v-list-item-title>
-            <v-list-item-subtitle> ສະຖານະ: </v-list-item-subtitle>
+          <v-list-item-content class="user">
+            <v-list-item-title color="primary">
+              ຊື່ຜູ້ໃຊ້:
+              <span class="user-text">{{ getUser.username }}</span>
+              <v-divider class="my-2"></v-divider>
+            </v-list-item-title>
+            <v-list-item-subtitle>
+              ສະຖານະ:
+              <span class="user-text">{{ getUser.status }}</span>
+            </v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>
       </v-list>
@@ -39,7 +46,11 @@
               ໜ້າຫຼັກ
             </v-list-item-title>
           </v-list-item>
-          <v-list-group :value="true" prepend-icon="view_list">
+          <v-list-group
+            v-show="getUser.status == 'Admin'"
+            :value="false"
+            prepend-icon="view_list"
+          >
             <template v-slot:activator>
               <v-list-item-title>
                 <span>ການຈັດການ</span>
@@ -103,7 +114,7 @@
               ຮັບເງີນສະຕິ
             </v-list-item-title>
           </v-list-item>
-          <v-list-group :value="true" prepend-icon="article">
+          <v-list-group :value="false" prepend-icon="article">
             <template v-slot:activator>
               <v-list-item-title>
                 <span>ລາຍງານ</span>
@@ -124,7 +135,7 @@
             </v-list-item>
           </v-list-group>
           <v-divider></v-divider>
-          <v-list-item link>
+          <v-list-item link v-show="getUser.status == 'Admin'">
             <v-list-item-icon>
               <v-icon medium>account_box</v-icon>
             </v-list-item-icon>
@@ -137,6 +148,7 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 export default {
   name: "Menu",
   data() {
@@ -209,9 +221,16 @@ export default {
           router: "/certificate-report",
         },
       ],
+      Username: null,
+      Status: null,
     };
   },
   mounted() {},
+  computed: {
+    ...mapGetters("User", {
+      getUser: "getmyUser",
+    }),
+  },
   methods: {
     isClickmenu(path) {
       this.$router.push(path).catch((err) => {
@@ -286,5 +305,15 @@ export default {
 <style lang="scss" scoped>
 .fixes {
   position: fixed;
+}
+.user {
+  border: #c2f0fc 2px solid;
+  border-radius: 5px;
+  padding: 5px;
+}
+.user-text {
+  color: #0760a8;
+  text-align: center !important;
+  margin-left: 10px;
 }
 </style>

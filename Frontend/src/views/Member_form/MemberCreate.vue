@@ -81,6 +81,8 @@
                         :close-on-content-click="false"
                         transition="scale-transition"
                         offset-y
+                        max-width="290px"
+                        min-width="auto"
                       >
                         <template v-slot:activator="{ on, attrs }">
                           <v-text-field
@@ -296,6 +298,8 @@
                         :close-on-content-click="false"
                         transition="scale-transition"
                         offset-y
+                        max-width="290px"
+                        min-width="auto"
                       >
                         <template v-slot:activator="{ on, attrs }">
                           <v-text-field
@@ -327,6 +331,8 @@
                         :close-on-content-click="false"
                         transition="scale-transition"
                         offset-y
+                        max-width="290px"
+                        min-width="auto"
                       >
                         <template v-slot:activator="{ on, attrs }">
                           <v-text-field
@@ -364,6 +370,8 @@
                         :close-on-content-click="false"
                         transition="scale-transition"
                         offset-y
+                        max-width="290px"
+                        min-width="auto"
                       >
                         <template v-slot:activator="{ on, attrs }">
                           <v-text-field
@@ -404,6 +412,8 @@
                         :close-on-content-click="false"
                         transition="scale-transition"
                         offset-y
+                        max-width="290px"
+                        min-width="auto"
                       >
                         <template v-slot:activator="{ on, attrs }">
                           <v-text-field
@@ -443,6 +453,8 @@
                         :close-on-content-click="false"
                         transition="scale-transition"
                         offset-y
+                        max-width="290px"
+                        min-width="auto"
                       >
                         <template v-slot:activator="{ on, attrs }">
                           <v-text-field
@@ -486,6 +498,8 @@
                         :close-on-content-click="false"
                         transition="scale-transition"
                         offset-y
+                        max-width="290px"
+                        min-width="auto"
                       >
                         <template v-slot:activator="{ on, attrs }">
                           <v-text-field
@@ -802,6 +816,8 @@ export default {
     this.getMaxID();
     this.get_TypeMember_selection();
     this.get_educationLevel();
+  },
+  created() {
     this.getUnit_items();
   },
 
@@ -835,6 +851,9 @@ export default {
         this.date_start_nuol
       );
     },
+    User() {
+      this.getUnit_items();
+    },
   },
   computed: {
     computedDateFormatted() {
@@ -863,6 +882,9 @@ export default {
     // compute ເຂົ້າສັງກັດ ມຊ
     computedformatDate_start_nuol() {
       return this.formatDate_start_nuol(this.date_p);
+    },
+    User() {
+      return this.$store.getters["User/getmyUser"];
     },
   },
   methods: {
@@ -1180,7 +1202,7 @@ export default {
     },
     //get unit items from api
     async getUnit_items() {
-      const found_id = this.$store.getters.getData_user.user_foundation;
+      const found_id = this.User.fund_id;
       try {
         await axios
           .get(

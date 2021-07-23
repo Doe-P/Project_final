@@ -5,7 +5,7 @@ const express = require('express');
 const router = express.Router();
 
 // import functions from model
-const { getAllRetire, getRetireById, insertRetire, updateRetireById, deleteRetireById, getMemberByStatus, getMemberByStatus_client,getMaxRetireId,CountAllmember_retire,Countfemalemember_retire } = require('../models/retirementModel');
+const { getAllRetire, getRetireById,getAllRetire_byFoundation, insertRetire, updateRetireById, deleteRetireById, getMemberByStatus, getMemberByStatus_client,getMaxRetireId,CountAllmember_retire,Countfemalemember_retire } = require('../models/retirementModel');
 
 // get all retirements
 router.get('/api/v1/retirements', (req, res) => {
@@ -145,5 +145,26 @@ router.get("/api/v1/count-femalemembers-retire", (req, res) => {
       res.json(result[0]);
     });
   });
+
+
+
+  // get single retirement by fundations
+router.get('/api/v1/retirements/foundations/:id', (req, res) => {
+    const id = req.params.id;
+    if(id){
+        getAllRetire_byFoundation(id, (err, result) => {
+            if (err) {
+              if (err.kind === "not found") {
+                return res.status(404).send({ msg: `Not found retirement with id ${id}` });
+              } else {
+                return res
+                  .status(500)
+                  .send({ msg: " Error retrieving retirement with id " + id });
+              }
+            }
+            res.json(result);
+          });
+    }
+});
 
 module.exports = router;

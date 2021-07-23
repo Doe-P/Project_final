@@ -60,9 +60,9 @@
                 </v-tooltip>
               </v-toolbar>
             </template>
-            <template v-slot:item="{ item }">
+            <template v-slot:item="{ item, index }">
               <tr>
-                <td>{{ item.move_id }}</td>
+                <td>{{ index + 1 }}</td>
                 <td>{{ item.move_NO }}</td>
                 <td>{{ item.m_Year }}</td>
                 <td>{{ item.reason }}</td>
@@ -127,7 +127,7 @@ export default {
   data() {
     return {
       headers: [
-        { text: "ລະຫັດຍົກຍ້າຍ", align: "Left", value: "move_id" },
+        { text: "ລຳດັບ", align: "Left", value: "NO" },
         { text: "ເລກທີໃບຍົກຍ້າຍ", value: "move_NO", sortable: false },
         { text: "ສົກຮຽນ", value: "m_year", sortable: true },
         { text: "ເຫດຜົນ", value: "reason", sortable: false },

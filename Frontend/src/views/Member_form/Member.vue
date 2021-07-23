@@ -63,7 +63,7 @@
             <template v-slot:top>
               <v-toolbar>
                 <v-toolbar-title>
-                  <span class="table-header">ຂໍ້ມູນສະມາຊິກ</span>
+                  <span class="header-text">ຂໍ້ມູນສະມາຊິກ</span>
                 </v-toolbar-title>
                 <v-divider class="px-3" inset vertical></v-divider>
                 <!--search ຮາກຖານ -->
@@ -214,6 +214,7 @@
 <script>
 import MemberCard from "@/components/cards/MemberCard.vue";
 import axios from "axios";
+//import { mapGetters } from 'vuex';
 export default {
   name: "Member",
   components: {
@@ -293,27 +294,41 @@ export default {
       countColumn: 0,
       //
       loading: true,
+      user_status: "Admin",
     };
   },
+  watch: {
+    myUser() {
+      this.getData_members();
+    },
+  },
+  computed: {
+    myUser() {
+      return this.$store.getters["User/getmyUser"];
+    },
+  },
   mounted() {
-    this.getData_members();
     this.getCount_allmember();
     this.getCount_femalemember();
     this.getCount_retirementmember();
     this.getCount_movemember();
   },
+  created() {
+    this.getData_members();
+  },
+
   methods: {
     async getData_members() {
       try {
-        const user_status = "admin";
-        const fund_id = this.$store.getters.getData_user.user_foundation;
         this.myData_member = [];
-        if (user_status == "admin") {
+        const fund_id = this.myUser.fund_id;
+        this.user_status = this.myUser.status;
+        if (this.user_status == "Admin") {
           let response = await axios.get(
             this.$store.getters.myHostname + "/api/v1/members"
           );
           this.myData_member = response.data;
-        } else {
+        } else if (this.user_status == "User") {
           let response = await axios.get(
             `${this.$store.getters.myHostname}/api/v1/members-foundation/${fund_id}`
           );
@@ -420,6 +435,12 @@ export default {
 #card {
   font-family: "boonhome-400";
   color: #0779e4;
+}
+.header-text {
+  font-family: "boonhome-400";
+  color: #0779e4;
+  font-size: 18px;
+  font-weight: bold;
 }
 .table-header {
   font-family: "boonhome-400";

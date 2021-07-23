@@ -10,6 +10,8 @@
             :single-select="single_select"
             item-key="member_id"
             show-select
+            :loading="loading"
+            loading-text="ກຳລັງໂຫຼດຂໍ້ມູນ..."
             class="elevation-1 table-content"
             :search="searchData_member"
             @input="checkSelect($event)"
@@ -28,8 +30,6 @@
                   single-line
                   hide-details
                   v-model="searchData_member"
-                  :loading="loading"
-                  loading-text="ກຳລັງໂຫຼດຂໍ້ມູນ..."
                   class="text-search"
                 ></v-text-field>
                 <v-spacer></v-spacer>
@@ -57,6 +57,18 @@
               </tr>
             </template>
             -->
+            <!----- number of rows --->
+            <template #body="{ items, headers }">
+              <tbody>
+                <tr v-for="(item, index) in items" :key="index">
+                  <td v-for="n in headers" :key="n">
+                    {{ n.value === "index" ? index + 1 : item[n.value] }}
+                  </td>
+                </tr>
+              </tbody>
+            </template>
+
+            <!-------------->
           </v-data-table>
           <v-card-actions class="justify-space-between table-content">
             <v-btn color="error" dark @click="$router.push('/activity')">
@@ -118,7 +130,7 @@ export default {
       searchData_member: null,
       //
       headers: [
-        { text: "ລະຫັດ", align: "Left", value: "member_id" },
+        { text: "#ລຳດັບ", align: "Left", value: "index" },
         { text: "ຊື່", value: "member_name", sortable: false },
         { text: "ນາມສະກຸນ", value: "surname", sortable: false },
         { text: "ເພດ", value: "gender", sortable: false },
@@ -137,8 +149,20 @@ export default {
       array: [],
     };
   },
-  mounted() {
+  created() {
     this.getData_member();
+  },
+
+  mounted() {},
+  watch: {
+    User() {
+      this.getData_member();
+    },
+  },
+  computed: {
+    User() {
+      return this.$store.getters["User/getmyUser"];
+    },
   },
   methods: {
     checkSelect(value) {
@@ -157,10 +181,10 @@ export default {
     },
     //get data member
     async getData_member() {
-      const user_status = "admin";
-      const get_found = "F0001-30062021";
+      const user_status = this.User.status;
+      const get_found = this.User.fund_id;
       this.myData_member = [];
-      if (user_status == "admin") {
+      if (user_status == "Admin") {
         try {
           let response = await axios.get(
             this.$store.getters.myHostname + "/api/v1/getMembers"
@@ -170,10 +194,10 @@ export default {
         } catch (err) {
           console.log(err);
         }
-      } else {
+      } else if (user_status == "User") {
         try {
           let response = await axios.get(
-            `${this.$store.getters.myHostname}/${get_found}`
+            `${this.$store.getters.myHostname}/api/v1/getMembers/${get_found}`
           );
           this.myData_member = response.data;
           this.loading = false;

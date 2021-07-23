@@ -2,90 +2,80 @@
   <div>
     <v-container fluid>
       <v-row justify="center" class="my-5">
-        <v-card width="800">
+        <v-card width="500">
           <v-toolbar color="primary" height="45" dark>
             <v-toolbar-title>
-              <span class="text-header">ແກ້ໄຂຂໍ້ມູນຜູ້ໃຊ້</span>
+              <span class="text-header">ປ່ຽນລະຫັດຜ່ານຜູ້ໃຊ້</span>
             </v-toolbar-title>
           </v-toolbar>
           <v-card-text>
             <v-form class="text-content" v-model="valid">
               <v-row>
-                <v-col cols="6">
+                <v-col cols="12">
                   <v-text-field
-                    name="name"
-                    label="ລະຫັດຜູ້ໃຊ້"
-                    id="id"
-                    :value="txt_user_id"
-                    readonly
-                  ></v-text-field>
-                </v-col>
-                <v-col cols="6">
-                  <v-text-field
-                    name="name"
                     label="ຊື່ຜູ້ໃຊ້"
-                    id="id"
-                    v-model="txt_user_name"
+                    :value="$route.params.username"
                     counter="20"
                     :rules="[
                       required('ຊື່ຜູ້ໃຊ້'),
                       minLength('ຊື່ຜູ້ໃຊ້', 5),
                       maxLength('ຊື່ຜູ້ໃຊ້', 20),
                     ]"
+                    outlined
+                    dense
+                    readonly
                   ></v-text-field>
                 </v-col>
-                <v-col cols="6">
+                <v-col cols="12">
                   <v-text-field
-                    name="name"
-                    label="ລະຫັດຜູ້ໃຊ້"
-                    id="id"
+                    label="ລະຫັດຜ່ານໃໝ່"
                     v-model="txt_user_psw"
                     :append-icon="
-                      isshowPassword ? 'visibility' : 'visibility_off'
+                      showPass_new ? 'visibility' : 'visibility_off'
                     "
-                    @click:append="isshowPassword = !isshowPassword"
-                    :type="isshowPassword ? 'text' : 'password'"
+                    @click:append="showPass_new = !showPass_new"
+                    :type="showPass_new ? 'text' : 'password'"
                     :rules="passwordRule"
+                    outlined
+                    dense
                   ></v-text-field>
                 </v-col>
-                <v-col cols="6">
+                <v-col cols="12">
                   <v-text-field
-                    name="name"
-                    label="ຢືນຢັນລະຫັດຜ່ານ"
-                    id="id"
+                    label="ຢືນຢັນລະຫັດຜ່ານໃໝ່"
                     v-model="txt_user_conpsw"
                     :append-icon="
-                      isshowPassword ? 'visibility' : 'visibility_off'
+                      showPass_newCon ? 'visibility' : 'visibility_off'
                     "
-                    @click:append="isshowPassword = !isshowPassword"
-                    :type="isshowPassword ? 'text' : 'password'"
+                    @click:append="showPass_newCon = !showPass_newCon"
+                    :type="showPass_newCon ? 'text' : 'password'"
                     :rules="passwordRule"
+                    outlined
+                    dense
                   ></v-text-field>
                 </v-col>
-                <v-col cols="6">
-                  <v-select
-                    :items="items"
-                    v-model="value"
-                    label="ເລືອກຮາກຖານ"
-                    :rules="[required('ຮາກຖານ')]"
-                  ></v-select>
-                </v-col>
-                <v-col cols="6">
-                  <v-radio-group v-model="selectStatus" row>
-                    <span>ສະຖານະຜູ້ໃຊ້:</span>
-                    <span class="ma-1"></span>
-                    <v-radio label="Admin" value="Admin"></v-radio>
-                    <v-radio label="User" value="User"></v-radio>
-                  </v-radio-group>
+                <v-col cols="12">
+                  <v-text-field
+                    label="ລະຫັດຜ່ານເກົ່າ"
+                    v-model="txt_user_oldpass"
+                    :append-icon="
+                      showPass_old ? 'visibility' : 'visibility_off'
+                    "
+                    @click:append="showPass_old = !showPass_old"
+                    :type="showPass_old ? 'text' : 'password'"
+                    :rules="oldpasswordRule"
+                    outlined
+                    dense
+                  ></v-text-field>
                 </v-col>
               </v-row>
             </v-form>
           </v-card-text>
-          <v-card-actions class="justify-space-between text-btn">
-            <v-btn @click="$router.push('/register-view')" color="error"
+          <v-card-actions class="justify-end text-btn">
+            <v-btn text @click="$router.push('/register-view')" color="error"
               >ຍົກເລີກ</v-btn
             >
-            <v-btn @click="saveData_user" :disabled="!valid" color="primary"
+            <v-btn @click="ChangePassword" :disabled="!valid" color="primary"
               >ບັນທຶກ</v-btn
             >
           </v-card-actions>
@@ -96,6 +86,7 @@
 </template>
 
 <script>
+import axios from "axios";
 export default {
   name: "RegisterCreate",
   data() {
@@ -119,18 +110,81 @@ export default {
         (v1) => !!v1 || "ກະລຸນາປ້ອນລະຫັດຜ່ານກ່ອນ",
         (v2) =>
           !!/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{10,}$/.test(v2) ||
-          "ຕ້ອງປ້ອນຕົວອັກສອນກັບຕົວເລກໃຫ້ເທົ່າກັບຫຼືຫຼາຍກວ່າ 10 ຕົວຢ່າງ Test123456",
+          "ຕ້ອງມີຕົວເລກ ແລະ ຕົວອັກສອນ",
+        (v3) =>
+          (v3 && String(v3).valueOf() == String(this.txt_user_psw).valueOf()) ||
+          "ລະຫັດຜ່ານບໍ່ກົງກັນ",
+        (v4) =>
+          (v4 && v4.length >= 10) || "ຕ້ອງຫຼາຍກວ່າ ຫຼື ເທົ່າກັບ 10 ຕົວອັກສອນ",
       ],
+      oldpasswordRule: [(v1) => !!v1 || "ກະລຸນາປ້ອນລະຫັດຜ່ານກ່ອນ"],
       // valid form
       valid: false,
       selectStatus: "User",
-      isshowPassword: false,
+      showPass_new: false,
+      showPass_newCon: false,
+      showPass_old: false,
+      /////
+      txt_user_psw: null,
+      txt_user_conpsw: null,
+      txt_user_oldpass: null,
     };
   },
 
   mounted() {},
 
-  methods: {},
+  methods: {
+    async ChangePassword() {
+      if (
+        this.txt_user_conpsw &&
+        this.txt_user_oldpass &&
+        this.$route.params.username
+      ) {
+        try {
+          await axios
+            .post(
+              this.$store.getters.myHostname + "/api/v1/auth/changePassword",
+              {
+                username: this.$route.params.username,
+                password: this.txt_user_oldpass,
+                newpassword: this.txt_user_conpsw,
+              }
+            )
+            .then(() => {
+              this.Msg_done("ປ່ຽນລະຫັດຜ່ານຜູ້ໃຊ້ສຳເລັດ");
+              this.$router.push("/register-view");
+            });
+        } catch (err) {
+          this.Msg_fail("ປ່ຽນລະຫັດຜ່ານບໍ່ສຳເລັດ");
+          console.log(err);
+        }
+      } else {
+        this.Msg_fail("ຂໍ້ມູນບໍ່ຖືກຕ້ອງ");
+      }
+    },
+    // message done
+    Msg_done(text) {
+      // Message show
+      this.$store.dispatch({
+        type: "doClick_myMsg",
+        mshow: true,
+        mcolor: "success",
+        micon: "check_circle",
+        message: text,
+      });
+    },
+    //message fail
+    Msg_fail(text) {
+      // Message show
+      this.$store.dispatch({
+        type: "doClick_myMsg",
+        mshow: true,
+        mcolor: "error",
+        micon: "error",
+        message: text,
+      });
+    },
+  },
 };
 </script>
 

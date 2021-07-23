@@ -42,6 +42,18 @@
                     ></v-text-field>
                   </v-container>
                 </template>
+                <!----- number of rows --->
+                <template #body="{ items, headers }">
+                  <tbody>
+                    <tr v-for="(item, index) in items" :key="index">
+                      <td v-for="n in headers" :key="n">
+                        {{ n.value === "index" ? index + 1 : item[n.value] }}
+                      </td>
+                    </tr>
+                  </tbody>
+                </template>
+
+                <!-------------->
               </v-data-table>
             </v-card-text>
             <v-card-actions class="justify-end btn_text">
@@ -67,7 +79,7 @@ export default {
   data() {
     return {
       headers: [
-        { text: "ລຳດັບ", value: "No", sortable: false },
+        { text: "#ລຳດັບ", value: "index", sortable: false },
         { text: "ຊື່", value: "member_name", sortable: false },
         { text: "ນາມສະກຸນ", value: "surname", sortable: false },
         { text: "ເພດ", value: "gender", sortable: false },
@@ -94,10 +106,20 @@ export default {
     };
   },
 
-  mounted() {
+  created() {
     this.getData_member();
   },
 
+  watch: {
+    User() {
+      this.getData_member();
+    },
+  },
+  computed: {
+    User() {
+      return this.$store.getters["User/getmyUser"];
+    },
+  },
   methods: {
     selectData(value) {
       if (value != "") {
@@ -120,13 +142,26 @@ export default {
     },
     // get data member
     async getData_member() {
+      const user_status = this.User.status;
+      const fund_id = this.User.fund_id;
       try {
-        await axios
-          .get(this.$store.getters.myHostname + "/api/v1/getMembers")
-          .then((response) => {
-            this.myData_members = response.data;
-            this.loading = false;
-          });
+        if (user_status == "Admin") {
+          await axios
+            .get(this.$store.getters.myHostname + "/api/v1/getMembers")
+            .then((response) => {
+              this.myData_members = response.data;
+              this.loading = false;
+            });
+        } else {
+          await axios
+            .get(
+              this.$store.getters.myHostname + `/api/v1/getMember/${fund_id}`
+            )
+            .then((response) => {
+              this.myData_members = response.data;
+              this.loading = false;
+            });
+        }
       } catch (err) {
         console.log(err);
       }

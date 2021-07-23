@@ -54,6 +54,8 @@
                       :close-on-content-click="false"
                       transition="scale-transition"
                       offset-y
+                      max-width="290px"
+                      min-width="auto"
                     >
                       <template v-slot:activator="{ on, attrs }">
                         <v-text-field
@@ -89,7 +91,9 @@
                     required
                     v-model="txt_actLocate"
                   ></v-text-field>
-                  <v-btn text @click="close_formAdd" color="error">ຍົກເລີກ</v-btn>
+                  <v-btn text @click="close_formAdd" color="error"
+                    >ຍົກເລີກ</v-btn
+                  >
                   <span></span>
                   <v-btn
                     type="submit"
