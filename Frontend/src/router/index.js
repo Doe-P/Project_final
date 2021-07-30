@@ -21,6 +21,7 @@ import member_move from "@/views/member-move/member-move.vue";
 import member_move_create from "@/views/member-move/member-move-create.vue";
 import member_move_detail from "@/views/member-move/member-move-detail.vue";
 import receive_money from "@/views/receive/receive-money.vue";
+import receive_detail from "@/views/receive/receive-detail.vue";
 import receive_create from "@/views/receive/receive-create.vue";
 import certificate_view from "@/views/Certificate/certificate-view.vue";
 import certificate_detail from "@/views/Certificate/certificate-detail.vue";
@@ -145,6 +146,11 @@ const routes = [
     path: "/receive-money",
     name: "receive-money",
     component: receive_money,
+  },
+  {
+   path:"/receive/detail/:id",
+   name:"receive-detail",
+   component:receive_detail
   },
   {
     path: "/recive-create",

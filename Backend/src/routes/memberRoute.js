@@ -13,7 +13,8 @@ const {
   CountAllmember,
   Countfemalemember,
   CountRetiremember,
-  CountMovemember
+  CountMovemember,
+  getMemberBystatus
 } = require("../models/memberModel");
 
 // Create new member
@@ -78,6 +79,18 @@ router.delete("/api/v1/members/:id", (req, res) => {
 // Get all member
 router.get("/api/v1/members", (req, res) => {
   getMember((err, result) => {
+    if (err) {
+      return res
+        .status(500)
+        .send({ msg: "Some error occurred while retrieving member" });
+    }
+    res.json(result);
+  });
+});
+
+// Get all member by status
+router.get("/api/v1/members/status", (req, res) => {
+  getMemberBystatus((err, result) => {
     if (err) {
       return res
         .status(500)

@@ -113,6 +113,7 @@
                       id="tel"
                       label="ເບີໂທລະສັບ"
                       v-model="txt_tel"
+                      hint="20-xxxx-xxxx"
                       required
                       :rules="[
                         required('ເບີໂທລະສັບ'),
@@ -162,20 +163,13 @@
                       ]"
                       :counter="20"
                     ></v-text-field>
-                    <v-text-field
-                      type="text"
-                      name="b_province"
-                      id="b_province"
-                      label="ແຂວງ"
+                    <v-select
+                      label="ເລືອກແຂວງ"
+                      :items="myProvince"
                       v-model="txt_bprovince"
                       required
-                      :rules="[
-                        required('ແຂວງ'),
-                        minLength('ແຂວງ', 5),
-                        maxLength('ແຂວງ', 20),
-                      ]"
-                      :counter="20"
-                    ></v-text-field>
+                      :rules="[required('ແຂວງ')]"
+                    ></v-select>
                   </v-col>
                 </v-row>
                 <v-row class="mx-10">
@@ -217,20 +211,13 @@
                       ]"
                       :counter="20"
                     ></v-text-field>
-                    <v-text-field
-                      type="text"
-                      name="n_province"
-                      id="n_province"
-                      label="ແຂວງຢູ່ປະຈຸບັນ"
+                    <v-select
+                      label="ເລືອກແຂວງປະຈຸບັນ"
+                      :items="myProvince"
                       v-model="txt_nprovince"
                       required
-                      :rules="[
-                        required('ແຂວງ'),
-                        minLength('ແຂວງ', 2),
-                        maxLength('ແຂວງ', 20),
-                      ]"
-                      :counter="20"
-                    ></v-text-field>
+                      :rules="[required('ແຂວງປະຈຸບັນ')]"
+                    ></v-select>
                   </v-col>
                 </v-row>
                 <v-row class="mx-10">
@@ -619,13 +606,12 @@
                       dense
                       v-model="selected_blood_Item"
                     ></v-select>
-                    <v-text-field
-                      name="name"
-                      label="ສະຖານະສະມາຊິກ"
-                      id="id"
-                      :value="member_status"
-                      readonly
-                    ></v-text-field>
+                    <v-select
+                      :items="myStatus"
+                      v-model="member_status"
+                      label="ເລືອກສະຖານະ"
+                      :rules="[required('ສະຖານະ')]"
+                    ></v-select>
                   </v-col>
                 </v-row>
                 <v-row class="mx-10">
@@ -671,6 +657,7 @@ export default {
     return {
       language_selected: ["ອັງກິດ"],
       items: ["ອັງກິດ", "ຈີນ", "ຫວຽດນາມ", "ຢີ່ປຸ່ນ", "ເກົາຫຼີ"],
+      myStatus:['ສະມາຊິກ','ພົ້ນກະສຽນ','ຍົກຍ້າຍ'],
       get_Year: null,
       //Valid input
       required(propertyType) {
@@ -765,6 +752,25 @@ export default {
       selecte_level_Item: null,
       // Blood
       blood_items: ["A", "B", "AB", "O"],
+      myProvince: [
+        "ນະຄອນຫຼວງວຽງຈັນ",
+        "ບໍລິຄຳໄຊ",
+        "ຄຳມ່ວນ",
+        "ສະຫວັນນະເຂດ",
+        "ຈຳປາສັກ",
+        "ສາລະວັນ",
+        "ເຊກອງ",
+        "ອັດຕະປື",
+        "ວຽງຈັນ",
+        "ໄຊຍະບູລີ",
+        "ໄຊສົມບູນ",
+        "ຫຼວງນ້ຳທາ",
+        "ຫຼວງພະບາງ",
+        "ຫົວພັນ",
+        "ບໍ່ແກ້ວ",
+        "ຊຽງຂວາງ",
+        "ຜົ້ງສາລີ",
+      ],
 
       selecte_status_Item: null,
       //-------------

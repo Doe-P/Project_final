@@ -88,9 +88,18 @@ app.use(certificate_Route);
 const activity_Route = require('./src/routes/activRoute');
 app.use(activity_Route);
 
+const receive_Route = require('./src/routes/recive_moneyRoute');
+app.use(receive_Route)
+
 const authenticate_Route = require('./src/routes/authRoute');
 app.use(authenticate_Route)
 
+const reportMove = require('./src/routes/reportMoveRoute')
+app.use(reportMove);
+
+
+const reportRetirememt = require('./src/routes/reportRetireRoute')
+app.use(reportRetirememt);
 // server listen to the port
 app.listen(PORT, () => {
     console.log(`Server running at http://localhost:${PORT}`);

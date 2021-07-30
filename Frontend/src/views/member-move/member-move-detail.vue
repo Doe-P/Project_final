@@ -51,7 +51,7 @@
             <template #body="{ items, headers }">
               <tbody>
                 <tr v-for="(item, index) in items" :key="index">
-                  <td v-for="n in headers" :key="n">
+                  <td v-for="(n,t) in headers" :key="t">
                     {{ n.value === "index" ? index + 1 : item[n.value] }}
                   </td>
                 </tr>
@@ -147,6 +147,9 @@ export default {
         console.log(err);
       }
     },
+   
+
+
   },
 };
 </script>

@@ -31,7 +31,7 @@ const generateAccessToken = (payload) => {
         issuer: i,
         subject: s,
         audience: a,
-        expiresIn: "1m",
+        expiresIn: "1h",
         algorithm: "RS256"
     }
 
