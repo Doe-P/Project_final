@@ -412,6 +412,7 @@ export default {
           String(this.myFoundations_all[i].fund_name).valueOf()
         ) {
           this.getFound_ID = this.myFoundations_all[i].fund_id;
+          this.myDatamembers();
         }
       }
     },
@@ -422,7 +423,7 @@ export default {
       this.Data_members = [];
       if (user_status == "Admin") {
         try {
-          let response = await axios.get(this.$store.getters.myHostname + "");
+          let response = await axios.get(this.$store.getters.myHostname + `/api/v1/getMembers/ReceiveMoney/${this.getFound_ID}`);
           this.Data_members = response.data;
           this.loading = false;
         } catch (err) {

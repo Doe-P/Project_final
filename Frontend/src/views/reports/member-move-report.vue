@@ -424,6 +424,7 @@ export default {
               this.DataMove_Years = response.data;
               this.loading = false;
               this.isShow = true;
+              this.isChecked_button1=false;
             } else {
               this.Msg_fail("ບໍ່ມີຂໍ້ມູນທີ່ທ່ານຕ້ອງການ");
             }

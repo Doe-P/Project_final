@@ -61,7 +61,7 @@
             </template>
 
             <!----- number of rows --->
-            <template #body="{ items, headers }">
+            <!-- <template #body="{ items, headers }">
               <tbody>
                 <tr v-for="(item, index) in items" :key="index">
                   <td v-for="n in headers" :key="n">
@@ -69,7 +69,7 @@
                   </td>
                 </tr>
               </tbody>
-            </template>
+            </template> -->
 
             <!-------------->
           </v-data-table>

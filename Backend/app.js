@@ -100,6 +100,16 @@ app.use(reportMove);
 
 const reportRetirememt = require('./src/routes/reportRetireRoute')
 app.use(reportRetirememt);
+
+const reportReceive = require('./src/routes/reportReceiveRoute')
+app.use(reportReceive);
+
+const reportActiv = require('./src/routes/reportActivRoute')
+app.use(reportActiv);
+
+const reportCertificate = require('./src/routes/reportCertificRoute')
+app.use(reportCertificate);
+
 // server listen to the port
 app.listen(PORT, () => {
     console.log(`Server running at http://localhost:${PORT}`);

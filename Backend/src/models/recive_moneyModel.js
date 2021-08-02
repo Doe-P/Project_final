@@ -75,7 +75,7 @@ exports.getReceiveMoney_client = (id, result) => {
 // get data Receive money for admin
 exports.getReceiveMoney_admin = (result) => {
     try {
-        let sql = `SELECT tb_receive_money.recive_id,tb_receive_money.receive_NO,  tb_foundation.fund_name, tb_receive_money.quarterly, tb_receive_money.year, tb_receive_money.money_total, tb_receive_money.date FROM tb_receive_money
+        let sql = `SELECT tb_receive_money.receive_id,tb_receive_money.recive_NO,  tb_foundation.fund_name, tb_receive_money.quarterly, tb_receive_money.year, tb_receive_money.money_total, tb_receive_money.date FROM tb_receive_money
         INNER JOIN tb_foundation ON tb_foundation.fund_id = tb_receive_money.fund_id`;
         dbCon.query(sql, (err, res) => {
             if (err) {

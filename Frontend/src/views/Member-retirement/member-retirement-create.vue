@@ -29,14 +29,14 @@
                   v-model="search_memberRetire"
                 ></v-text-field>
                 <v-spacer></v-spacer>
-                <v-tooltip bottom>
+                <!-- <v-tooltip bottom>
                   <template v-slot:activator="{ on, attrs }">
                     <v-btn color="primary" dark v-on="on" v-bind="attrs">
                       <v-icon>print</v-icon>
                     </v-btn>
                   </template>
                   <span class="text-tooltip">ພິມຂໍ້ມູນສະມາຊິກພົ້ນກະສຽນ</span>
-                </v-tooltip>
+                </v-tooltip> -->
               </v-toolbar>
             </template>
             <template v-slot:item="{ item, index }">

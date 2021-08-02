@@ -58,7 +58,7 @@
             </template>
             -->
             <!----- number of rows --->
-            <template #body="{ items, headers }">
+            <!-- <template #body="{ items, headers }">
               <tbody>
                 <tr v-for="(item, index) in items" :key="index">
                   <td v-for="n in headers" :key="n">
@@ -66,7 +66,7 @@
                   </td>
                 </tr>
               </tbody>
-            </template>
+            </template> -->
 
             <!-------------->
           </v-data-table>
@@ -130,7 +130,7 @@ export default {
       searchData_member: null,
       //
       headers: [
-        { text: "#ລຳດັບ", align: "Left", value: "index" },
+       // { text: "#ລຳດັບ", align: "Left", value: "index" },
         { text: "ຊື່", value: "member_name", sortable: false },
         { text: "ນາມສະກຸນ", value: "surname", sortable: false },
         { text: "ເພດ", value: "gender", sortable: false },
