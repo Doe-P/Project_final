@@ -87,6 +87,19 @@
                       </template>
                       <span class="text-tooltip">ແກ້ໄຂຂໍ້ມູນ</span>
                     </v-tooltip>
+                    <span class="ma-1"></span>
+                    <v-tooltip bottom>
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-icon
+                         @click.prevent="downloadRetirementPDF(item.retire_id)"
+                          small
+                          v-on="on"
+                          v-bind="attrs"
+                          >file_download</v-icon
+                        >
+                      </template>
+                      <span class="text-tooltip">ດາວໂຫຼດໃບພົ້ນກະສຽນ</span>
+                    </v-tooltip>
                   </td>
                 </tr>
               </template>
@@ -103,6 +116,9 @@
 import formRetireEdit from "@/components/retirement-form/retirementEdit.vue";
 import MemberCard from "@/components/cards/MemberCard.vue";
 import axios from "axios";
+import dateformat from 'dateformat';
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
 export default {
   name: "MemberRetirement",
   components: {
@@ -140,7 +156,7 @@ export default {
         {
           text: "ວັນທີພົ້ນກະສຽນ",
           align: "Left",
-          value: "action",
+          value: "date_retire",
           sortable: false,
         },
         { text: "Actions", align: "Left", value: "action", sortable: false },
@@ -226,6 +242,168 @@ export default {
         retire_id: id,
       });
     },
+
+    //----------------
+    downloadRetirementPDF(id){
+      if(id){
+         const doc = new jsPDF({
+          orientation: "portrait",
+          unit: "in",
+          format: "A4",
+        });
+          const mydata = this.myData_menberRetire.filter(item => String(item.retire_id)==String(id))
+          var rows = [];
+          for(let i in mydata ){
+            rows[i]={
+              index:parseInt(i)+1,
+              retire_NO:mydata[i].retire_id,
+              date:mydata[i].date_retire,
+              name:mydata[i].member_name,
+              surname:mydata[i].surname,
+              gender:mydata[i].gender,
+              unit:mydata[i].unit_name,
+              age:mydata[i].age,
+              fundation : mydata[i].fund_name
+            }
+          }
+
+           // table columns
+        const columns = [
+          { title: "ລຳດັບ", dataKey: "index" },
+          { title: "ຊື່", dataKey: "name" },
+          { title: "ນາມສະກຸນ", dataKey: "surname" },
+          { title: "ເພດ", dataKey: "gender" },
+          { title: "ໜ່ວຍ", dataKey: "unit" },
+          { title: " ອາຍຸ", dataKey: "age" },
+           { title: "ໝາຍເຫດ", dataKey: "note" },
+        ];
+          
+
+           // Table
+        doc.autoTable({
+          columns,
+          body: rows,
+           bodyStyles: {
+            overflow: "linebreak",
+            tableWidth: "auto",
+            //fileColor: [0, 0, 0],
+            lineWidth: 0.01,
+          },
+          margin: { left: 0.5, top: 6.25, right: 0.5 },
+          styles: { font: "Saysettha OT" },
+          columnWidth: {
+            fund_name: { columnWidth: 33 },
+            result: { columnWidth: 33 },
+            women: { columnWidth: 33 },
+          },
+        });
+           //set format PDF
+        //set font text header
+        doc.addFont("Saysettha OT");
+        doc.setFont("Saysettha OT");
+        doc
+          .addImage("nation.png", "PNG", 3.6, 0.25, 0.8, 0.8)
+          .setFontSize(11)
+          .text("ສາທາລະນະລັດ ປະຊາທິປະໄຕ ປະຊາຊົນລາວ", 4, 1.4, {
+            align: "center",
+            maxWidth: "7.5",
+          })
+          .text("ສັນຕິພາບ ເອກະລາດ ປະຊາທິປະໄຕ ເອກະພາບ ວັດທະນາຖາວອນ", 4, 1.6, {
+            align: "center",
+            maxWidth: "7.5",
+          })
+          .text("ມະຫາວິທະຍາໄລແຫ່ງຊາດ", 0.5, 1.9, {
+            align: "left",
+            maxWidth: "7.5",
+          })
+          .text("ຄະນະຊາວໜຸ່ມປະຊາຊົນປະຕິວັດລາວ", 0.5, 2.2, {
+            align: "left",
+            maxWidth: "7.5",
+          })
+          .text(`ເລກທີ...${rows[0].retire_NO}../ຄຊປປລ ມຊ`, 7.7, 2.1, {
+            align: "right",
+            maxWidth: "7.5",
+          })
+          .text(
+            `ວິທະຍາເຂດດົງໂດກ, ວັນທີ:.${dateformat(Date.now(), "dd/mm/yyyy")}`,
+            7.7,
+            2.4,
+            {
+              align: "right",
+              maxWidth: "7.5",
+            }
+          )
+          .setFontSize(12)
+          .text("ຂໍ້ຕົກລົງ", 4, 3, {
+            align: "center",
+            maxWidth: "7.5",
+          })
+          .text(`ວ່າດ້ວຍການສິນສຸດ ການເປັນສະມາຊິກ ຊາວໜຸ່ມປະຊາຊົນປະຕິວັດລາວ`, 4, 3.33, {
+            align: "center",
+            maxWidth: "7.5",
+          })
+           .setFontSize(11)
+           .text(`- ອິງຕາມ: ກົດລະບຽບຂອງຊາວໜຸ່ມ ປະຊາຊົນປະຕິວັດລາວ ສະໄໝທີ VII ໝວດ II ມາດຕາທີ 08 ວ່າດ້ວຍ `, 0.8, 3.83, {
+            align: "left",
+            maxWidth: "7.5",
+          })
+           .text(` ການສິ້ນສຸດການເປັນສະມາຊິກ ຂອງຊາວໜຸ່ມປະຊົນປະຕິວັດລາວ`, 0.8, 4.07, {
+            align: "left",
+            maxWidth: "7.5",
+          })
+           .text(`- ອິງຕາມ: ໜັງສືສະເໜີຂອງຄະນະບໍລິຫານງານຮາກຖານ ${rows[0].fundation} ສະບັບເລກທີ `, 0.8, 4.33, {
+            align: "left",
+            maxWidth: "7.5",
+          })
+            .text(` ${rows[0].retire_NO}/ຄຊປປລ.ຄວທ, ລົງວັນທີ ${dateformat(rows[0].date,'dd/mm/yyyy')}`, 0.8, 4.63, {
+            align: "left",
+            maxWidth: "7.5",
+          })
+           .text(`- ອິງຕາມ: ການຄົ້ນຄວ້າຂອງຄະນະບໍລິຫານງານຊາວໜຸ່ມ ປປລ ມະຫາວິທະຍາໄລແຫ່ງຊາດ`, 0.8, 4.93, {
+            align: "left",
+            maxWidth: "7.5",
+          })
+           .setFontSize(12)
+            .text(`ຄະນະບໍລິຫານງານຊາວໜຸ່ມປະຊາຊົນປະຕິວັດລາວມະຫາວິທະຍາໄລແຫ່ງຊາດ ຕົກລົງ`, 0.8, 5.33, {
+            align: "left",
+            maxWidth: "7.5",
+          })
+           .setFontSize(11)
+            .text(` ມາດຕາ 01 ເຫັນດີໃຫ້ສະມາຊິກຊາວໜຸ່ມຮາກຖານ ${rows[0].fundation}`, 0.8, 5.63, {
+            align: "left",
+            maxWidth: "7.5",
+          })
+            .text(` ອອກຈາກການເປັນສະມາຊິກ ຊາວໜຸ່ມປະຊາຊົນປະຕິວັດລາວ ດັ່ງລາຍຊື່ລຸ່ມນີ້:`, 0.8, 5.93, {
+            align: "left",
+            maxWidth: "7.5",
+          })
+           
+
+            .text(`ມາດຕາ 02 ມອບໃຫ້ຄະນະບໍລິຫານງານຊາວໜຸ່ມປະຊາຊົນປະຕິວັດລາວ ຮາກຖານ ${rows[0].fundation}`, 0.6, 7.33, {
+            align: "left",
+            maxWidth: "7.5",
+          })
+          .text(`ຈັດພິທີລາອອກຈາກສົມກຽດ ຕາມເວລາທີ່ເໝາະສົມ.`, 0.6, 7.63, {
+            align: "left",
+            maxWidth: "7.5",
+          })
+           .text(`ມາດຕາ 03 ຂໍ້ຕົກລົງສະບັບນີ້ມີຜົນສັກສິດນັບຕັ້ງແຕ່ມື້ລົງລາບເຊັນເປັນຕົ້ນໄປ`, 0.6, 7.93, {
+            align: "left",
+            maxWidth: "7.5",
+          })
+        doc.setFontSize(11);
+        doc.text("ຄະນະບໍລິຫານງານຊາວໜຸ່ມມະຫາວິທະຍາໄລແຫ່ງຊາດ", 7, 8.63, null, null, "right");
+        doc.text("ເລຂາ", 5, 8.93, null, null, "left");
+        // save pdf
+
+          doc.save(
+          `ໃບພົ້ນກະສຽນຂອງ${rows[0].name+rows[0].surname}-${dateformat(
+            Date.now(),
+            "dd/mm/yyyy"
+          )}.pdf`
+        );
+      }
+    }
   },
 };
 </script>

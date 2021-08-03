@@ -42,8 +42,7 @@
                     ></v-text-field>
                   </v-container>
                 </template>
-                
-              
+
                 <!-- <template #body="{ items, headers }">
                   <tbody>
                     <tr v-for="(item, index) in items" :key="index">
@@ -53,7 +52,6 @@
                     </tr>
                   </tbody>
                 </template> -->
-               
               </v-data-table>
             </v-card-text>
             <v-card-actions class="justify-end btn_text">

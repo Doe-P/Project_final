@@ -89,7 +89,7 @@
                         </v-card-title>
                         <v-card-text class="sub-text">
                           <v-row>
-                              <v-col cols="6">
+                            <v-col cols="6">
                               <v-select
                                 :items="Foundation"
                                 v-model="fund_select"
@@ -97,7 +97,7 @@
                                 @change="getDataMove_NObyFound"
                                 outlined
                                 dense
-                                :disabled="User.status=='User'"
+                                :disabled="User.status == 'User'"
                               ></v-select>
                             </v-col>
                             <v-col cols="6">
@@ -268,11 +268,11 @@ export default {
       myMove_No: [],
       isShow_bill: false,
       DataMove_Bill: [],
-      Foundation:[],
-       Foundation_all:[],
-      fund_select:null,
-      fund_id :null,
-      getMoves_NO :[],
+      Foundation: [],
+      Foundation_all: [],
+      fund_select: null,
+      fund_id: null,
+      getMoves_NO: [],
       //
       isChecked_button1: true,
       isChecked_button2: true,
@@ -280,17 +280,17 @@ export default {
     };
   },
   created() {
-      this.setYear_select();
+    this.setYear_select();
     this.getFoundations();
   },
-  
+
   mounted() {
-     this.getmember_moveNO();
+    this.getmember_moveNO();
   },
   watch: {
-    User(){
+    User() {
       this.getmember_moveNO();
-    }
+    },
   },
   computed: {
     User() {
@@ -298,87 +298,98 @@ export default {
     },
   },
   methods: {
-  async  getDataMove_NObyYear(){
-      this.myMove_No =[]
-        try{
-           if(this.User.status=="User"){
-              await axios
+    async getDataMove_NObyYear() {
+      this.myMove_No = [];
+      try {
+        if (this.User.status == "User") {
+          await axios
             .get(
-              `${this.$store.getters.myHostname}/reportMove/moveNO/get/${this.User.fund_id}&${this.Year_value_select}`)
+              `${this.$store.getters.myHostname}/reportMove/moveNO/get/${this.User.fund_id}&${this.Year_value_select}`
+            )
             .then((response) => {
-              this.myMove_No= response.data.map(item => item.move_NO);
-              for(let i in this.Foundation_all){
-                if(String(this.User.fund_id)==String(this.Foundation_all[i].fund_id)){
+              this.myMove_No = response.data.map((item) => item.move_NO);
+              for (let i in this.Foundation_all) {
+                if (
+                  String(this.User.fund_id) ==
+                  String(this.Foundation_all[i].fund_id)
+                ) {
                   this.fund_select = this.Foundation_all[i].fund_name;
                 }
               }
             });
-           }
-        }catch(err){
-          console.log(err);
         }
+      } catch (err) {
+        console.log(err);
+      }
     },
-   //----------------
-  async  getDataMove_NObyFound(){
-     this.myMove_No = [];
-       for(let i in this.Foundation_all){
-         if(String(this.fund_select)==String(this.Foundation_all[i].fund_name)){
-            this.fund_id = this.Foundation_all[i].fund_id;
-            try {
+    //----------------
+    async getDataMove_NObyFound() {
+      this.myMove_No = [];
+      for (let i in this.Foundation_all) {
+        if (
+          String(this.fund_select) == String(this.Foundation_all[i].fund_name)
+        ) {
+          this.fund_id = this.Foundation_all[i].fund_id;
+          try {
             await axios
-            .get(
-              `${this.$store.getters.myHostname}/reportMove/moveNO/get/${this.fund_id}&${this.Year_value_select}`)
-            .then((response) => {
-              this.myMove_No= response.data.map(item => item.move_NO)
-            });
-        } catch (err) {
-          console.log(err);
+              .get(
+                `${this.$store.getters.myHostname}/reportMove/moveNO/get/${this.fund_id}&${this.Year_value_select}`
+              )
+              .then((response) => {
+                this.myMove_No = response.data.map((item) => item.move_NO);
+              });
+          } catch (err) {
+            console.log(err);
+          }
         }
-         }
-       }
+      }
     },
-
 
     //----------------------
 
-
-
     async getmember_moveNO() {
       this.myMove_No = [];
-        try {
-          if(this.User.status=="Admin"){
-            await axios
+      try {
+        if (this.User.status == "Admin") {
+          await axios
             .get(
-              `${this.$store.getters.myHostname}/reportMove/moveNO/get/${this.fund_id}&${this.Year_value_select}`)
+              `${this.$store.getters.myHostname}/reportMove/moveNO/get/${this.fund_id}&${this.Year_value_select}`
+            )
             .then((response) => {
-              this.myMove_No= response.data.map(item => item.move_NO)
+              this.myMove_No = response.data.map((item) => item.move_NO);
             });
-          }else{
-           await axios
+        } else {
+          await axios
             .get(
-              `${this.$store.getters.myHostname}/reportMove/moveNO/get/${this.User.fund_id}&${this.Year_select[0]}`)
+              `${this.$store.getters.myHostname}/reportMove/moveNO/get/${this.User.fund_id}&${this.Year_select[0]}`
+            )
             .then((response) => {
-              this.myMove_No= response.data.map(item => item.move_NO);
-              for(let i in this.Foundation_all){
-                if(String(this.User.fund_id)==String(this.Foundation_all[i].fund_id)){
+              this.myMove_No = response.data.map((item) => item.move_NO);
+              for (let i in this.Foundation_all) {
+                if (
+                  String(this.User.fund_id) ==
+                  String(this.Foundation_all[i].fund_id)
+                ) {
                   this.fund_select = this.Foundation_all[i].fund_name;
                 }
               }
             });
-          }
-        } catch (err) {
-          console.log(err);
         }
+      } catch (err) {
+        console.log(err);
+      }
     },
 
-   async getFoundations(){
-        try{
-          let response = await axios.get(this.$store.getters.myHostname+"/api/v1/foundations");
-          this.Foundation_all = response.data;
-          this.Foundation = this.Foundation_all.map(item => item.fund_name);
-        }catch(err){
-          console.log(err);
-        }
+    async getFoundations() {
+      try {
+        let response = await axios.get(
+          this.$store.getters.myHostname + "/api/v1/foundations"
+        );
+        this.Foundation_all = response.data;
+        this.Foundation = this.Foundation_all.map((item) => item.fund_name);
+      } catch (err) {
+        console.log(err);
+      }
     },
 
     setYear_select() {
@@ -424,7 +435,7 @@ export default {
               this.DataMove_Years = response.data;
               this.loading = false;
               this.isShow = true;
-              this.isChecked_button1=false;
+              this.isChecked_button1 = false;
             } else {
               this.Msg_fail("ບໍ່ມີຂໍ້ມູນທີ່ທ່ານຕ້ອງການ");
             }

@@ -657,7 +657,7 @@ export default {
     return {
       language_selected: ["ອັງກິດ"],
       items: ["ອັງກິດ", "ຈີນ", "ຫວຽດນາມ", "ຢີ່ປຸ່ນ", "ເກົາຫຼີ"],
-      myStatus:['ສະມາຊິກ','ພົ້ນກະສຽນ','ຍົກຍ້າຍ'],
+      myStatus: ["ສະມາຊິກ", "ພົ້ນກະສຽນ", "ຍົກຍ້າຍ"],
       get_Year: null,
       //Valid input
       required(propertyType) {

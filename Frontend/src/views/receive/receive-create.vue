@@ -152,9 +152,21 @@
                 <v-col cols="6">
                   <span>ເລືອກງວດທີ່ຕ້ອງຊຳລະ</span>
                   <v-radio-group v-model="time_selected" row>
-                    <v-radio :disabled="quater_A" label="ງວດທີ I" value="ງວດທີ I"></v-radio>
-                    <v-radio :disabled="quater_B" label="ງວດທີ II" value="ງວດທີ II"></v-radio>
-                    <v-radio :disabled="quater_all" label="ໝົດປີ" value="ໝົດປີ"></v-radio>
+                    <v-radio
+                      :disabled="quater_A"
+                      label="ງວດທີ I"
+                      value="ງວດທີ I"
+                    ></v-radio>
+                    <v-radio
+                      :disabled="quater_B"
+                      label="ງວດທີ II"
+                      value="ງວດທີ II"
+                    ></v-radio>
+                    <v-radio
+                      :disabled="quater_all"
+                      label="ໝົດປີ"
+                      value="ໝົດປີ"
+                    ></v-radio>
                   </v-radio-group>
                 </v-col>
                 <v-col cols="6">
@@ -263,9 +275,9 @@ export default {
       ///------
       recive_NO: null,
       month: 0,
-      quater_all:false,
-      quater_A:false,
-      quater_B:false,
+      quater_all: false,
+      quater_A: false,
+      quater_B: false,
     };
   },
   created() {
@@ -279,7 +291,7 @@ export default {
     this.getFoundations();
     this.select_year = this.Years[0];
     this.receive_date_format = dateformat(Date.now(), "dd-mm-yyyy");
-     this.Quaterly();
+    this.Quaterly();
   },
   watch: {
     receive_date() {
@@ -423,7 +435,10 @@ export default {
       this.Data_members = [];
       if (user_status == "Admin") {
         try {
-          let response = await axios.get(this.$store.getters.myHostname + `/api/v1/getMembers/ReceiveMoney/${this.getFound_ID}`);
+          let response = await axios.get(
+            this.$store.getters.myHostname +
+              `/api/v1/getMembers/ReceiveMoney/${this.getFound_ID}`
+          );
           this.Data_members = response.data;
           this.loading = false;
         } catch (err) {
@@ -539,10 +554,10 @@ export default {
     },
     // get quaterly
     async Quaterly() {
-      let fund_id =""
-      if(this.User.status =='Admin'){
+      let fund_id = "";
+      if (this.User.status == "Admin") {
         fund_id = this.getFound_ID;
-      }else{
+      } else {
         fund_id = this.User.fund_id;
       }
       try {
@@ -553,36 +568,38 @@ export default {
           .then((response) => {
             const myQuaterly = response.data;
             console.log(JSON.stringify(myQuaterly));
-            if(myQuaterly){
-              for(let i in myQuaterly){
-                if(String(myQuaterly[i].quarterly).valueOf()=='ງວດທີ I'){
-                  this.quater_A=true;
-                  this.time_selected='ງວດທີ II'
-                }else if(String(myQuaterly[i].quarterly).valueOf()=='ໝົດປີ'){
-                   this.quater_all=true;
-                  this.quater_A=true;
-                 this.quater_B=true;
-                 this.time_selected=''
-                }else{
-                  this.quater_all=true;
-                  this.quater_A=true;
-                 this.quater_B=true;
+            if (myQuaterly) {
+              for (let i in myQuaterly) {
+                if (String(myQuaterly[i].quarterly).valueOf() == "ງວດທີ I") {
+                  this.quater_A = true;
+                  this.time_selected = "ງວດທີ II";
+                } else if (
+                  String(myQuaterly[i].quarterly).valueOf() == "ໝົດປີ"
+                ) {
+                  this.quater_all = true;
+                  this.quater_A = true;
+                  this.quater_B = true;
+                  this.time_selected = "";
+                } else {
+                  this.quater_all = true;
+                  this.quater_A = true;
+                  this.quater_B = true;
                 }
               }
-              this.time_selected = ""
-            }else{
-              this.quater_all=false;
-              this.quater_A=false;
-              this.quater_B=false;
+              this.time_selected = "";
+            } else {
+              this.quater_all = false;
+              this.quater_A = false;
+              this.quater_B = false;
               console.log("ss");
             }
           });
       } catch (err) {
         console.log(err);
-          this.quater_all=false;
-        this.quater_A=false;
-        this.quater_B=false;
-        this.time_selected='ງວດທີ I'
+        this.quater_all = false;
+        this.quater_A = false;
+        this.quater_B = false;
+        this.time_selected = "ງວດທີ I";
       }
     },
   },

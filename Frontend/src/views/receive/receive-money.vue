@@ -22,7 +22,8 @@
                     </v-list-item-title>
                     <v-list-item-subtitle>
                       <span class="text-card-subtitle"
-                        >{{ formatPrice(CalculateMoneyTotal) }} <small>ກີບ</small></span
+                        >{{ formatPrice(CalculateMoneyTotal) }}
+                        <small>ກີບ</small></span
                       >
                     </v-list-item-subtitle>
                   </v-list-item-content>
@@ -100,27 +101,49 @@
               <v-divider></v-divider>
             </template>
 
-          <template v-slot:item="{item , index}">
-            <tr>
-              <td>{{index + 1}}</td>
-              <td>{{item.recive_NO}}</td>
-               <td>{{item.fund_name}}</td>
-                <td>{{item.quarterly}}</td>
-                <td>{{item.year}}</td>
-                <td>{{formatPrice(item.money_total)}}</td>
-                  <td>{{item.date |formatDate}}</td>
-                  <td>
-                    <v-tooltip bottom>
-                      <template v-slot:activator="{attrs,on}">
-                       <v-icon v-on="on" v-bind="attrs" small @click="$router.push({name:'receive-detail',params:{id:item.receive_id}})">more</v-icon>
+            <template v-slot:item="{ item, index }">
+              <tr>
+                <td>{{ index + 1 }}</td>
+                <td>{{ item.recive_NO }}</td>
+                <td>{{ item.fund_name }}</td>
+                <td>{{ item.quarterly }}</td>
+                <td>{{ item.year }}</td>
+                <td>{{ formatPrice(item.money_total) }}</td>
+                <td>{{ item.date | formatDate }}</td>
+                <td>
+                  <v-tooltip bottom>
+                    <template v-slot:activator="{ attrs, on }">
+                      <v-icon
+                        v-on="on"
+                        v-bind="attrs"
+                        small
+                        @click="
+                          $router.push({
+                            name: 'receive-detail',
+                            params: { id: item.receive_id },
+                          })
+                        "
+                        >more</v-icon
+                      >
                     </template>
                     <span class="text-tooltip">ສະແດງລາຍລະອຽດ</span>
-                    </v-tooltip>
-                  </td>
-            </tr>
-          </template>
-
-
+                  </v-tooltip>
+                  <span class="ma-1"></span>
+                   <v-tooltip bottom>
+                    <template v-slot:activator="{ attrs, on }">
+                      <v-icon
+                       @click.prevent="downloadReceivebill(item.receive_id)"
+                        v-on="on"
+                        v-bind="attrs"
+                        small
+                        >file_download</v-icon
+                      >
+                    </template>
+                    <span class="text-tooltip">ດາວໂຫຼດບິນຈ່າຍເງິນ</span>
+                  </v-tooltip>
+                </td>
+              </tr>
+            </template>
           </v-data-table>
         </v-card>
       </v-row>
@@ -129,7 +152,10 @@
 </template>
 
 <script>
-import axios from 'axios';
+import axios from "axios";
+import dateformat from 'dateformat';
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
 export default {
   name: "ReceiveMoney",
   data() {
@@ -142,27 +168,26 @@ export default {
         { text: "ສົກຮຽນ", value: "year", sortable: true },
         { text: "ຈຳນວນເງີນທັງໝົດ(ກີບ)", value: "money_total", sortable: false },
         { text: "ວັນທີ", value: "date", sortable: false },
-          { text: "Action", value: "action", sortable: false },
+        { text: "Action", value: "action", sortable: false },
       ],
       Year_start: 2000,
       Years: [],
-      times:['ງວດທີ I','ງວດທີ II','ໝົດປີ'],
-      myReciveMoney:[],
-      loading:true,
-      searchRecive:null,
-      myData_recive:[],
-      Year_selected:null,
-      time_selected:null,
+      times: ["ງວດທີ I", "ງວດທີ II", "ໝົດປີ"],
+      myReciveMoney: [],
+      loading: true,
+      searchRecive: null,
+      myData_recive: [],
+      Year_selected: null,
+      time_selected: null,
     };
   },
   created() {
     this.ReciveMoney();
   },
-  
 
   mounted() {
     this.setYear_select();
-    this.Year_selected=this.Years[0]
+    this.Year_selected = this.Years[0];
   },
   watch: {
     User() {
@@ -171,18 +196,17 @@ export default {
   },
   computed: {
     User() {
-      return this.$store.getters['User/getmyUser'];
+      return this.$store.getters["User/getmyUser"];
     },
-    CalculateMoneyTotal(){
-      const money = this.myReciveMoney.map(money => money.money_total);
+    CalculateMoneyTotal() {
+      const money = this.myReciveMoney.map((money) => money.money_total);
       var moneyTotal = parseInt(
         money.reduce(function (a, b) {
           return a + b;
         }, 0)
       );
       return moneyTotal;
-    }
-  
+    },
   },
   methods: {
     setYear_select() {
@@ -197,43 +221,222 @@ export default {
         this.Years.push(str);
       }
     },
-    // get data recive money 
-  async ReciveMoney(){
+    // get data recive money
+    async ReciveMoney() {
       const user_status = this.User.status;
       const fund_id = this.User.fund_id;
-      if(user_status=='Admin'){
-         try{
-         let response = await axios.get(this.$store.getters.myHostname+"/api/v1/getReceiveMoney/admin");
-         this.myReciveMoney=response.data;
-         this.myData_recive=this.myReciveMoney;
-         this.loading=false;
-       }catch(err){
-         console.log("Admin Error:",err);
-       }
-      }else if(user_status=="User"){
-         try{
-         let response = await axios.get(this.$store.getters.myHostname+`/api/v1/getReceiveMoney/client/${fund_id}`);
-         this.myReciveMoney=response.data;
-          this.myData_recive=this.myReciveMoney;
-          this.loading=false;
-       }catch(err){
-         console.log("User Error:",err);
+      if (user_status == "Admin") {
+        try {
+          let response = await axios.get(
+            this.$store.getters.myHostname + "/api/v1/getReceiveMoney/admin"
+          );
+          this.myReciveMoney = response.data;
+          this.myData_recive = this.myReciveMoney;
+          this.loading = false;
+        } catch (err) {
+          console.log("Admin Error:", err);
+        }
+      } else if (user_status == "User") {
+        try {
+          let response = await axios.get(
+            this.$store.getters.myHostname +
+              `/api/v1/getReceiveMoney/client/${fund_id}`
+          );
+          this.myReciveMoney = response.data;
+          this.myData_recive = this.myReciveMoney;
+          this.loading = false;
+        } catch (err) {
+          console.log("User Error:", err);
+        }
       }
-   }
-  },
-  formatPrice(value) {
+    },
+    formatPrice(value) {
       let val = (value / 1).toFixed(2).replace(",", ".");
       return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     },
-    search_Recive_Year(){
-      this.myReciveMoney=[];
-      this.myReciveMoney = this.myData_recive.filter(value =>String(value.year)==String(this.Year_selected))
+    search_Recive_Year() {
+      this.myReciveMoney = [];
+      this.myReciveMoney = this.myData_recive.filter(
+        (value) => String(value.year) == String(this.Year_selected)
+      );
     },
-    search_Recive_querterly(){
-      this.myReciveMoney=[];
-      this.myReciveMoney=this.myData_recive.filter(value => String(value.quarterly)==String(this.time_selected))
+    search_Recive_querterly() {
+      this.myReciveMoney = [];
+      this.myReciveMoney = this.myData_recive.filter(
+        (value) => String(value.quarterly) == String(this.time_selected)
+      );
+    },
+    
+    //------------------
+  async  downloadReceivebill(value){
+      // table columns
+        const columns = [
+          [
+            {
+              title: "",
+            },
+            {
+              title: "",
+            },
+
+            {
+              title: "",
+            },
+            {
+              title: "ນັກຮຽນແລະນັກສຶກສາ",
+            },
+            {
+              title: "",
+            },
+            {
+              title: "",
+            },
+            {
+              title: "ພະນັກງານຄູອາຈານ",
+            },
+            {
+              title: "",
+            },
+            {
+              title: "ລວມເງິນ",
+            },
+            {
+              title: "ລວມເງິນ(ຫັກ50%)",
+            },
+          ],
+          [
+            {
+              title: "ລຳດັບ",
+            },
+            {
+              title: "ຮາກຖານ    ",
+            },
+            ////
+            {
+              title: "ລວມ",
+            },
+            {
+              title: "ຍິງ",
+            },
+            {
+              title: "ລວມເງິນສະຕິ",
+            },
+            ////
+            {
+              title: "ລວມ",
+            },
+            {
+              title: " ຍິງ",
+            },
+            {
+              title: "ລວມເງີນສະຕິ",
+            },
+          ],
+        ];
+        //set format PDF
+        const doc = new jsPDF({
+          orientation: "p",
+          unit: "in",
+          format: "A4",
+        });
+         if(value){
+           
+          let response = await axios.get(this.$store.getters.myHostname+`${value}`);
+          const mydata = response.data;
+          var rows =[];
+          for(let i in mydata ){
+            rows[i]=[]
+          }
+
+
+        //set font and line
+        doc.setFontSize(10);
+        doc.setLineWidth(0.01).line(0.5, 3.6, 7.5, 3.6);
+
+        // Table
+        doc.autoTable({
+          head: columns,
+          body: "",
+          bodyStyles: {
+            overflow: "linebreak",
+            tableWidth: "auto",
+            //fileColor: [0, 0, 0],
+            lineWidth: 0.01,
+          },
+          margin: { left: 0.1, top: 3.7, right: 0.1 },
+          styles: {
+            font: "Saysettha OT",
+          },
+          columnWidth: "auto",
+          /*
+           overflow: "linebreak",
+            tableWidth: "auto",
+            fileColor: [0, 0, 0],
+            lineWidth: 0.01,
+
+          */
+        });
+
+        //set font text header
+        doc.addFont("Saysettha OT");
+        doc.setFont("Saysettha OT");
+        doc
+          .addImage("nation.png", "PNG", 3.8, 0.25, 0.8, 0.8)
+          .setFontSize(11)
+          .text("ສາທາລະນະລັດ ປະຊາທິປະໄຕ ປະຊາຊົນລາວ", 4, 1.4, {
+            align: "center",
+            maxWidth: "7.5",
+          })
+          .text("ສັນຕິພາບ ເອກະລາດ ປະຊາທິປະໄຕ ເອກະພາບ ວັດທະນາຖາວອນ", 4, 1.6, {
+            align: "center",
+            maxWidth: "7.5",
+          })
+          .text("ມະຫາວິທະຍາໄລແຫ່ງຊາດ", 0.5, 1.9, {
+            align: "left",
+            maxWidth: "7.5",
+          })
+          .text("ຄະນະບໍລິຫານງານຊາວໜຸ່ມ ມຊ", 0.5, 2.2, {
+            align: "left",
+            maxWidth: "7.5",
+          })
+          .text("ໃບບິນເລກທີ..../ຄຊປປລ ມຊ", 7.5, 2.1, {
+            align: "right",
+            maxWidth: "7.5",
+          })
+          .text(
+            `ນະຄອນຫຼວງວຽງຈັນ, ວັນທີ:.${dateformat(Date.now(), "dd/mm/yyyy")}`,
+            7.5,
+            2.4,
+            {
+              align: "right",
+              maxWidth: "7.5",
+            }
+          )
+          .setFontSize(12)
+          .text("ໃບບິນຮັບເງິນສະຕິ ຊາວໜຸ່ມ", 4, 3, {
+            align: "center",
+            maxWidth: "7.5",
+          })
+          .setFontSize(11)
+          .text(`ປະຈຳງວດທີ:...${'ງວດທີ I'}..ຂອງສົກປີ:..${'2020-2021'}..ຈຳນວນ:..${6}..ເດືອນ`,4, 3.4, {
+            align: "center",
+            maxWidth: "7.5",
+          })
+
+        doc
+          .setFontSize(12)
+          .text("ຜູ້ສັງລວມ", 10.9, 32 - 25, null, null, "right");
+         }
+        // save pdf
+        // doc.autoPrint();
+        doc.save(
+          `ລາຍງານຂໍ້ມູນການຈ່າຍເງີນສະຕິ-${dateformat(
+            Date.now(),
+            "dd/mm/yyyy"
+          )}.pdf`
+        );
     }
-  }
+  },
 };
 </script>
 
@@ -254,7 +457,7 @@ export default {
   font-family: "boonhome-400";
   font-size: 18px;
 }
-.text-tooltip{
+.text-tooltip {
   font-family: "boonhome-400";
   font-size: 14px;
 }

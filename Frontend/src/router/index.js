@@ -148,9 +148,9 @@ const routes = [
     component: receive_money,
   },
   {
-   path:"/receive/detail/:id",
-   name:"receive-detail",
-   component:receive_detail
+    path: "/receive/detail/:id",
+    name: "receive-detail",
+    component: receive_detail,
   },
   {
     path: "/recive-create",

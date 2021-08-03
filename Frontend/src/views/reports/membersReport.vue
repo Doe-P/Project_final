@@ -292,7 +292,7 @@ export default {
               maxWidth: "7.5",
             }
           );
-            doc.text("ຜູ້ສັງລວມ", 27 - 20, 35.5 - 25, null, null, "right");
+        doc.text("ຜູ້ສັງລວມ", 27 - 20, 35.5 - 25, null, null, "right");
         // save pdf
         // doc.autoPrint();
         doc.save(
@@ -406,7 +406,7 @@ export default {
               maxWidth: "7.5",
             }
           );
-           doc.text("ຜູ້ສັງລວມ", 27 - 20, 35.5 - 25, null, null, "right");
+        doc.text("ຜູ້ສັງລວມ", 27 - 20, 35.5 - 25, null, null, "right");
         // save pdf
         // doc.autoPrint();
         doc.save(

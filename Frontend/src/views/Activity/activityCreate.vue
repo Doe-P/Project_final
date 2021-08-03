@@ -130,7 +130,7 @@ export default {
       searchData_member: null,
       //
       headers: [
-       // { text: "#ລຳດັບ", align: "Left", value: "index" },
+        // { text: "#ລຳດັບ", align: "Left", value: "index" },
         { text: "ຊື່", value: "member_name", sortable: false },
         { text: "ນາມສະກຸນ", value: "surname", sortable: false },
         { text: "ເພດ", value: "gender", sortable: false },

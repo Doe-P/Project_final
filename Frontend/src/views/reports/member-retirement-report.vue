@@ -497,26 +497,28 @@ export default {
 
     downloadPDF_byYear() {
       if (this.select_found && this.year_selected) {
-
-        const getresult = this.DataRetirement.map(item => item.result);
-        const getwomen = this.DataRetirement.map(item => item.women);
-        const getdate = this.DataRetirement.map(item => item.date_retire);
-        let row =[];
-        for(let i in getdate){
-          row[i]={
-            index:parseInt(i)+1,
-            member_name:this.DataRetirement[i].member_name,
-            surname:this.DataRetirement[i].surname,
-            gender:this.DataRetirement[i].gender,
-            sect_name:this.DataRetirement[i].sect_name,
-            unit_name:this.DataRetirement[i].unit_name,
-            reason:this.DataRetirement[i].reason,
-            date_retire:dateformat(this.DataRetirement[i].date_retire,"dd/mm/yyyy")
-          }
+        const getresult = this.DataRetirement.map((item) => item.result);
+        const getwomen = this.DataRetirement.map((item) => item.women);
+        const getdate = this.DataRetirement.map((item) => item.date_retire);
+        let row = [];
+        for (let i in getdate) {
+          row[i] = {
+            index: parseInt(i) + 1,
+            member_name: this.DataRetirement[i].member_name,
+            surname: this.DataRetirement[i].surname,
+            gender: this.DataRetirement[i].gender,
+            sect_name: this.DataRetirement[i].sect_name,
+            unit_name: this.DataRetirement[i].unit_name,
+            reason: this.DataRetirement[i].reason,
+            date_retire: dateformat(
+              this.DataRetirement[i].date_retire,
+              "dd/mm/yyyy"
+            ),
+          };
         }
         // table columns
         const columns = [
-           { title: "ລຳດັບ", dataKey: "index" },
+          { title: "ລຳດັບ", dataKey: "index" },
           { title: "ຊື່", dataKey: "member_name" },
           { title: "ນາມສະກຸນ", dataKey: "surname" },
           { title: "ເພດ", dataKey: "gender" },
@@ -536,7 +538,7 @@ export default {
         //set font and line
         doc.setFontSize(10);
         doc.setLineWidth(0.01).line(0.5, 3.2, 11.2, 3.2);
-        
+
         // Table
         doc.autoTable({
           columns,
@@ -591,7 +593,7 @@ export default {
             maxWidth: "7.5",
           })
           .setFontSize(11)
-           .text(`ຮາກຖານ: ${this.select_found}`, 0.5, 2.9, {
+          .text(`ຮາກຖານ: ${this.select_found}`, 0.5, 2.9, {
             align: "left",
             maxWidth: "7.5",
           })
@@ -599,11 +601,18 @@ export default {
             align: "left",
             maxWidth: "7.5",
           })
-          .text(`ລວມສະມາຊິກພົ້ນກະສຽນທັງໝົດ:..${getresult}..ສະຫາຍ, ຍິງ:.${getwomen}.ສະຫາຍ`, 11, 3.1, {
-            align: "right",
-            maxWidth: "7.5",
-          });
-        doc.setFontSize(12).text("ຜູ້ສັງລວມ", 10.9, 32 - 25, null, null, "right");
+          .text(
+            `ລວມສະມາຊິກພົ້ນກະສຽນທັງໝົດ:..${getresult}..ສະຫາຍ, ຍິງ:.${getwomen}.ສະຫາຍ`,
+            11,
+            3.1,
+            {
+              align: "right",
+              maxWidth: "7.5",
+            }
+          );
+        doc
+          .setFontSize(12)
+          .text("ຜູ້ສັງລວມ", 10.9, 32 - 25, null, null, "right");
         // save pdf
         // doc.autoPrint();
         doc.save(
@@ -617,20 +626,20 @@ export default {
 
     //=================
 
-      downloadPDF_byDate() {
+    downloadPDF_byDate() {
       if (this.start_date_format && this.end_date_format) {
-        let row =[];
-        for(let i in this.DataRetirement_byDate){
-          row[i]={
-            index:parseInt(i)+1,
-            fund_name:this.DataRetirement_byDate[i].fund_name,
-            total:this.DataRetirement_byDate[i].total,
-            women:this.DataRetirement_byDate[i].women,
-          }
+        let row = [];
+        for (let i in this.DataRetirement_byDate) {
+          row[i] = {
+            index: parseInt(i) + 1,
+            fund_name: this.DataRetirement_byDate[i].fund_name,
+            total: this.DataRetirement_byDate[i].total,
+            women: this.DataRetirement_byDate[i].women,
+          };
         }
         // table columns
         const columns = [
-           { title: "ລຳດັບ", dataKey: "index" },
+          { title: "ລຳດັບ", dataKey: "index" },
           { title: "ຮາກຖານ", dataKey: "fund_name" },
           { title: "ລວມສະມາຊິກທັງໝົດ", dataKey: "total" },
           { title: "ຍິງ", dataKey: "women" },
@@ -646,7 +655,7 @@ export default {
         //set font and line
         doc.setFontSize(10);
         doc.setLineWidth(0.01).line(0.5, 3.3, 7.7, 3.3);
-        
+
         // Table
         doc.autoTable({
           columns,
@@ -654,7 +663,7 @@ export default {
           margin: { left: 0.5, top: 3.4, right: 0.5 },
           styles: { font: "Saysettha OT" },
           columnWidth: {
-            fund_name: { columnWidth: 33 }, 
+            fund_name: { columnWidth: 33 },
             result: { columnWidth: 33 },
             women: { columnWidth: 33 },
           },
@@ -701,18 +710,20 @@ export default {
             maxWidth: "7.5",
           })
           .setFontSize(11)
-           .text(`ປະຈຳວັນທີ: ${this.start_date_format} ຫາ ${this.end_date_format}`, 4, 3.1, {
-            align: "center",
-            maxWidth: "7.5",
-           })
+          .text(
+            `ປະຈຳວັນທີ: ${this.start_date_format} ຫາ ${this.end_date_format}`,
+            4,
+            3.1,
+            {
+              align: "center",
+              maxWidth: "7.5",
+            }
+          );
         doc.setFontSize(12).text("ຜູ້ສັງລວມ", 7, 35 - 25, null, null, "right");
         // save pdf
         // doc.autoPrint();
         doc.save(
-          `ລາຍງານຂໍ້ມູນການພົ້ນກະສຽນ-${dateformat(
-            Date.now(),
-            "dd/mm/yyyy"
-          )}.pdf`
+          `ລາຍງານຂໍ້ມູນການພົ້ນກະສຽນ-${dateformat(Date.now(), "dd/mm/yyyy")}.pdf`
         );
       }
     },
@@ -737,7 +748,7 @@ export default {
   font-family: "boonhome-400";
   font-size: 14px;
 }
-.button-action:hover{
+.button-action:hover {
   transition-delay: 2ms;
   transform: translateY(-8px);
 }

@@ -191,7 +191,7 @@ export default {
       Year_value_select: null,
       isChecked: true,
       myData_receive: [],
-      isChecked_download:true,
+      isChecked_download: true,
     };
   },
 
@@ -217,7 +217,7 @@ export default {
       this.isChecked = true;
       this.Year_value_select = null;
       this.myData_receive = [];
-      this.isChecked_download=true;
+      this.isChecked_download = true;
     },
 
     //=================
@@ -252,7 +252,7 @@ export default {
               `/reportReceive_money/year/${this.Year_value_select}`
           );
           this.myData_receive = response.data;
-          this.isChecked_download=false;
+          this.isChecked_download = false;
         } catch (err) {
           console.log(err);
         }
@@ -272,20 +272,18 @@ export default {
         let row = [];
         for (let i in this.myData_receive) {
           row[i] = [
-             parseInt(i) + 1,
-           this.myData_receive[i].fund_name,
+            parseInt(i) + 1,
+            this.myData_receive[i].fund_name,
             this.myData_receive[i].quarterly,
-           dateformat(this.myData_receive[i].date, "dd/mm/yyyy"),
-           this.myData_receive[i].student,
-           this.myData_receive[i].student_W,
-          this.formatPrice(this.myData_receive[i].student_Mn),
-           this.myData_receive[i].teacher,
-           this.myData_receive[i].teacher_W,
+            dateformat(this.myData_receive[i].date, "dd/mm/yyyy"),
+            this.myData_receive[i].student,
+            this.myData_receive[i].student_W,
+            this.formatPrice(this.myData_receive[i].student_Mn),
+            this.myData_receive[i].teacher,
+            this.myData_receive[i].teacher_W,
             this.formatPrice(this.myData_receive[i].teacher_Mn),
             this.formatPrice(this.myData_receive[i].money_total),
-           this.formatPrice(
-              parseInt(this.myData_receive[i].money_total) / 2
-            ),
+            this.formatPrice(parseInt(this.myData_receive[i].money_total) / 2),
           ];
         }
         // table columns
@@ -370,7 +368,7 @@ export default {
           unit: "in",
           format: "A4",
         });
-       
+
         //set font and line
         doc.setFontSize(10);
         doc.setLineWidth(0.01).line(0.1, 3.2, 11.2, 3.2);
@@ -389,7 +387,7 @@ export default {
           styles: {
             font: "Saysettha OT",
           },
-          columnWidth:'auto'
+          columnWidth: "auto",
           /*
            overflow: "linebreak",
             tableWidth: "auto",
@@ -444,10 +442,17 @@ export default {
             align: "left",
             maxWidth: "7.5",
           })
-           .text(`ລວມຈຳນວນເງິນສະຕິທີ່ຮັບມາທັງໝົດ: ${this.formatPrice(this.Summoney)} ກີບ`, 11, 3.1, {
-            align: "right",
-            maxWidth: "7.5",
-          });
+          .text(
+            `ລວມຈຳນວນເງິນສະຕິທີ່ຮັບມາທັງໝົດ: ${this.formatPrice(
+              this.Summoney
+            )} ກີບ`,
+            11,
+            3.1,
+            {
+              align: "right",
+              maxWidth: "7.5",
+            }
+          );
 
         doc
           .setFontSize(12)

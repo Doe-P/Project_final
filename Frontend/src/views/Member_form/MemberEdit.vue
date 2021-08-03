@@ -154,7 +154,7 @@
                       ]"
                       :counter="20"
                     ></v-text-field>
-                     <v-select
+                    <v-select
                       label="ເລືອກແຂວງປະຈຸບັນ"
                       :items="myProvince"
                       v-model="txt_bprovince"
@@ -202,7 +202,7 @@
                       ]"
                       :counter="20"
                     ></v-text-field>
-                     <v-select
+                    <v-select
                       label="ເລືອກແຂວງປະຈຸບັນ"
                       :items="myProvince"
                       v-model="txt_nprovince"
@@ -632,7 +632,7 @@ export default {
     return {
       language_selected: [],
       items: ["ອັງກິດ", "ຈີນ", "ຫວຽດນາມ", "ຢີ່ປຸ່ນ", "ເກົາຫຼີ"],
-        myStatus:['ສະມາຊິກ','ພົ້ນກະສຽນ','ຍົກຍ້າຍ'],
+      myStatus: ["ສະມາຊິກ", "ພົ້ນກະສຽນ", "ຍົກຍ້າຍ"],
       //Valid input
       required(propertyType) {
         return (v) => (v && v.length > 0) || `ກະລຸນາປ້ອນຂໍ້ມູນ${propertyType}`;

@@ -139,9 +139,9 @@
 
 <script>
 import axios from "axios";
-import jsPDF from 'jspdf';
-import 'jspdf-autotable';
-import dateformat from 'dateformat';
+import jsPDF from "jspdf";
+import "jspdf-autotable";
+import dateformat from "dateformat";
 export default {
   name: "ReceiveReport",
   data() {
@@ -238,16 +238,19 @@ export default {
 
     downloadActivity_PDF() {
       if (this.Year_value_select) {
-        var row=[];
-        for(let i in this.myDataActivity){
-           row[i]={
-             index:parseInt(i)+1,
-             acti_title:this.myDataActivity[i].acti_title,
-             place:this.myDataActivity[i].place,
-             date_acti:dateformat(this.myDataActivity[i].date_acti,"dd/mm/yyyy"),
-             result:this.myDataActivity[i].result,
-             women:this.myDataActivity[i].women
-           }
+        var row = [];
+        for (let i in this.myDataActivity) {
+          row[i] = {
+            index: parseInt(i) + 1,
+            acti_title: this.myDataActivity[i].acti_title,
+            place: this.myDataActivity[i].place,
+            date_acti: dateformat(
+              this.myDataActivity[i].date_acti,
+              "dd/mm/yyyy"
+            ),
+            result: this.myDataActivity[i].result,
+            women: this.myDataActivity[i].women,
+          };
         }
         // table columns
         const columns = [
@@ -257,7 +260,7 @@ export default {
           { title: "ວັນທີ", dataKey: "date_acti" },
           { title: "ຈຳນວນສະມາຊິກເຂົ້າຮ່ວມ", dataKey: "result" },
           { title: "ຍິງ", dataKey: "women" },
-           { title: "ໝາຍເຫດ", dataKey: "note" },
+          { title: "ໝາຍເຫດ", dataKey: "note" },
         ];
 
         //set format PDF
@@ -279,11 +282,11 @@ export default {
             overflow: "linebreak",
             tableWidth: "auto",
             //fileColor: [0, 0, 0],
-          lineWidth: 0.01,
+            lineWidth: 0.01,
           },
           margin: { left: 0.5, top: 3.4, right: 0.5 },
           styles: { font: "Saysettha OT" },
-          columnWidth: 'auto'
+          columnWidth: "auto",
         });
 
         //set font text header
@@ -326,7 +329,7 @@ export default {
             align: "center",
             maxWidth: "7.5",
           })
-           .setFontSize(11)
+          .setFontSize(11)
           .text(`ປະຈຳປີ: ${this.Year_value_select}`, 0.5, 2.9, {
             align: "left",
             maxWidth: "7.5",
@@ -349,7 +352,7 @@ export default {
               maxWidth: "7.5",
             }
           );
-         doc.setFontSize(11)
+        doc.setFontSize(11);
         doc.text("ເລຂາຊາວໜຸ່ມ", 0.7, 35.5 - 25, null, null, "left");
         doc.text("ຜູ້ສັງລວມ", 27 - 20, 35.5 - 25, null, null, "right");
         // save pdf

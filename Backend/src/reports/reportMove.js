@@ -100,3 +100,32 @@ exports.get_moveNO = (fund_id,year,result) => {
         console.log(error);
     }
 }
+
+exports.repMove_member = (id, result) => {
+    let cdt_ID1 = id;
+    try {
+        let sql = `SELECT tb_move.move_NO,tb_member.member_name,tb_member.surname,tb_member.birthday,tb_member.bvillage,tb_member.bdistrict,tb_member.bprovince,tb_member.nvillage,tb_member.ndistrict,tb_member.nprovince,tb_member.nation,tb_member.ethnic,tb_member.religion,tb_member.date_Y,tb_member.responsible,tb_foundation.fund_name,tb_move.reason,tb_move.m_Year 
+        FROM tb_move_detail 
+        INNER JOIN tb_move ON tb_move_detail.move_id=tb_move.move_id 
+        INNER JOIN tb_member ON tb_move_detail.member_id=tb_member.member_id 
+        INNER JOIN tb_section ON tb_member.sect_id = tb_section.sect_id 
+        INNER JOIN tb_unit ON tb_section.unit_id=tb_unit.unit_id 
+        INNER JOIN tb_foundation ON tb_unit.fund_id=tb_foundation.fund_id 
+        WHERE tb_move_detail.move_id =?`;
+        dbCon.query(sql, [cdt_ID1, id], (err, res) => {
+            if (err) {
+                console.log(`Error while fetching count women and data move member with${id}` + err);
+                return result(err, null);
+            }
+
+            if (res.length) {
+                // found
+                return result(null, res);
+            }
+            // not found
+            result({ kind: 'not found' }, null);
+        });
+    } catch (error) {
+        console.log(error);
+    }
+}
