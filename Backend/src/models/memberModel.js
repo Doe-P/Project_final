@@ -138,9 +138,14 @@ exports.getMemberByfound = (id, result) => {
     });
 }
 // count all member
-exports.CountAllmember = (result) => {
-    let sql = 'SELECT COUNT(member_id) AS count_member FROM tb_member';
-    dbCon.query(sql, (err, res) => {
+exports.CountAllmemberclient = (fund_id,result) => {
+    let sql = `SELECT COUNT(*) AS count_member 
+    FROM tb_member 
+    INNER JOIN tb_section ON tb_member.sect_id = tb_section.sect_id 
+    INNER JOIN tb_unit ON tb_section.unit_id = tb_unit.unit_id 
+    INNER JOIN tb_foundation ON tb_unit.fund_id = tb_foundation.fund_id 
+    WHERE tb_member.status LIKE N'ສະມາຊິກ' AND tb_foundation.fund_id=?`;
+    dbCon.query(sql,[fund_id], (err, res) => {
         if (err) {
             console.log('Error while fetching tb_member==>' + err);
             result(err, null);
@@ -188,3 +193,22 @@ exports.CountMovemember = (result) => {
         result(null, res);
     });
 }
+
+// count member
+exports.CountMembers = (result) => {
+    let sql = `SELECT
+     (SELECT COUNT(*) FROM tb_member WHERE status LIKE N'ສະມາຊິກ') AS members,
+      (SELECT COUNT(*) FROM tb_member WHERE status LIKE N'ສະມາຊິກ' AND gender='ຍິງ') AS women,
+       (SELECT COUNT(*) FROM tb_member WHERE status LIKE N'ຍົກຍ້າຍ') AS move, 
+       (SELECT COUNT(*) FROM tb_member WHERE status LIKE N'ພົ້ນກະສຽນ') AS retire
+        FROM tb_member`;
+    dbCon.query(sql,(err, res) => {
+        if (err) {
+            console.log('Error while fetching tb_member==>' + err);
+            result(err, null);
+            return;
+        }
+        result(null, res);
+    });
+}
+

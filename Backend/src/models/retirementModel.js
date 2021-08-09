@@ -4,7 +4,7 @@ const dbCon = require('../../config/db');
 // Get all member retirement from tb_member 
 exports.getAllRetire = (result) => {
     //let status = 'retired' // ໝາຍເຖິງສະຖານະສະມາຊິກທີ່ົພົ້ນກະສຽນ
-    let sql = 'SELECT tb_retirement.retire_id,tb_retirement.No_Ask,tb_retirement.member_id,tb_retirement.reason,tb_retirement.portfolio,tb_retirement.date_Ask,tb_retirement.age,tb_retirement.date_retire,tb_typemember.typemember,tb_member.member_name,tb_member.surname,tb_member.gender,tb_section.sect_name,tb_unit.unit_name,tb_foundation.fund_name FROM tb_retirement INNER JOIN tb_member ON tb_retirement.member_id=tb_member.member_id INNER JOIN tb_typemember ON tb_member.typemember_id=tb_typemember.typemember_id INNER JOIN tb_section ON tb_member.sect_id=tb_section.sect_id INNER JOIN tb_unit ON tb_section.unit_id=tb_unit.unit_id INNER JOIN tb_foundation ON tb_unit.fund_id=tb_foundation.fund_id';
+    let sql = 'SELECT tb_retirement.retire_id,tb_retirement.No_Ask,tb_retirement.member_id,tb_retirement.reason,tb_retirement.portfolio,tb_retirement.date_Ask,tb_retirement.age,tb_retirement.date_retire,tb_typemember.typemember,tb_member.member_name,tb_member.surname,tb_member.gender,tb_section.sect_name,tb_unit.unit_name,tb_foundation.fund_name,tb_foundation.fund_id FROM tb_retirement INNER JOIN tb_member ON tb_retirement.member_id=tb_member.member_id INNER JOIN tb_typemember ON tb_member.typemember_id=tb_typemember.typemember_id INNER JOIN tb_section ON tb_member.sect_id=tb_section.sect_id INNER JOIN tb_unit ON tb_section.unit_id=tb_unit.unit_id INNER JOIN tb_foundation ON tb_unit.fund_id=tb_foundation.fund_id';
     dbCon.query(sql, (err, res) => {
         if (err) {
             console.log('Error while fetching retirements', err);

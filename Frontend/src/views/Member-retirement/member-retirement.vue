@@ -7,7 +7,7 @@
             <MemberCard
               id="card"
               title="ສະມາຊິກພົ້ນກະສຽນທັງໝົດ"
-              :subtitle="getCount_allmember"
+              :subtitle="Count_allmember"
               bg_color="primary"
               avatar_ic="groups"
             />
@@ -16,7 +16,7 @@
             <MemberCard
               id="card"
               title="ສະມາຊິກຍິງທັງໝົດ"
-              :subtitle="getCount_femalemember"
+              :subtitle="Count_femalemember"
               bg_color="women"
               avatar_ic="people"
             />
@@ -177,14 +177,33 @@ export default {
     User() {
       return this.$store.getters["User/getmyUser"];
     },
+      Count_allmember() {
+       let myData = ""
+      try {
+         myData = this.myData_menberRetire.length;
+      } catch (err) {
+        console.log(err);
+      }
+      return myData;
+    },
+
+      Count_femalemember() {
+        let myData =""
+      try {
+        myData = this.myData_menberRetire.filter(item => String(item.gender)==String('ຍິງ')).length;
+      } catch (err) {
+        console.log(err);
+      }
+      return myData;
+    },
   },
   created() {
     this.getData_retirements();
   },
 
   mounted() {
-    this.Count_allmember();
-    this.Count_femalemember();
+    // this.Count_allmember();
+    // this.Count_femalemember();
   },
   methods: {
     async getData_retirements() {
@@ -208,33 +227,33 @@ export default {
         console.log(err);
       }
     },
-    async Count_allmember() {
-      try {
-        await axios
-          .get(
-            this.$store.getters.myHostname + "/api/v1/count-allmembers-retire"
-          )
-          .then((response) => {
-            this.getCount_allmember = response.data.count_member;
-          });
-      } catch (err) {
-        console.log(err);
-      }
-    },
-    async Count_femalemember() {
-      try {
-        await axios
-          .get(
-            this.$store.getters.myHostname +
-              "/api/v1/count-femalemembers-retire"
-          )
-          .then((response) => {
-            this.getCount_femalemember = response.data.count_member;
-          });
-      } catch (err) {
-        console.log(err);
-      }
-    },
+    // async Count_allmember() {
+    //   try {
+    //     await axios
+    //       .get(
+    //         this.$store.getters.myHostname + "/api/v1/count-allmembers-retire"
+    //       )
+    //       .then((response) => {
+    //         this.getCount_allmember = response.data.count_member;
+    //       });
+    //   } catch (err) {
+    //     console.log(err);
+    //   }
+    // },
+    // async Count_femalemember() {
+    //   try {
+    //     await axios
+    //       .get(
+    //         this.$store.getters.myHostname +
+    //           "/api/v1/count-femalemembers-retire"
+    //       )
+    //       .then((response) => {
+    //         this.getCount_femalemember = response.data.count_member;
+    //       });
+    //   } catch (err) {
+    //     console.log(err);
+    //   }
+    // },
     edit_item_retire(id) {
       this.$store.dispatch({
         type: "doClick_retireEdit",

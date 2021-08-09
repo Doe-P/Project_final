@@ -35,6 +35,7 @@ import certificateReport from "@/views/reports/certificate-report.vue";
 import register_view from "@/views/registers/register-view.vue";
 import register_create from "@/views/registers/register-create.vue";
 import register_edit from "@/views/registers/register-edit.vue";
+import Main from "@/views/Main/main.vue";
 
 Vue.use(VueRouter);
 
@@ -43,6 +44,11 @@ const routes = [
     path: "/",
     name: "Login",
     component: Login,
+  },
+  {
+   path:"/dashboard",
+   name:"dashboard",
+   component:Main
   },
   {
     path: "/Member",

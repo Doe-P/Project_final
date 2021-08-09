@@ -7,7 +7,8 @@ exports.repRetire_Year = (year, id, result) => {
     let ft1_ID = id;
     let ft2_ID = id;
     try {
-        let sql = `SELECT tb_retirement.NO_Ask, tb_member.member_name, tb_member.surname, tb_member.gender, tb_typemember.typemember, tb_section.sect_name, tb_unit.unit_name, tb_foundation.fund_name, tb_member.responsible,tb_retirement.reason, tb_retirement.date_retire, (SELECT COUNT(*) FROM tb_member
+        let sql = `SELECT tb_retirement.NO_Ask, tb_member.member_name, tb_member.surname, tb_member.gender, tb_typemember.typemember, tb_section.sect_name, tb_unit.unit_name, tb_foundation.fund_name, tb_member.responsible,tb_retirement.reason, tb_retirement.date_retire, 
+        (SELECT COUNT(*) FROM tb_member
         INNER JOIN tb_retirement ON tb_member.member_id = tb_retirement.member_id
         INNER JOIN tb_section ON tb_section.sect_id = tb_member.sect_id
         INNER JOIN tb_unit ON tb_unit.unit_id = tb_section.unit_id

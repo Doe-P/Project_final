@@ -8,7 +8,7 @@
             <MemberCard
               id="card"
               title="ສະມາຊິກທັງໝົດ"
-              :subtitle="Count_allmember"
+              :subtitle="getCount_allmember"
               bg_color="primary"
               avatar_ic="groups"
             />
@@ -18,29 +18,30 @@
             <MemberCard
               id="card"
               title="ສະມາຊິກຍິງທັງໝົດ"
-              :subtitle="Count_femalemember"
+              :subtitle="getCount_femalemember"
               bg_color="primary"
               avatar_ic="groups"
             />
           </v-col>
-          <!-- ຈຳນວນສະມາຊິກພົ້ນກະສຽ່ນທັງໝົດ -->
-          <v-col lg="3" md="3" sm="12" cols="12">
-            <MemberCard
-              id="card"
-              title="ສະມາຊິກພົ້ນກະສຽ່ນທັງໝົດ"
-              :subtitle="Count_retiremember"
-              bg_color="primary"
-              avatar_ic="person_remove"
-            />
-          </v-col>
+    
           <!-- ຈຳນວນສະມາຊິກຍົກຍ້າຍທັງໝົດ -->
           <v-col lg="3" md="3" sm="12" cols="12">
             <MemberCard
               id="card"
               title="ສະມາຊິກຍົກຍ້າຍທັງໝົດ"
-              :subtitle="Count_movemember"
+              :subtitle="getCount_movemember"
               bg_color="primary"
               avatar_ic="timeline"
+            />
+          </v-col>
+           <!-- ຈຳນວນສະມາຊິກພົ້ນກະສຽ່ນທັງໝົດ -->
+          <v-col lg="3" md="3" sm="12" cols="12">
+            <MemberCard
+              id="card"
+              title="ສະມາຊິກພົ້ນກະສຽ່ນທັງໝົດ"
+              :subtitle="getCount_retirementmember"
+              bg_color="primary"
+              avatar_ic="person_remove"
             />
           </v-col>
         </v-row>
@@ -299,6 +300,7 @@ export default {
   },
   watch: {
     myUser() {
+      // this.getCount_allmember();
       this.getData_members();
     },
   },
@@ -306,9 +308,91 @@ export default {
     myUser() {
       return this.$store.getters["User/getmyUser"];
     },
+    getCount_allmember() {
+      let myData = "";
+      try {
+        if (this.myUser.status == "Admin") {
+          myData = this.myData_member.filter(
+            (item) => String(item.status) == String("ສະມາຊິກ")
+          ).length;
+        } else {
+          myData = this.myData_member.filter(
+            (item) =>
+              String(item.status) == String("ສະມາຊິກ") &&
+              String(item.fund_id) == String(this.myUser.fund_id)
+          ).length;
+        }
+      } catch (err) {
+        console.log(err);
+      }
+      return myData;
+    },
+
+    getCount_femalemember() {
+      let myData = "";
+      try {
+        if (this.myUser.status == "Admin") {
+          myData = this.myData_member.filter(
+            (item) =>
+              String(item.status) == String("ສະມາຊິກ") &&
+              String(item.gender) == String("ຍິງ")
+          ).length;
+        } else {
+          myData = this.myData_member.filter(
+            (item) =>
+              String(item.status) == String("ສະມາຊິກ") &&
+              String(item.fund_id) == String(this.myUser.fund_id) &&
+              String(item.gender) == String("ຍິງ")
+          ).length;
+        }
+      } catch (err) {
+        console.log(err);
+      }
+      return myData;
+    },
+
+     getCount_retirementmember() {
+       let myData =""
+      try {
+         if (this.myUser.status == "Admin") {
+          myData = this.myData_member.filter(
+            (item) => String(item.status) == String("ພົ້ນກະສຽນ")
+          ).length;
+        } else {
+          myData = this.myData_member.filter(
+            (item) =>
+              String(item.status) == String("ພົ້ນກະສຽນ") &&
+              String(item.fund_id) == String(this.myUser.fund_id)
+          ).length;
+        }
+      } catch (err) {
+        console.log(err);
+      }
+      return myData;
+    },
+
+   getCount_movemember() {
+     let myData =""
+      try {
+        if (this.myUser.status == "Admin") {
+          myData = this.myData_member.filter(
+            (item) => String(item.status) == String("ຍົກຍ້າຍ")
+          ).length;
+        } else {
+          myData = this.myData_member.filter(
+            (item) =>
+              String(item.status) == String("ຍົກຍ້າຍ") &&
+              String(item.fund_id) == String(this.myUser.fund_id)
+          ).length;
+        }
+      } catch (err) {
+        console.log(err);
+      }
+      return myData;
+    },
   },
   mounted() {
-    this.getCount_allmember();
+    // this.getCount_allmember();
     this.getCount_femalemember();
     this.getCount_retirementmember();
     this.getCount_movemember();
@@ -328,58 +412,59 @@ export default {
             this.$store.getters.myHostname + "/api/v1/members"
           );
           this.myData_member = response.data;
+          this.loading = false;
         } else if (this.user_status == "User") {
           let response = await axios.get(
             `${this.$store.getters.myHostname}/api/v1/members-foundation/${fund_id}`
           );
           this.myData_member = response.data;
+          this.loading = false;
         }
       } catch (err) {
         console.log(err);
       }
     },
     // get count all member
-    async getCount_allmember() {
-      try {
-        let response = await axios.get(
-          this.$store.getters.myHostname + "/api/v1/count-allmembers"
-        );
-        this.Count_allmember = parseInt(response.data.count_member);
-        this.loading = false;
-      } catch (err) {
-        console.log(err);
-      }
-    },
-    async getCount_femalemember() {
-      try {
-        let response = await axios.get(
-          this.$store.getters.myHostname + "/api/v1/count-femalemembers"
-        );
-        this.Count_femalemember = parseInt(response.data.count_member);
-      } catch (err) {
-        console.log(err);
-      }
-    },
-    async getCount_retirementmember() {
-      try {
-        let response = await axios.get(
-          this.$store.getters.myHostname + "/api/v1/retirement-members"
-        );
-        this.Count_retiremember = parseInt(response.data.count_member);
-      } catch (err) {
-        console.log(err);
-      }
-    },
-    async getCount_movemember() {
-      try {
-        let response = await axios.get(
-          this.$store.getters.myHostname + "/api/v1/count-movemembers"
-        );
-        this.Count_movemember = parseInt(response.data.count_member);
-      } catch (err) {
-        console.log(err);
-      }
-    },
+    // async getCount_allmember() {
+    //   try {
+
+    //      let myData = this.myData_member.filter(item => String(item.status)==String('ສະມາຊິກ'));
+    //      this.Count_allmember = parseInt(myData.length)
+
+    //   } catch (err) {
+    //     console.log(err);
+    //   }
+    // },
+    // async getCount_femalemember() {
+    //   try {
+    //     let response = await axios.get(
+    //       this.$store.getters.myHostname + "/api/v1/count-femalemembers"
+    //     );
+    //     this.Count_femalemember = parseInt(response.data.count_member);
+    //   } catch (err) {
+    //     console.log(err);
+    //   }
+    // },
+    // async getCount_retirementmember() {
+    //   try {
+    //     let response = await axios.get(
+    //       this.$store.getters.myHostname + "/api/v1/retirement-members"
+    //     );
+    //     this.Count_retiremember = parseInt(response.data.count_member);
+    //   } catch (err) {
+    //     console.log(err);
+    //   }
+    // },
+    // async getCount_movemember() {
+    //   try {
+    //     let response = await axios.get(
+    //       this.$store.getters.myHostname + "/api/v1/count-movemembers"
+    //     );
+    //     this.Count_movemember = parseInt(response.data.count_member);
+    //   } catch (err) {
+    //     console.log(err);
+    //   }
+    // },
     delete_item(id) {
       this.confirm_dialog = true;
       this.get_member_id = id;

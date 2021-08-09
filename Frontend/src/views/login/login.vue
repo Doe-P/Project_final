@@ -106,7 +106,7 @@ export default {
               this.$store.dispatch({
                 type: "doLogin",
               });
-              this.$router.push("/Member");
+              this.$router.push("/dashboard");
               location.reload();
             }
           });

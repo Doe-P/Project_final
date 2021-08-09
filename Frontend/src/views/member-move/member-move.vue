@@ -2,7 +2,7 @@
   <div id="move">
     <v-container fluid>
       <v-row justify="center" class="my-5 mx-10">
-        <v-col lg="6" md="6" sm="12" cols="12">
+        <!-- <v-col lg="6" md="6" sm="12" cols="12">
           <MemberCard
             id="card"
             title="ສະມາຊິກຍົກຍ້າຍທັງໝົດ"
@@ -19,7 +19,7 @@
             bg_color="primary"
             avatar_ic="people"
           />
-        </v-col>
+        </v-col> -->
         <v-card width="100%" class="mt-3">
           <v-data-table
             :headers="headers"
@@ -113,7 +113,7 @@
 </template>
 
 <script>
-import MemberCard from "@/components/cards/MemberCard.vue";
+// import MemberCard from "@/components/cards/MemberCard.vue";
 import moveformAdd from "@/components/member-move-form/move-formAdd.vue";
 import moveformEdit from "@/components/member-move-form/move-formEdit.vue";
 import axios from "axios";
@@ -122,7 +122,7 @@ export default {
   components: {
     moveformAdd,
     moveformEdit,
-    MemberCard,
+  //  MemberCard,
   },
   data() {
     return {
@@ -146,8 +146,8 @@ export default {
   },
   mounted() {
     this.getData_move();
-    this.CountAll_membermove();
-    this.CountFemale_membermove();
+    // this.CountAll_membermove();
+    // this.CountFemale_membermove();
   },
   methods: {
     async getData_move() {
@@ -184,61 +184,61 @@ export default {
         move_id: id,
       });
     },
-    // get count all member move for admin
-    async CountAll_membermove() {
-      const user_status = "admin";
-      const get_found = "F0001-30062021";
-      if (user_status == "admin") {
-        try {
-          await axios
-            .get(this.$store.getters.myHostname + "/api/v1/countAll")
-            .then((response) => {
-              this.getCount_all = parseInt(response.data.amount);
-            });
-        } catch (err) {
-          console.log(err);
-        }
-      } else {
-        try {
-          await axios
-            .get(
-              `${this.$store.getters.myHostname}/api/v1/countAll-foundation/${get_found}`
-            )
-            .then((response) => {
-              this.getCount_all = parseInt(response.data.amount);
-            });
-        } catch (err) {
-          console.log(err);
-        }
-      }
-    },
-    async CountFemale_membermove() {
-      const user_status = "admin";
-      const get_found = "F0001-30062021";
-      if (user_status == "admin") {
-        try {
-          await axios
-            .get(this.$store.getters.myHostname + "/api/v1/countfemale")
-            .then((response) => {
-              this.getCount_female = parseInt(response.data.amount);
-            });
-        } catch (err) {
-          console.log(err);
-        }
-      } else {
-        try {
-          await axios
-            .get(
-              `${this.$store.getters.myHostname}/api/v1/countfemale-found//${get_found}`
-            )
-            .then((response) => {
-              this.getCount_female = parseInt(response.data.amount);
-            });
-        } catch (err) {
-          console.log(err);
-        }
-      }
-    },
+    // // get count all member move for admin
+    // async CountAll_membermove() {
+    //   const user_status = "admin";
+    //   const get_found = "F0001-30062021";
+    //   if (user_status == "admin") {
+    //     try {
+    //       await axios
+    //         .get(this.$store.getters.myHostname + "/api/v1/countAll")
+    //         .then((response) => {
+    //           this.getCount_all = parseInt(response.data.amount);
+    //         });
+    //     } catch (err) {
+    //       console.log(err);
+    //     }
+    //   } else {
+    //     try {
+    //       await axios
+    //         .get(
+    //           `${this.$store.getters.myHostname}/api/v1/countAll-foundation/${get_found}`
+    //         )
+    //         .then((response) => {
+    //           this.getCount_all = parseInt(response.data.amount);
+    //         });
+    //     } catch (err) {
+    //       console.log(err);
+    //     }
+    //   }
+    // },
+    // async CountFemale_membermove() {
+    //   const user_status = "admin";
+    //   const get_found = "F0001-30062021";
+    //   if (user_status == "admin") {
+    //     try {
+    //       await axios
+    //         .get(this.$store.getters.myHostname + "/api/v1/countfemale")
+    //         .then((response) => {
+    //           this.getCount_female = parseInt(response.data.amount);
+    //         });
+    //     } catch (err) {
+    //       console.log(err);
+    //     }
+    //   } else {
+    //     try {
+    //       await axios
+    //         .get(
+    //           `${this.$store.getters.myHostname}/api/v1/countfemale-found//${get_found}`
+    //         )
+    //         .then((response) => {
+    //           this.getCount_female = parseInt(response.data.amount);
+    //         });
+    //     } catch (err) {
+    //       console.log(err);
+    //     }
+    //   }
+    // },
   },
 };
 </script>

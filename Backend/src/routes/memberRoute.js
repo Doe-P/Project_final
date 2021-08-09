@@ -14,6 +14,7 @@ const {
   Countfemalemember,
   CountRetiremember,
   CountMovemember,
+  CountMembers,
   getMemberBystatus
 } = require("../models/memberModel");
 
@@ -148,8 +149,9 @@ router.get("/api/v1/members-MaxID", (req, res) => {
 });
 
 // count all member
-router.get("/api/v1/count-allmembers", (req, res) => {
-  CountAllmember((err, result) => {
+router.get("/api/v1/count-allmembers/:id", (req, res) => {
+  const fund_id = req.params.id;
+  CountAllmemberclient(fund_id,(err, result) => {
     if (err) {
       return res
         .status(500)
@@ -194,5 +196,17 @@ router.get("/api/v1/count-movemembers", (req, res) => {
       res.json(result[0]);
     });
   });
+
+    // count member
+router.get("/api/v1/count-members", (req, res) => {
+  CountMembers((err, result) => {
+    if (err) {
+      return res
+        .status(500)
+        .send({ msg: "Some error occurred while retrieving member" });
+    }
+    res.json(result[0]);
+  });
+});
 
 module.exports = router;

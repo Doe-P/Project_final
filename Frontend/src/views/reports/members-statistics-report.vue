@@ -141,8 +141,8 @@
               class="elevation-10 table-content"
               loading-text="ກຳລັງໂຫຼດ..."
             >
-              <template v-slot:body="{ items }">
-                <thead>
+              <template  v-slot:body="{ items }">
+                <thead >
                   <tr>
                     <template v-for="(headeritem, idx_1) in headerTitle">
                       <th
@@ -207,6 +207,7 @@
 <script>
 import dateformat from "dateformat";
 import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
 export default {
   name: "MembersStatisticsReport",
   data() {
@@ -367,7 +368,8 @@ export default {
       },
       // validate btn
       valid: false,
-      isCheck_download: true,
+      isCheck_download: false,
+      myData_receive:[{fund_name:1}]
     };
   },
 
@@ -439,17 +441,18 @@ export default {
     //-------------
 
     downloadStatisticPDF(){
-      const doc = new jsPDF();
-
-      const html = this.$refs.myTable.innerHTML
-
-      doc.formHTML(html,15,15,{
-        Width:150
-      })
-
-      doc.save('output.pdf')
-    }
+     const doc = new jsPDF({
+        orientation: "l",
+          format: "A4",
+     });
+     var canvasElement = document.createElement('canvas');
+     html2canvas(this.$refs.myTable,{canvas:canvasElement}).then(function (canvas){
+       const img = canvas.toDataURL('nation.png',0.8);
+       doc.addImage(img,'PNG',10,10);
+       doc.save('myTable.pdf');
+     })
   },
+  }
 };
 </script>
 

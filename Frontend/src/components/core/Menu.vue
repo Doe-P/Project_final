@@ -7,14 +7,14 @@
       temporary
       color="#fdfdfd"
       class="fixes"
+      width="300px"
     >
       <v-list>
-        <v-list-item class="justify-center">
+        <v-list-item class="justify-center pa-5">
           <v-list-item-avatar size="100">
             <v-img
-              max-height="100"
-              max-width="100"
-              sizes="100"
+              width="100px"
+              height="100px"
               src="@/assets/images/logo.png"
             >
             </v-img>
@@ -35,25 +35,28 @@
         </v-list-item>
       </v-list>
       <v-divider></v-divider>
-      <!-- Menu Drop draw -->
+      <!-- Menu Drop draw ຈັດການຂໍ້ມູນພື້ນຖານ -->
       <v-list nav dense>
         <v-list-item-group active-class="primary--text text--accent-4">
-          <v-list-item link>
+
+            <!-- deshboard -->
+          <v-list-item link class="button-menu-action">
             <v-list-item-icon>
-              <v-icon medium>dashboard</v-icon>
+              <v-icon  medium>home</v-icon>
             </v-list-item-icon>
-            <v-list-item-title @click="ClickDeshboard">
-              ໜ້າຫຼັກ
+            <v-list-item-title @click="ClickDashboard">
+             <span class="text-menu">ໜ້າຫຼັກ</span>
             </v-list-item-title>
           </v-list-item>
-          <v-list-group
+          <!-- ຈັດການຂໍ້ມູນຫຼັກ -->
+           <v-list-group
             v-show="getUser.status == 'Admin'"
             :value="false"
             prepend-icon="view_list"
           >
             <template v-slot:activator>
-              <v-list-item-title>
-                <span>ການຈັດການ</span>
+              <v-list-item-title  >
+                <span class="text-menu">ຈັດການຂໍ້ມູນຫຼັກ</span>
               </v-list-item-title>
             </template>
 
@@ -61,63 +64,80 @@
               link
               v-for="(item, index) in dataManage"
               :key="index"
-              class="pa-0"
+               class="ml-10 pl-6 subButton-action "
               @click="isClickmenu(item.router)"
             >
-              <v-list-item-icon>
-                <v-icon medium>{{ item.icons }}</v-icon>
-              </v-list-item-icon>
-              <v-list-item-title> {{ item.title }} </v-list-item-title>
+              <!-- <v-list-item-icon class="justify-end">
+                <v-icon small>{{ item.icons }}</v-icon>
+              </v-list-item-icon> -->
+              <v-list-item-title><span class="text-subtitle"> {{ item.title }}</span> </v-list-item-title>
             </v-list-item>
           </v-list-group>
-          <v-list-item link>
+
+          <!-- ຈັດການຂໍ້ມູນສະມາຊິກ -->
+          <v-list-item link class="button-menu-action">
             <v-list-item-icon>
-              <v-icon medium>local_activity</v-icon>
+              <v-icon  medium>view_module</v-icon>
             </v-list-item-icon>
-            <v-list-item-title @click="ClickActivity">
-              ບັນທຶກກິດຈະກຳ
+            <v-list-item-title @click="ClickManageMember">
+             <span class="text-menu">ຈັດການຂໍ້ມູນສະມາຊິກ</span>
             </v-list-item-title>
           </v-list-item>
 
-          <!-- ສະມາຊິກກະສຽ່ນ -->
-          <v-list-item link>
-            <v-list-item-icon>
-              <v-icon medium>verified</v-icon>
-            </v-list-item-icon>
-            <v-list-item-title @click="certificate"> ຍ້ອງຍໍ </v-list-item-title>
-          </v-list-item>
-
-          <!-- ສະມາຊິກກະສຽ່ນ -->
-          <v-list-item link>
-            <v-list-item-icon>
-              <v-icon medium>person_remove</v-icon>
-            </v-list-item-icon>
-            <v-list-item-title @click="ClickRetirement">
-              ສະມາຊິກພົ້ນກະສ່ຽນ
-            </v-list-item-title>
-          </v-list-item>
-          <!-- ສະມາຊິກຍົກຍ້າຍ -->
-          <v-list-item link>
+            <!-- ສະມາຊິກຍົກຍ້າຍ -->
+          <v-list-item link class="button-menu-action">
             <v-list-item-icon>
               <v-icon medium>timeline</v-icon>
             </v-list-item-icon>
             <v-list-item-title @click="ClickMove">
-              ສະມາຊິກຍົກຍ້າຍ
+             <span class="text-menu">ສະມາຊິກຍົກຍ້າຍ</span>
             </v-list-item-title>
           </v-list-item>
+
+            <!-- ສະມາຊິກກະສຽ່ນ -->
+          <v-list-item link class="button-menu-action">
+            <v-list-item-icon>
+              <v-icon medium>person_remove</v-icon>
+            </v-list-item-icon>
+            <v-list-item-title @click="ClickRetirement">
+              <span class="text-menu">ສະມາຊິກພົ້ນກະສ່ຽນ</span>
+            </v-list-item-title>
+          </v-list-item>
+
+          <!-- ບັນທືກກິດຈະກຳ -->
+
+          <v-list-item link class="button-menu-action" >
+            <v-list-item-icon>
+              <v-icon medium>local_activity</v-icon>
+            </v-list-item-icon>
+            <v-list-item-title @click="ClickActivity">
+              <span class="text-menu">ບັນທຶກກິດຈະກຳ</span>
+            </v-list-item-title>
+          </v-list-item>
+
+          <!-- ຍ້ອງຍໍ -->
+          <v-list-item link class="button-menu-action">
+            <v-list-item-icon>
+              <v-icon medium>verified</v-icon>
+            </v-list-item-icon>
+            <v-list-item-title @click="certificate"> <span class="text-menu">ຍ້ອງຍໍ</span> </v-list-item-title>
+          </v-list-item>
+
+        
+        
           <!-- ຮັບເງີນສະຕິ -->
-          <v-list-item link>
+          <v-list-item link class="button-menu-action">
             <v-list-item-icon>
               <v-icon medium>payments</v-icon>
             </v-list-item-icon>
             <v-list-item-title @click="ClickReceive">
-              ຮັບເງີນສະຕິ
+             <span class="text-menu"> ຮັບເງີນສະຕິ</span>
             </v-list-item-title>
           </v-list-item>
           <v-list-group :value="false" prepend-icon="article">
             <template v-slot:activator>
               <v-list-item-title>
-                <span>ລາຍງານ</span>
+                <span class="text-menu">ລາຍງານ</span>
               </v-list-item-title>
             </template>
 
@@ -125,22 +145,22 @@
               link
               v-for="(item, index) in myReports"
               :key="index"
-              class="pa-0"
+              class=" ml-10 pl-6 subButton-action"
               @click="isClickmenu(item.router)"
             >
-              <v-list-item-icon>
+              <!-- <v-list-item-icon>
                 <v-icon medium>{{ item.icons }}</v-icon>
-              </v-list-item-icon>
-              <v-list-item-title> {{ item.title }} </v-list-item-title>
+              </v-list-item-icon> -->
+              <v-list-item-title class="text-subtitle"> {{ item.title }} </v-list-item-title>
             </v-list-item>
           </v-list-group>
           <v-divider></v-divider>
-          <v-list-item link v-show="getUser.status == 'Admin'">
+          <!-- <v-list-item link v-show="getUser.status == 'Admin'">
             <v-list-item-icon>
               <v-icon medium>account_box</v-icon>
             </v-list-item-icon>
             <v-list-item-title @click="register">ສະໝັກຜູ້ໃຊ້</v-list-item-title>
-          </v-list-item>
+          </v-list-item> -->
         </v-list-item-group>
       </v-list>
     </v-navigation-drawer>
@@ -164,14 +184,14 @@ export default {
         },
         { title: "ຈັດການຂໍ້ມູນຈຸ", icons: "class", router: "/section" },
         {
-          title: "ຈັດການຂໍ້ມູນລະດັບການສຶກສາ",
-          icons: "filter_list",
-          router: "/education-level",
-        },
-        {
           title: "ຈັດການຂໍ້ມູນປະເພດສະມາຊິກ",
           icons: "people",
           router: "/member-type",
+        },
+         {
+          title: "ຈັດການຂໍ້ມູນລະດັບການສຶກສາ",
+          icons: "filter_list",
+          router: "/education-level",
         },
         {
           title: "ຈັດການຂໍ້ມູນປະເພດກິດຈະກຳ",
@@ -182,6 +202,11 @@ export default {
           title: "ຈັດການຂໍ້ມູນປະເພດການຍ້ອງຍໍ",
           icons: "stars",
           router: "/certificate-type",
+        },
+        {
+          title: "ຈັດການຂໍ້ມູນຜູ້ໃຊ້ລະບົບ",
+          icons: "stars",
+          router: "/register-view",
         },
       ],
       myReports: [
@@ -196,12 +221,12 @@ export default {
           router: "/members-statistics-report",
         },
         {
-          title: "ລາຍງານຈຳນວນສະມາຊິກທີ່ຍົກຍ້າຍ",
+          title: "ລາຍງານຂໍ້ມູນສະຖິຕິຍົກຍ້າຍ",
           icons: "confirmation_number",
           router: "/member-move-report",
         },
         {
-          title: "ລາຍງານຈຳນວນຜູ້ພົ້ນກະສຽນ",
+          title: "ລາຍງານຂໍ້ມູນສະຖິຕິຜູ້ພົ້ນກະສຽນ",
           icons: "person_remove",
           router: "/members-retirement-report",
         },
@@ -240,7 +265,13 @@ export default {
         type: "doClickshow",
       });
     },
-    ClickDeshboard() {
+    ClickDashboard(){
+    this.$store.dispatch({
+        type: "doClickshow",
+      });
+      this.$router.push("/dashboard");
+    },
+    ClickManageMember() {
       this.$store.dispatch({
         type: "doClickshow",
       });
@@ -284,12 +315,12 @@ export default {
         type: "doClickshow",
       });
     },
-    register() {
-      this.$store.dispatch({
-        type: "doClickshow",
-      });
-      this.$router.push("/register-view");
-    },
+    // register() {
+    //   this.$store.dispatch({
+    //     type: "doClickshow",
+    //   });
+    //   this.$router.push("/register-view");
+    // },
     get_users() {
       this.$store.dispatch({
         type: "doget_users",
@@ -307,13 +338,35 @@ export default {
   position: fixed;
 }
 .user {
-  border: #c2f0fc 2px solid;
-  border-radius: 5px;
+  
   padding: 5px;
 }
 .user-text {
   color: #0760a8;
   text-align: center !important;
   margin-left: 10px;
+}
+.text-menu{
+  font-family: 'boonhome-400';
+  font-size: 16px;
+  font-weight: 30px;
+}
+
+.button-menu-action:hover{
+  background-color: #D8E3E7;
+  transform: translateX(10px);
+  transition-delay: transform 250ms, opacity 100ms;
+  transition-timing-function: ease-in-out 250ms;
+}
+
+.subButton-action:hover{
+ background-color: #cee2f3 ;
+  transition-delay: transform 250ms, opacity 100ms;
+  transition-timing-function: ease-in-out 250ms;
+}
+.text-subtitle{
+  font-family: 'boonhome-400';
+  font-size: 14px;
+  font-weight: 30px;
 }
 </style>
