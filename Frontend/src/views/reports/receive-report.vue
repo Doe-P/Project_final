@@ -121,17 +121,12 @@
                   <td>{{ formatPrice(item.money_total / 2) }}</td>
                 </tr>
                 <tr>
-                  <td colspan="11"></td>
-                  <td class="pt-5">
-                    <v-text-field
-                      label="ລວມເງີນສະຕີທັງໝົດ"
-                      outlined
-                      dense
-                      readonly
-                      :value="formatPrice(Summoney)"
-                      suffix="ກີບ"
-                    ></v-text-field>
+                  <th  colspan="10" >ລວມເງີນສະຕິທັງໝົດ</th>
+                  <td></td>
+                  <td>
+                   {{formatPrice(Summoney) +"ກີບ"}}
                   </td>
+                
                 </tr>
               </tbody>
             </template>

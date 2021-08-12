@@ -43,6 +43,40 @@
         <span class="text-tooltip">ອອກຈາກລະບົບ</span>
       </v-tooltip>
     </v-app-bar>
+     <!-- Dialog confirm delete data -->
+      <template>
+        <v-row justify="center">
+          <v-dialog
+            v-model="confirm_dialog"
+            persistent
+            max-width="400"
+            transition="dialog-transition"
+          >
+            <template>
+              <v-card>
+                <v-toolbar color="primary" height="45" dark>
+                  <v-toolbar-title class="header-message">
+                    <v-icon>info</v-icon>
+                    ຂໍ້ຄວາມ
+                  </v-toolbar-title>
+                </v-toolbar>
+                <v-card-text class="text-center mt-5 text-message">
+                  ທ່ານຕ້ອງການອອກຈາກລະບົບຫຼືບໍ່?
+                </v-card-text>
+                <v-card-actions class="justify-space-between text-message-btn">
+                  <v-btn text @click="confirm_dialog = false" color="error"
+                    >ຍົກເລີກ</v-btn
+                  >
+                  <v-spacer></v-spacer>
+                  <v-btn text :loading="buttonLoading" color="primary" @click="LogOutConfirm"
+                    >ຕົກລົງ</v-btn
+                  >
+                </v-card-actions>
+              </v-card>
+            </template>
+          </v-dialog>
+        </v-row>
+      </template>
   </div>
 </template>
 
@@ -50,7 +84,10 @@
 export default {
   name: "Header",
   data() {
-    return {};
+    return {
+      confirm_dialog:false,
+      buttonLoading:false,
+    };
   },
   mounted() {},
   methods: {
@@ -60,12 +97,22 @@ export default {
       });
     },
     logout() {
-      this.$store.dispatch({
+      this.confirm_dialog = true;
+    },
+    LogOutConfirm(){
+      this.buttonLoading=true;
+      if(this.confirm_dialog==true){
+       setInterval(() => {
+          this.$store.dispatch({
         type: "doLogOut",
       });
       localStorage.clear();
       this.$router.push("/");
-    },
+      this.buttonLoading=false;
+      this.confirm_dialog = false;
+       }, 3000);
+      }
+    }
   },
 };
 </script>

@@ -29,7 +29,10 @@ export default {
     Content,
     Msg,
   },
-  computed: {},
+  created() {
+   
+  },
+ 
   mounted() {
     this.show();
     this.$store.dispatch({
@@ -41,7 +44,7 @@ export default {
       actionsGetUser: "getUser",
     }),
     async show() {
-      await this.actionsGetUser(localStorage.getItem("accessToken"));
+         await this.actionsGetUser(localStorage.getItem("accessToken"));
     },
   },
   data: () => ({

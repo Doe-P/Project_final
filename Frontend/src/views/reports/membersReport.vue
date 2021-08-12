@@ -201,6 +201,7 @@ export default {
 
         // table columns
         const columns = [
+           { title: "ລຳດັບ", dataKey: "index" },
           { title: "ຊື່", dataKey: "member_name" },
           { title: "ນາມສະກຸນ", dataKey: "surname" },
           { title: "ເພດ", dataKey: "gender" },
@@ -210,6 +211,21 @@ export default {
           { title: "ຈຸ", dataKey: "sect_name" },
           { title: "ໜ່ວຍ", dataKey: "unit_name" },
         ];
+
+        let rows = [];
+        for(let i in this.myData_members){
+          rows[i]={
+            index:parseInt(i)+1,
+            member_name:this.myData_members[i].member_name,
+            surname:this.myData_members[i].surname,
+            gender:this.myData_members[i].gender,
+            typemember:this.myData_members[i].typemember,
+            responsible:this.myData_members[i].responsible,
+            status:this.myData_members[i].status,
+            sect_name:this.myData_members[i].sect_name,
+            unit_name:this.myData_members[i].unit_name
+          }
+        }
 
         //set format PDF
         const doc = new jsPDF({
@@ -225,8 +241,14 @@ export default {
         // Table
         doc.autoTable({
           columns,
-          body: this.myData_members,
-          margin: { left: 0.5, top: 3.2, right: 0.5 },
+          body: rows,
+            bodyStyles: {
+            overflow: "linebreak",
+            tableWidth: "auto",
+            //fileColor: [0, 0, 0],
+            lineWidth: 0.01,
+          },
+          margin: { left: 0.2, top: 3.2, right: 0.2 },
           styles: { font: "Saysettha OT" },
           columnWidth: {
             member_name: { columnWidth: 20 },
@@ -312,6 +334,7 @@ export default {
 
         // table columns
         const columns = [
+           { title: "ລຳດັບ", dataKey: "index" },
           { title: "ຊື່", dataKey: "member_name" },
           { title: "ນາມສະກຸນ", dataKey: "surname" },
           { title: "ເພດ", dataKey: "gender" },
@@ -320,7 +343,20 @@ export default {
           { title: "ສະຖານະ", dataKey: "status" },
           { title: "ຈຸ", dataKey: "sect_name" },
         ];
-
+         
+          let rows = [];
+        for(let i in this.myData_members){
+          rows[i]={
+            index:parseInt(i)+1,
+            member_name:this.myData_members[i].member_name,
+            surname:this.myData_members[i].surname,
+            gender:this.myData_members[i].gender,
+            typemember:this.myData_members[i].typemember,
+            responsible:this.myData_members[i].responsible,
+            status:this.myData_members[i].status,
+            sect_name:this.myData_members[i].sect_name,
+          }
+        }
         //set format PDF
         const doc = new jsPDF({
           orientation: "portrait",
@@ -335,7 +371,13 @@ export default {
         // Table
         doc.autoTable({
           columns,
-          body: this.myData_members,
+          body: rows,
+            bodyStyles: {
+            overflow: "linebreak",
+            tableWidth: "auto",
+            //fileColor: [0, 0, 0],
+            lineWidth: 0.01,
+          },
           margin: { left: 0.5, top: 3.4, right: 0.5 },
           styles: { font: "Saysettha OT" },
           columnWidth: {
@@ -426,6 +468,7 @@ export default {
 
         // table columns
         const columns = [
+          { title: "ລຳດັບ", dataKey: "index" },
           { title: "ຊື່", dataKey: "member_name" },
           { title: "ນາມສະກຸນ", dataKey: "surname" },
           { title: "ເພດ", dataKey: "gender" },
@@ -433,6 +476,20 @@ export default {
           { title: "ໜ້າທີ່ຮັບຜິດຊອບ", dataKey: "responsible" },
           { title: "ສະຖານະ", dataKey: "status" },
         ];
+
+          let rows = [];
+        for(let i in this.myData_members){
+          rows[i]={
+            index:parseInt(i)+1,
+            member_name:this.myData_members[i].member_name,
+            surname:this.myData_members[i].surname,
+            gender:this.myData_members[i].gender,
+            typemember:this.myData_members[i].typemember,
+            responsible:this.myData_members[i].responsible,
+            status:this.myData_members[i].status,
+            sect_name:this.myData_members[i].sect_name,
+          }
+        }
 
         //set format PDF
         const doc = new jsPDF({
@@ -449,7 +506,13 @@ export default {
         doc.autoTable({
           startY: false,
           columns,
-          body: this.myData_members,
+          body: rows,
+            bodyStyles: {
+            overflow: "linebreak",
+            tableWidth: "auto",
+            //fileColor: [0, 0, 0],
+            lineWidth: 0.01,
+          },
           margin: { left: 0.5, top: 3.6, bottom: 1, right: 0.5 },
           styles: {
             font: "Saysettha OT",

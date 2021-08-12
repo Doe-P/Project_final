@@ -5,9 +5,7 @@
         <v-row class="justify-center my-card">
           <v-card height="400" width="350" class="login-card mt-10">
             <v-card-title primary-title class="title justify-center">
-              <v-avatar size="120">
-                <img src="@/assets/images/logo.png" />
-              </v-avatar>
+              <img width="100" height="100" src="@/assets/images/logo.png" />
             </v-card-title>
             <v-card-subtitle class="text-center pt-2">
               <span class="header-text">
@@ -28,6 +26,7 @@
                   :rules="usernameRule"
                   outlined
                   dense
+                  hint="ປ້ອນຊື່ຜູ້ໃຊ້"
                 ></v-text-field>
                 <v-text-field
                   class="text-input"
@@ -44,19 +43,19 @@
                   :rules="passwordRule"
                   outlined
                   dense
+                  hint="ປ້ອນລະຫັດຜ່ານ"
                 ></v-text-field>
-                <v-card-actions class="justify-space-between">
-                  <v-btn class="text-input" text color="primary"
-                    >ລືມລະຫັດຜ່ານ</v-btn
-                  >
+                <div class="button-login">
                   <v-btn
                     :disabled="!invalid"
                     type="submit"
                     class="text-input"
                     color="primary"
+                    width="100%"
+                    :loading="buttonLoading"
                     >ເຂົ້າສູ່ລະບົບ</v-btn
                   >
-                </v-card-actions>
+                </div>
               </v-form>
             </v-card-text>
           </v-card>
@@ -74,6 +73,7 @@ export default {
     return {
       isshowPassword: false,
       invalid: false,
+      buttonLoading: false,
       account: {
         username: null,
         password: null,
@@ -91,23 +91,28 @@ export default {
   methods: {
     async isLogin() {
       try {
+        this.buttonLoading = true;
         await axios
           .post(this.$store.getters.myHostname + "/api/v1/auth/signIn1", {
             username: this.account.username,
             password: this.account.password,
           })
           .then((response) => {
-            this.Msg_done("ເຂົ້າສູ່ລະບົບສຳເລັດ");
             if (response) {
               console.log(response);
-              localStorage.setItem("refreshToken", response.data.refreshToken);
-              localStorage.setItem("accessToken", response.data.accessToken);
-              console.log(response.data.accessToken);
-              this.$store.dispatch({
-                type: "doLogin",
-              });
-              this.$router.push("/dashboard");
-              location.reload();
+              setInterval(() => {
+                localStorage.setItem(
+                  "refreshToken",
+                  response.data.refreshToken
+                );
+                localStorage.setItem("accessToken", response.data.accessToken);
+                this.$store.dispatch({
+                  type: "doLogin",
+                });
+                this.$router.push("/dashboard");
+                this.buttonLoading = false;
+                location.reload();
+              }, 3000);
             }
           });
       } catch (err) {
@@ -159,6 +164,7 @@ export default {
 .login-card {
   transition: transform 250ms;
   border: #6ddccf 5px;
+  border-radius: 15px;
   box-shadow: rgba(17, 17, 26, 0.1) 0px 4px 16px,
     rgba(17, 17, 26, 0.1) 0px 8px 24px, rgba(17, 17, 26, 0.1) 0px 16px 56px !important;
 }
@@ -169,5 +175,9 @@ export default {
 .my-card {
   width: 100%;
   height: 100%;
+}
+.button-login {
+  width: 90%;
+  margin-left: 10%;
 }
 </style>

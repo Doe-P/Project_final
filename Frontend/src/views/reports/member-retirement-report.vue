@@ -543,6 +543,12 @@ export default {
         doc.autoTable({
           columns,
           body: row,
+            bodyStyles: {
+            overflow: "linebreak",
+            tableWidth: "auto",
+            //fileColor: [0, 0, 0],
+            lineWidth: 0.01,
+          },
           margin: { left: 0.5, top: 3.3, right: 0.5 },
           styles: { font: "Saysettha OT" },
           columnWidth: {
@@ -660,6 +666,12 @@ export default {
         doc.autoTable({
           columns,
           body: row,
+            bodyStyles: {
+            overflow: "linebreak",
+            tableWidth: "auto",
+            //fileColor: [0, 0, 0],
+            lineWidth: 0.01,
+          },
           margin: { left: 0.5, top: 3.4, right: 0.5 },
           styles: { font: "Saysettha OT" },
           columnWidth: {

@@ -7,7 +7,7 @@
             id="card"
             title="ສະມາຊິກຍົກຍ້າຍທັງໝົດ"
             :subtitle="getCount_all"
-            bg_color="primary"
+            bg_color="#FF8F00"
             avatar_ic="groups"
           />
         </v-col>
@@ -16,7 +16,7 @@
             id="card"
             title="ສະມາຊິກຍົກຍ້າຍຍິງທັງໝົດ"
             :subtitle="getCount_female"
-            bg_color="primary"
+            bg_color="#D81B60"
             avatar_ic="groups"
           />
         </v-col>

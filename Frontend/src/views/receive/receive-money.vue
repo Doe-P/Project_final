@@ -283,19 +283,19 @@ export default {
               title: "",
             },
             {
-              title: "ນັກຮຽນແລະນັກສຶກສາ",
+              title: "ນັກຮຽນ",
+            },
+            {
+              title: "ນັກສຶກສາ",
             },
             {
               title: "",
             },
             {
-              title: "",
+              title: "ພະນັກງານ",
             },
             {
-              title: "ພະນັກງານຄູອາຈານ",
-            },
-            {
-              title: "",
+              title: "ຄູອາຈານ",
             },
             {
               title: "ລວມເງິນ",
@@ -341,22 +341,33 @@ export default {
         });
          if(value){
            
-          let response = await axios.get(this.$store.getters.myHostname+`${value}`);
+          let response = await axios.get(this.$store.getters.myHostname+`/reportBill_money/receiveID/${value}`);
           const mydata = response.data;
           var rows =[];
           for(let i in mydata ){
-            rows[i]=[]
+             rows[i] =[
+               parseInt(i)+1,
+               mydata[i].fund_name,
+               mydata[i].student,
+               mydata[i].student_W,
+              this.formatPrice(mydata[i].student_Mn),
+               mydata[i].teacher,
+               mydata[i].teacher_W,
+              this.formatPrice( mydata[i].teacher_Mn),
+             this.formatPrice(mydata[i].money_total),
+              this.formatPrice( mydata[i].money_total/2)
+             ]
           }
 
 
         //set font and line
         doc.setFontSize(10);
-        doc.setLineWidth(0.01).line(0.5, 3.6, 7.5, 3.6);
+        doc.setLineWidth(0.01).line(0.1, 3.6, 8, 3.6);
 
         // Table
         doc.autoTable({
           head: columns,
-          body: "",
+          body: rows ,
           bodyStyles: {
             overflow: "linebreak",
             tableWidth: "auto",
@@ -418,7 +429,7 @@ export default {
             maxWidth: "7.5",
           })
           .setFontSize(11)
-          .text(`ປະຈຳງວດທີ:...${'ງວດທີ I'}..ຂອງສົກປີ:..${'2020-2021'}..ຈຳນວນ:..${6}..ເດືອນ`,4, 3.4, {
+          .text(`ປະຈຳງວດທີ:...${mydata[0].quarterly}..ຂອງສົກປີ:..${dateformat(mydata[0].date,"dd/mm/yyyy")}..ຈຳນວນ:..${mydata[0].amount_month}..ເດືອນ`,4, 3.4, {
             align: "center",
             maxWidth: "7.5",
           })
@@ -426,15 +437,16 @@ export default {
         doc
           .setFontSize(12)
           .text("ຜູ້ສັງລວມ", 10.9, 32 - 25, null, null, "right");
-         }
+         
         // save pdf
         // doc.autoPrint();
         doc.save(
-          `ລາຍງານຂໍ້ມູນການຈ່າຍເງີນສະຕິ-${dateformat(
+          `ໃບບິນການຈ່າຍເງີນສະຕິ-${dateformat(
             Date.now(),
             "dd/mm/yyyy"
           )}.pdf`
         );
+   }
     }
   },
 };

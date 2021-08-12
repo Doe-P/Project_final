@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 // import function from reports
-const { repReceive_year, repReceive_all, repBill_fundID } = require('../reports/reportReceiveMN');
+const { repReceive_year, repReceive_all, repBill_fundID, repBill_Money} = require('../reports/reportReceiveMN');
 
 // ===============> report receive money where year <===================
 router.get('/reportReceive_money/year/:year_ID', (req, res) => {
@@ -33,6 +33,22 @@ router.get('/reportReceive_money/all', (req, res) => {
 router.get('/reportInvoice_money/fundID/:fund_ID', (req, res) => {
     const id = req.params.fund_ID;
     repBill_fundID(id, (err, result) => {
+        if (err) {
+            if (err.kind === 'not found') {
+                return res.status(404).send({ msg: 'Not found' });
+            } else {
+                return res.status(500).send({ msg: 'error retrieving data!!' });
+            }
+        }
+        res.json(result);
+    });
+});
+
+
+// =============> report bill money <===============
+router.get('/reportBill_money/receiveID/:receive_ID', (req, res) => {
+    const id = req.params.receive_ID;
+    repBill_Money(id, (err, result) => {
         if (err) {
             if (err.kind === 'not found') {
                 return res.status(404).send({ msg: 'Not found' });

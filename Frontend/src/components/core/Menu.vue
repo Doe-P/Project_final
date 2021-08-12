@@ -11,14 +11,16 @@
     >
       <v-list>
         <v-list-item class="justify-center pa-5">
-          <v-list-item-avatar size="100">
-            <v-img
+         
+          <div>
+              <v-img
               width="100px"
               height="100px"
               src="@/assets/images/logo.png"
             >
             </v-img>
-          </v-list-item-avatar>
+          </div>
+         
         </v-list-item>
         <v-list-item>
           <v-list-item-content class="user">
@@ -77,7 +79,7 @@
           <!-- ຈັດການຂໍ້ມູນສະມາຊິກ -->
           <v-list-item link class="button-menu-action">
             <v-list-item-icon>
-              <v-icon  medium>view_module</v-icon>
+              <v-icon  medium>group_add</v-icon>
             </v-list-item-icon>
             <v-list-item-title @click="ClickManageMember">
              <span class="text-menu">ຈັດການຂໍ້ມູນສະມາຊິກ</span>
@@ -100,7 +102,7 @@
               <v-icon medium>person_remove</v-icon>
             </v-list-item-icon>
             <v-list-item-title @click="ClickRetirement">
-              <span class="text-menu">ສະມາຊິກພົ້ນກະສ່ຽນ</span>
+              <span class="text-menu">ສະມາຊິກພົ້ນກະສຽນ</span>
             </v-list-item-title>
           </v-list-item>
 
@@ -265,6 +267,7 @@ export default {
         type: "doClickshow",
       });
     },
+
     ClickDashboard(){
     this.$store.dispatch({
         type: "doClickshow",

@@ -9,7 +9,7 @@
               id="card"
               title="ສະມາຊິກທັງໝົດ"
               :subtitle="getCount_allmember"
-              bg_color="primary"
+              bg_color="#26a69a"
               avatar_ic="groups"
             />
           </v-col>
@@ -19,8 +19,8 @@
               id="card"
               title="ສະມາຊິກຍິງທັງໝົດ"
               :subtitle="getCount_femalemember"
-              bg_color="primary"
-              avatar_ic="groups"
+              bg_color="#D81B60"
+              avatar_ic="group"
             />
           </v-col>
     
@@ -30,7 +30,7 @@
               id="card"
               title="ສະມາຊິກຍົກຍ້າຍທັງໝົດ"
               :subtitle="getCount_movemember"
-              bg_color="primary"
+              bg_color="#FF8F00"
               avatar_ic="timeline"
             />
           </v-col>
@@ -38,9 +38,9 @@
           <v-col lg="3" md="3" sm="12" cols="12">
             <MemberCard
               id="card"
-              title="ສະມາຊິກພົ້ນກະສຽ່ນທັງໝົດ"
+              title="ສະມາຊິກພົ້ນກະສຽນທັງໝົດ"
               :subtitle="getCount_retirementmember"
-              bg_color="primary"
+              bg_color="#D32F2F"
               avatar_ic="person_remove"
             />
           </v-col>

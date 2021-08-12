@@ -88,7 +88,7 @@
                           <v-text-field
                             v-model="format_Date"
                             label="ວັນເດືອນປີເກີດ"
-                            :rules="[isCheckAge(get_Year)]"
+                           :rules="[required('ວັນເດືອນປີເກີດ')]"
                             prepend-icon="mdi-calendar"
                             readonly
                             @blur="date = parseDate(formatDate)"
@@ -108,7 +108,7 @@
                       </v-menu>
                     </template>
                     <v-text-field
-                      type="Number"
+                      type="number"
                       name="tel"
                       id="tel"
                       label="ເບີໂທລະສັບ"
@@ -657,7 +657,7 @@ export default {
     return {
       language_selected: ["ອັງກິດ"],
       items: ["ອັງກິດ", "ຈີນ", "ຫວຽດນາມ", "ຢີ່ປຸ່ນ", "ເກົາຫຼີ"],
-      myStatus: ["ສະມາຊິກ", "ພົ້ນກະສຽນ", "ຍົກຍ້າຍ"],
+      myStatus: ["ສະມາຊິກ", "ພົ້ນກະສຽນ", "ຍົກຍ້າຍ","ຖືກວິໄນ","ເສຍຊີວິດ"],
       get_Year: null,
       //Valid input
       required(propertyType) {
@@ -693,22 +693,22 @@ export default {
           console.log("validate text on member create form err");
         }
       },
-      isCheckAge(birthdate) {
-        var d = new Date();
-        var y = d.getFullYear();
-        var age = y - birthdate;
-        if (age >= 35) {
-          return `ອາຍຸຂອງສະມາຊິກຫຼາຍກວ່າ 34 ອາຍຸຕ້ອງຢູ່ລະຫວ່າງ 15-34`;
-        } else if (age < 15) {
-          return `ອາຍຸຂອງສະມາຊິກໜ້ອຍກວ່າ  15 ອາຍຸຕ້ອງຢູ່ລະຫວ່າງ 15-34`;
-        }
-      },
+      // isCheckAge(birthdate) {
+      //   var d = new Date();
+      //   var y = d.getFullYear();
+      //   var age = y - birthdate;
+      //   if (age >= 35) {
+      //     return `ອາຍຸຂອງສະມາຊິກຫຼາຍກວ່າ 34 ອາຍຸຕ້ອງຢູ່ລະຫວ່າງ 15-34`;
+      //   } else if (age < 15) {
+      //     return `ອາຍຸຂອງສະມາຊິກໜ້ອຍກວ່າ  15 ອາຍຸຕ້ອງຢູ່ລະຫວ່າງ 15-34`;
+      //   }
+      // },
       // valid form
       valid: true,
       show_alert: false,
       timeout: 2000,
       message: "Hello",
-      reponsibles: ["ນັກສຶກສາ", "ອາຈານ"],
+      reponsibles: ["ນັກສຶກສາ","ຄູອາຈານ", "ຫົວໜ້າຈຸ","ຫົວໜ້າໜ່ວຍ","ຫົວໜ້າຮາກຖານ"],
       member_status: "ສະມາຊິກ",
       // isShow_woman_date: true,
       //Birthday

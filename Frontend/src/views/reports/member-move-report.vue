@@ -476,11 +476,20 @@ export default {
 
         // table columns
         const columns = [
+            { title: "ລຳດັບ", dataKey: "index" },
           { title: "ຮາກຖານ", dataKey: "fund_name" },
           { title: "ຈຳນວນສະມາຊິກ", dataKey: "result" },
           { title: "ຍິງ", dataKey: "women" },
         ];
-
+        let rows = [];
+        for(let i in this.DataMove_Years){
+          rows[i]={
+            index:parseInt(i)+1,
+            fund_name:this.DataMove_Years[i].fund_name,
+            result:this.DataMove_Years[i].result,
+            women :this.DataMove_Years[i].women
+          }
+        }
         //set format PDF
         const doc = new jsPDF({
           orientation: "portrait",
@@ -495,7 +504,13 @@ export default {
         // Table
         doc.autoTable({
           columns,
-          body: this.DataMove_Years,
+          body: rows,
+            bodyStyles: {
+            overflow: "linebreak",
+            tableWidth: "auto",
+            //fileColor: [0, 0, 0],
+            lineWidth: 0.01,
+          },
           margin: { left: 0.5, top: 3.2, right: 0.5 },
           styles: { font: "Saysettha OT" },
           columnWidth: {
@@ -579,6 +594,7 @@ export default {
 
         // table columns
         const columns = [
+            { title: "ລຳດັບ", dataKey: "index" },
           { title: "ຊື່", dataKey: "member_name" },
           { title: "ນາມສະກຸນ", dataKey: "surname" },
           { title: "ເພດ", dataKey: "gender" },
@@ -587,6 +603,20 @@ export default {
           { title: "ໜ່ວຍ", dataKey: "unit_name" },
           { title: "ຮາກຖານ", dataKey: "fund_name" },
         ];
+
+        let rows = [];
+        for(let i in this.DataMove_Bill){
+           rows[i]={
+             index:parseInt(i)+1,
+             member_name:this.DataMove_Bill[i].member_name,
+             surname:this.DataMove_Bill[i].surname,
+             gender:this.DataMove_Bill[i].gender,
+             typemember:this.DataMove_Bill[i].typemember,
+             sect_name:this.DataMove_Bill[i].sect_name,
+             unit_name:this.DataMove_Bill[i].unit_name,
+             fund_name:this.DataMove_Bill[i].fund_name
+           }
+        }
 
         //set format PDF
         const doc = new jsPDF({
@@ -602,8 +632,14 @@ export default {
         // Table
         doc.autoTable({
           columns,
-          body: this.DataMove_Bill,
-          margin: { left: 0.5, top: 3.2, right: 0.5 },
+          body: rows,
+            bodyStyles: {
+            overflow: "linebreak",
+            tableWidth: "auto",
+            //fileColor: [0, 0, 0],
+            lineWidth: 0.01,
+          },
+          margin: { left: 0.2, top: 3.2, right: 0.2 },
           styles: { font: "Saysettha OT" },
           columnWidth: {
             member_name: { columnWidth: 15 },

@@ -80,7 +80,7 @@
                           <v-text-field
                             v-model="format_Date"
                             label="ວັນເດືອນປີເກີດ"
-                            :rules="[isCheckAge(get_Year)]"
+                            :rules="[required('ວັນເດືອນປີເກີດ')]"
                             prepend-icon="mdi-calendar"
                             readonly
                             @blur="date = parseDate(formatDate)"
@@ -632,7 +632,7 @@ export default {
     return {
       language_selected: [],
       items: ["ອັງກິດ", "ຈີນ", "ຫວຽດນາມ", "ຢີ່ປຸ່ນ", "ເກົາຫຼີ"],
-      myStatus: ["ສະມາຊິກ", "ພົ້ນກະສຽນ", "ຍົກຍ້າຍ"],
+      myStatus: ["ສະມາຊິກ", "ພົ້ນກະສຽນ", "ຍົກຍ້າຍ","ຖືກວິໄນ","ເສຍຊີວິດ"],
       //Valid input
       required(propertyType) {
         return (v) => (v && v.length > 0) || `ກະລຸນາປ້ອນຂໍ້ມູນ${propertyType}`;
@@ -667,21 +667,21 @@ export default {
           console.log("validate text on member create form err");
         }
       },
-      isCheckAge(birthdate) {
-        var d = new Date();
-        var y = d.getFullYear();
-        var age = y - birthdate;
-        if (birthdate) {
-          if (age >= 35) {
-            return `ອາຍຸຂອງສະມາຊິກຫຼາຍກວ່າ 34 ອາຍຸຕ້ອງຢູ່ລະຫວ່າງ 15-34`;
-          } else if (age < 15) {
-            return `ອາຍຸຂອງສະມາຊິກໜ້ອຍກວ່າ  15 ອາຍຸຕ້ອງຢູ່ລະຫວ່າງ 15-34`;
-          }
-        }
-      },
+      // isCheckAge(birthdate) {
+      //   var d = new Date();
+      //   var y = d.getFullYear();
+      //   var age = y - birthdate;
+      //   if (birthdate) {
+      //     if (age >= 35) {
+      //       return `ອາຍຸຂອງສະມາຊິກຫຼາຍກວ່າ 34 ອາຍຸຕ້ອງຢູ່ລະຫວ່າງ 15-34`;
+      //     } else if (age < 15) {
+      //       return `ອາຍຸຂອງສະມາຊິກໜ້ອຍກວ່າ  15 ອາຍຸຕ້ອງຢູ່ລະຫວ່າງ 15-34`;
+      //     }
+      //   }
+      // },
       // valid form
       valid: true,
-      reponsibles: ["ນັກສຶກສາ", "ອາຈານ"],
+      reponsibles: ["ນັກສຶກສາ","ຄູອາຈານ", "ຫົວໜ້າຈຸ","ຫົວໜ້າໜ່ວຍ","ຫົວໜ້າຮາກຖານ"],
       member_status: "",
       get_Year: null,
       // isShow_woman_date: true,

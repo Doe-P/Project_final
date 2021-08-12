@@ -8,7 +8,7 @@
               id="card"
               title="ສະມາຊິກພົ້ນກະສຽນທັງໝົດ"
               :subtitle="Count_allmember"
-              bg_color="primary"
+              bg_color="#D32F2F"
               avatar_ic="groups"
             />
           </v-col>
@@ -17,7 +17,7 @@
               id="card"
               title="ສະມາຊິກຍິງທັງໝົດ"
               :subtitle="Count_femalemember"
-              bg_color="women"
+              bg_color="#D81B60"
               avatar_ic="people"
             />
           </v-col>
@@ -374,7 +374,7 @@ export default {
             align: "left",
             maxWidth: "7.5",
           })
-            .text(` ${rows[0].retire_NO}/ຄຊປປລ.ຄວທ, ລົງວັນທີ ${dateformat(rows[0].date,'dd/mm/yyyy')}`, 0.8, 4.63, {
+            .text(` ${mydata[0].No_Ask}/ຄຊປປລ.ຄວທ, ລົງວັນທີ ${dateformat(rows[0].date,'dd/mm/yyyy')}`, 0.8, 4.63, {
             align: "left",
             maxWidth: "7.5",
           })

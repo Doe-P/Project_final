@@ -110,6 +110,8 @@ app.use(reportActiv);
 const reportCertificate = require('./src/routes/reportCertificRoute')
 app.use(reportCertificate);
 
+const reportStatistic = require('./src/routes/reportStatisRoute')
+app.use(reportStatistic);
 // server listen to the port
 app.listen(PORT, () => {
     console.log(`Server running at http://localhost:${PORT}`);
