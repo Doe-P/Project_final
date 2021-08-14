@@ -158,7 +158,7 @@ export default {
       mytypeCertificate: null,
       certiType_select: "",
       Datasign_by: [
-        "ຮາກຖານ",
+        "ເລຂາຄະນະບໍລິຫານງານຊາວໜຸ່ມ ມຊ",
         "ຄຊປປລ ມຊ",
         "ກະຊວງສຶກສາ ແລະ ກິລາ",
         "ສູນກາງຊາວໝຸ່ມ",

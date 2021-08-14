@@ -90,7 +90,8 @@ export default {
   mounted() {},
   methods: {
     async isLogin() {
-      try {
+      if(this.account){
+           try {
         this.buttonLoading = true;
         await axios
           .post(this.$store.getters.myHostname + "/api/v1/auth/signIn1", {
@@ -100,7 +101,6 @@ export default {
           .then((response) => {
             if (response) {
               console.log(response);
-              setInterval(() => {
                 localStorage.setItem(
                   "refreshToken",
                   response.data.refreshToken
@@ -109,17 +109,19 @@ export default {
                 this.$store.dispatch({
                   type: "doLogin",
                 });
-                this.$router.push("/dashboard");
                 this.buttonLoading = false;
-                location.reload();
-              }, 3000);
+                 this.$router.push("/dashboard");
+                 location.reload();
             }
           });
       } catch (err) {
         this.Msg_fail(
           "ມີຂໍ້ຜິດພາດໃນການເຂົ້າສູ່ລະບົບ ກະລຸນາກວດສອບ ຊື່ຜູ້ໃຊ້ ຫຼື ລະຫັດຜ່ານຄືນໃໝ່"
         );
+         this.buttonLoading = false;
         console.log(err);
+        
+      }
       }
     },
 

@@ -20,6 +20,7 @@
             @input="Isselected($event)"
             :search="searchData"
             item-key="member_id"
+            :items-per-page="itemsPerPage"
           >
             <template v-slot:top>
               <v-toolbar>
@@ -231,6 +232,7 @@ export default {
   name: "ReceiveCreate",
   data() {
     return {
+      itemsPerPage:20,
       //Valid input
       required(propertyType) {
         if (this.myswitch == false) {
@@ -289,7 +291,7 @@ export default {
     this.setYear_select();
     this.getMaxID();
     this.getFoundations();
-    this.select_year = this.Years[0];
+   // this.select_year = this.Years[0];
     this.receive_date_format = dateformat(Date.now(), "dd-mm-yyyy");
     this.Quaterly();
   },
@@ -371,6 +373,7 @@ export default {
       }
     },
     MemberID() {
+      this.selected = this.Data_members;
       this.getMemberID = this.selected.map((item) => item.member_id);
     },
     setYear_select() {

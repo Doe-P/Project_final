@@ -106,11 +106,14 @@ export default {
           this.$store.dispatch({
         type: "doLogOut",
       });
-      localStorage.clear();
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('refreshToken');
       this.$router.push("/");
       this.buttonLoading=false;
       this.confirm_dialog = false;
+       location.reload();
        }, 3000);
+      
       }
     }
   },

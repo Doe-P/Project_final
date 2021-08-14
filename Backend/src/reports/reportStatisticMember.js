@@ -64,10 +64,10 @@ exports.repMemberStatis_start_last = (d_start, d_end, result) => {
         IFNULL(COUNT(CASE WHEN tb_member.status = N'ພົ້ນກະສຽນ' THEN 1 END),0) AS phonkasien,
         IFNULL(COUNT(CASE WHEN tb_member.date_start >= N? AND tb_member.date_start <= N? THEN 1 END),0) AS permmai,
         IFNULL(COUNT(CASE WHEN tb_member.date_start >= N? AND tb_member.date_start <= N? AND tb_member.gender = N'ຍິງ' THEN 1 END),0) AS W_permmai,
-        (SELECT COUNT(*) FROM tb_section WHERE status_sect = 'ບັນຈຸ') AS section,
-        (SELECT COUNT(*) FROM tb_section WHERE status_sect ='ບັນຈຸ' AND date_sect >= N? AND date_sect <= N? ) AS Newsection,
-        (SELECT COUNT(*) FROM tb_unit WHERE status_unit='ບັນຈຸ' ) AS unit,
-        (SELECT COUNT(*) FROM tb_unit WHERE status_unit='ບັນຈຸ' AND date_unit >= N? AND date_unit<= N?) AS newUnit
+        IFNULL((SELECT COUNT(*) FROM tb_section WHERE status_sect = 'ບັນຈຸ'),0) AS section,
+        IFNULL((SELECT COUNT(*) FROM tb_section WHERE status_sect ='ບັນຈຸ' AND date_sect >= N? AND date_sect <= N? ),0) AS Newsection,
+        IFNULL((SELECT COUNT(*) FROM tb_unit WHERE status_unit='ບັນຈຸ' ),0) AS unit,
+        IFNULL((SELECT COUNT(*) FROM tb_unit WHERE status_unit='ບັນຈຸ' AND date_unit >= N? AND date_unit<= N?),0) AS newUnit
         FROM tb_member
         INNER JOIN tb_section ON tb_section.sect_id = tb_member.sect_id
         INNER JOIN tb_unit ON tb_unit.unit_id = tb_section.unit_id

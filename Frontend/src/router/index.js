@@ -41,7 +41,7 @@ Vue.use(VueRouter);
 
 const routes = [
   {
-    path: "/",
+    path: "/Login",
     name: "Login",
     component: Login,
   },
@@ -139,7 +139,7 @@ const routes = [
     component: member_move,
   },
   {
-    path: "/member-move-create",
+    path: "/member/move/create",
     name: "member-move-create",
     component: member_move_create,
   },
@@ -224,7 +224,7 @@ const routes = [
     component: register_edit,
   },
   {
-    path: "/",
+    path: "/Login",
     redirect: "/Login",
   },
   {

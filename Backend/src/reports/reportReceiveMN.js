@@ -8,9 +8,9 @@ exports.repReceive_year = (id, result) => {
         IFNULL(COUNT(CASE WHEN tb_typemember.typemember = N'ນັກສຶກສາ' OR tb_typemember.typemember = N'ນັກຮຽນ' THEN 1 END),0) AS student,
         IFNULL(COUNT(CASE WHEN(tb_typemember.typemember = N'ນັກສຶກສາ' OR tb_typemember.typemember = N'ນັກຮຽນ') AND tb_member.gender = N'ຍິງ' THEN 1 END),0) AS student_W,
         IFNULL(COUNT(CASE WHEN tb_typemember.typemember = N'ນັກສຶກສາ' OR tb_typemember.typemember = N'ນັກຮຽນ' THEN 1 END),0) * (SELECT money FROM tb_typemember WHERE tb_typemember.typemember = N'ນັກສຶກສາ') AS student_Mn,
-        IFNULL(COUNT(CASE WHEN tb_typemember.typemember = N'ອາຈານ' THEN 1 END),0) * (SELECT money FROM tb_typemember WHERE tb_typemember.typemember = N'ພະນັກງານຄູອາຈານ') AS teacher_Mn,
-        IFNULL(COUNT(CASE WHEN tb_typemember.typemember = N'ອາຈານ' THEN 1 END),0) AS teacher,
-        IFNULL(COUNT(CASE WHEN tb_typemember.typemember = N'ອາຈານ' AND tb_member.gender = N'ຍິງ' THEN 1 END),0) AS teacher_W, tb_receive_detail.amount_month FROM tb_member
+        IFNULL(COUNT(CASE WHEN tb_typemember.typemember = N'ພະນັກງານຄູອາຈານ' THEN 1 END),0) * (SELECT money FROM tb_typemember WHERE tb_typemember.typemember = N'ພະນັກງານຄູອາຈານ') AS teacher_Mn,
+        IFNULL(COUNT(CASE WHEN tb_typemember.typemember = N'ພະນັກງານຄູອາຈານ' THEN 1 END),0) AS teacher,
+        IFNULL(COUNT(CASE WHEN tb_typemember.typemember = N'ພະນັກງານຄູອາຈານ' AND tb_member.gender = N'ຍິງ' THEN 1 END),0) AS teacher_W, tb_receive_detail.amount_month FROM tb_member
         INNER JOIN tb_receive_detail ON tb_member.member_id = tb_receive_detail.member_id
         INNER JOIN tb_section ON tb_section.sect_id = tb_member.sect_id
         INNER JOIN tb_unit ON tb_unit.unit_id = tb_section.unit_id
@@ -46,9 +46,9 @@ exports.repReceive_all = (result) => {
         IFNULL(COUNT(CASE WHEN tb_typemember.typemember = N'ນັກສຶກສາ' OR tb_typemember.typemember = N'ນັກຮຽນ' THEN 1 END),0) AS student,
         IFNULL(COUNT(CASE WHEN(tb_typemember.typemember = N'ນັກສຶກສາ' OR tb_typemember.typemember = N'ນັກຮຽນ') AND tb_member.gender = N'ຍິງ' THEN 1 END),0) AS student_W,
         IFNULL(COUNT(CASE WHEN tb_typemember.typemember = N'ນັກສຶກສາ' OR tb_typemember.typemember = N'ນັກຮຽນ' THEN 1 END),0) * (SELECT money FROM tb_typemember WHERE tb_typemember.typemember = N'ນັກສຶກສາ') AS student_Mn,
-        IFNULL(COUNT(CASE WHEN tb_typemember.typemember = N'ອາຈານ' THEN 1 END),0) * (SELECT money FROM tb_typemember WHERE tb_typemember.typemember = N'ພະນັກງານຄູອາຈານ') AS teacher_Mn,
-        IFNULL(COUNT(CASE WHEN tb_typemember.typemember = N'ອາຈານ' THEN 1 END),0) AS teacher,
-        IFNULL(COUNT(CASE WHEN tb_typemember.typemember = N'ອາຈານ' AND tb_member.gender = N'ຍິງ' THEN 1 END),0) AS teacher_W, tb_receive_detail.amount_month FROM tb_member
+        IFNULL(COUNT(CASE WHEN tb_typemember.typemember = N'ພະນັກງານຄູອາຈານ' THEN 1 END),0) * (SELECT money FROM tb_typemember WHERE tb_typemember.typemember = N'ພະນັກງານຄູອາຈານ') AS teacher_Mn,
+        IFNULL(COUNT(CASE WHEN tb_typemember.typemember = N'ພະນັກງານຄູອາຈານ' THEN 1 END),0) AS teacher,
+        IFNULL(COUNT(CASE WHEN tb_typemember.typemember = N'ພະນັກງານຄູອາຈານ' AND tb_member.gender = N'ຍິງ' THEN 1 END),0) AS teacher_W, tb_receive_detail.amount_month FROM tb_member
         INNER JOIN tb_receive_detail ON tb_member.member_id = tb_receive_detail.member_id
         INNER JOIN tb_section ON tb_section.sect_id = tb_member.sect_id
         INNER JOIN tb_unit ON tb_unit.unit_id = tb_section.unit_id

@@ -247,7 +247,7 @@ export default {
         {
           text: "ເພດ",
           value: "gender",
-          sortable: false,
+          sortable: true,
         },
         {
           text: "ລະດັບການສຶກສາ",
@@ -267,12 +267,12 @@ export default {
         {
           text: "ຈຸ",
           value: "sect_name",
-          sortable: false,
+          sortable: true,
         },
         {
           text: "ໜ່ວຍ",
           value: "unit_name",
-          sortable: false,
+          sortable: true,
         },
         {
           text: "ສະຖານະ",

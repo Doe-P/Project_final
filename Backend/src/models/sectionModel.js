@@ -16,7 +16,7 @@ exports.getSections = (result) => {
 
 //  Get all section by ID
 exports.getAllSectionById = (id, result) => {
-    dbCon.query('SELECT sect_id,sect_name FROM tb_section WHERE unit_id = ?', [id], (err, res) => {
+    dbCon.query('SELECT sect_id,sect_name,status_sect FROM tb_section WHERE unit_id = ?', [id], (err, res) => {
         if (err) {
             console.log('Error while fetching section by id', err);
             result(err, null);

@@ -32,19 +32,27 @@ export default {
   created() {
    
   },
- 
+  watch: {
+
+  },
+  computed: {
+  
+  },
   mounted() {
     this.show();
-    this.$store.dispatch({
-      type: "restoreLogin",
-    });
   },
   methods: {
     ...mapActions("User", {
       actionsGetUser: "getUser",
     }),
     async show() {
-         await this.actionsGetUser(localStorage.getItem("accessToken"));
+        if(localStorage.getItem("accessToken")){
+           await this.actionsGetUser(localStorage.getItem("accessToken"));
+            this.$store.dispatch({
+             type: "restoreLogin",
+                });
+
+        }
     },
   },
   data: () => ({

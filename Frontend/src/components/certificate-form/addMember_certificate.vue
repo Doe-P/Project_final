@@ -77,7 +77,6 @@ export default {
   data() {
     return {
       headers: [
-        { text: "#ລຳດັບ", value: "index", sortable: false },
         { text: "ຊື່", value: "member_name", sortable: false },
         { text: "ນາມສະກຸນ", value: "surname", sortable: false },
         { text: "ເພດ", value: "gender", sortable: false },

@@ -272,7 +272,7 @@ export default {
 
         //set font and line
         doc.setFontSize(10);
-        doc.setLineWidth(0.01).line(0.5, 3.3, 7.8, 3.3);
+        doc.setLineWidth(0.01).line(0.3, 3.3, 7.8, 3.3);
 
         // Table
         doc.autoTable({
@@ -284,7 +284,7 @@ export default {
             //fileColor: [0, 0, 0],
             lineWidth: 0.01,
           },
-          margin: { left: 0.5, top: 3.4, right: 0.5 },
+          margin: { left: 0.3, top: 3.4, right: 0.3 },
           styles: { font: "Saysettha OT" },
           columnWidth: "auto",
         });

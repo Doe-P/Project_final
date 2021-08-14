@@ -206,7 +206,6 @@ export default {
     },
     async saveData_Move() {
       const moveID = this.$store.getters.getCustomID;
-      alert(moveID);
       if (
         moveID &&
         this.txt_moveNO &&
@@ -229,11 +228,10 @@ export default {
             })
             .then(() => {
               this.Msg_done("ບັນທຶກຂໍ້ມູນກິດຈະກຳສຳເລັດແລ້ວ");
-              this.$router.push({
-                name: "member-move-create",
-                params: { id: moveID, move_NO: this.txt_moveNO },
-              });
-              location.reload();
+              const move_NO = this.txt_moveNO;
+            //  this.$router.push({ name: "member-move-create",params: { id: moveID, move_NO: this.txt_moveNO },});
+              this.$router.push({path:`/member/move/create`,query:{id:moveID,move_NO:move_NO}});
+             // this.close_form_add();
             });
         } catch (err) {
           this.Msg_fail("ບັນທຶກຂໍ້ມູນກິດຈະກຳບໍ່ສຳເລັດ");

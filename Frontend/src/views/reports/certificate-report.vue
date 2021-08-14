@@ -437,7 +437,7 @@ export default {
 
         //set font and line
         doc.setFontSize(10);
-        doc.setLineWidth(0.01).line(0.5, 3.3, 7.8, 3.3);
+        doc.setLineWidth(0.01).line(0.2, 3.3, 8, 3.3);
 
         // Table
         doc.autoTable({
@@ -449,7 +449,7 @@ export default {
             //fileColor: [0, 0, 0],
             lineWidth: 0.01,
           },
-          margin: { left: 0.5, top: 3.4, right: 0.5 },
+          margin: { left: 0.2, top: 3.4, right: 0.2 },
           styles: { font: "Saysettha OT" },
           columnWidth: "auto",
         });
@@ -573,22 +573,8 @@ export default {
         doc.setFontSize(10);
         doc.setLineWidth(0.01).line(0.5, 4, 7.8, 4);
 
-        // Table
-        doc.autoTable({
-          columns,
-          body: rows,
-          bodyStyles: {
-            overflow: "linebreak",
-            tableWidth: "auto",
-            //fileColor: [0, 0, 0],
-            lineWidth: 0.01,
-          },
-          margin: { left: 0.5, top: 4.1, right: 0.5 },
-          styles: { font: "Saysettha OT" },
-          columnWidth: "auto",
-        });
-
-        //set font text header
+        
+           //set font text header
         doc.addFont("Saysettha OT");
         doc.setFont("Saysettha OT");
         doc
@@ -654,9 +640,25 @@ export default {
               maxWidth: "7.5",
             }
           );
+        // Table
+        doc.autoTable({
+          columns,
+          body: rows,
+          bodyStyles: {
+            overflow: "linebreak",
+            tableWidth: "auto",
+            //fileColor: [0, 0, 0],
+            lineWidth: 0.01,
+          },
+          startY: 4.1,
+          showHead: "firstPage",
+          margin: { left: 0.5, right: 0.5 },
+          styles: { font: "Saysettha OT" },
+          columnWidth: "auto",
+        });
         doc.setFontSize(11);
-        doc.text("ເລຂາຊາວໜຸ່ມ", 0.7, 35.5 - 25, null, null, "left");
-        doc.text("ຜູ້ສັງລວມ", 27 - 20, 35.5 - 25, null, null, "right");
+        doc.text("ເລຂາຊາວໜຸ່ມ", 0.7, 36 - 25, null, null, "left");
+        doc.text("ຜູ້ສັງລວມ", 27 - 20, 36 - 25, null, null, "right");
         // save pdf
         // doc.autoPrint();
         doc.save(

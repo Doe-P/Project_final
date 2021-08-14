@@ -1209,7 +1209,23 @@ export default {
     //get unit items from api
     async getUnit_items() {
       const found_id = this.User.fund_id;
-      try {
+      if(this.User.status=="Admin"){
+         try {
+        await axios
+          .get(
+            `${this.$store.getters.myHostname}/api/v1/units`
+          )
+          .then((response) => {
+            this.unit_items_all = response.data;
+            for (let i = 0; i <= this.unit_items_all.length; i++) {
+              this.unit_items.push(this.unit_items_all[i].unit_name);
+            }
+          });
+      } catch (err) {
+        console.log(err);
+      }
+      }else{
+         try {
         await axios
           .get(
             `${this.$store.getters.myHostname}/api/v1/getItem-units/${found_id}`
@@ -1222,6 +1238,7 @@ export default {
           });
       } catch (err) {
         console.log(err);
+      }
       }
     },
     async get_unit() {
@@ -1240,7 +1257,7 @@ export default {
                   `${this.$store.getters.myHostname}/api/v1/allsections/${id}`
                 )
                 .then((response) => {
-                  this.section_items_all = response.data;
+                  this.section_items_all = response.data.filter(item => String(item.status_sect)==String('ບັນຈຸ'));
                   for (let a = 0; a <= this.section_items_all.length; a++) {
                     this.section_items.push(
                       this.section_items_all[a].sect_name

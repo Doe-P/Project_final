@@ -299,6 +299,7 @@ export default {
   },
   methods: {
     async getDataMove_NObyYear() {
+      this.fund_select = null;
       this.myMove_No = [];
       try {
         if (this.User.status == "User") {
@@ -628,31 +629,9 @@ export default {
         //set font and line
         doc.setFontSize(10);
         doc.setLineWidth(0.01).line(0.5, 3.2, 7.8, 3.2);
+        
 
-        // Table
-        doc.autoTable({
-          columns,
-          body: rows,
-            bodyStyles: {
-            overflow: "linebreak",
-            tableWidth: "auto",
-            //fileColor: [0, 0, 0],
-            lineWidth: 0.01,
-          },
-          margin: { left: 0.2, top: 3.2, right: 0.2 },
-          styles: { font: "Saysettha OT" },
-          columnWidth: {
-            member_name: { columnWidth: 15 },
-            surname: { columnWidth: 15 },
-            gender: { columnWidth: 5 },
-            typemember: { columnWidth: 10 },
-            sect_name: { columnWidth: 15 },
-            unit_name: { columnWidth: 15 },
-            fund_name: { columnWidth: 15 },
-          },
-        });
-
-        //set font text header
+         //set font text header
         doc.addFont("Saysettha OT");
         doc.setFont("Saysettha OT");
         doc
@@ -710,10 +689,36 @@ export default {
               maxWidth: "7.5",
             }
           );
+        // Table
+        doc.autoTable({
+          columns,
+          body: rows,
+            bodyStyles: {
+            overflow: "linebreak",
+            tableWidth: "auto",
+            //fileColor: [0, 0, 0],
+            lineWidth: 0.01,
+          },
+           startY: 3.3,
+          showHead: "firstPage",
+          margin: { left: 0.2,right: 0.2 },
+          styles: { font: "Saysettha OT" },
+          columnWidth: {
+            member_name: { columnWidth: 15 },
+            surname: { columnWidth: 15 },
+            gender: { columnWidth: 5 },
+            typemember: { columnWidth: 10 },
+            sect_name: { columnWidth: 15 },
+            unit_name: { columnWidth: 15 },
+            fund_name: { columnWidth: 15 },
+          },
+        });
 
+       
+       
         doc
           .setFontSize(12)
-          .text("ຜູ້ສັງລວມ", 27 - 20, 35.5 - 25, null, null, "right");
+          .text("ຜູ້ສັງລວມ", 27 - 20, 36 - 25, null, null, "right");
         // save pdf
         // doc.autoPrint();
         doc.save(

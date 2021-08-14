@@ -45,7 +45,7 @@
                 >
               </v-list-item>
               <v-list-tile-content class="text-center">
-                <h2 class="text-content-color">{{Allmember}}</h2>
+                <h2 class="text-content-color">{{Allmember || 0}}</h2>
               </v-list-tile-content>
             </v-list>
           </v-card>
@@ -68,7 +68,7 @@
                 >
               </v-list-item>
               <v-list-tile-content class="text-center">
-                <h2 class="text-content-color" style="color:#D81B60;">{{womenMember}}</h2>
+                <h2 class="text-content-color" style="color:#D81B60;">{{womenMember || 0}}</h2>
               </v-list-tile-content>
             </v-list>
           </v-card>
@@ -91,7 +91,7 @@
                 >
               </v-list-item>
               <v-list-tile-content class="text-center">
-                <h2 class="text-content-color" style="color:#FF8F00;">{{MemberMoveAll}}</h2>
+                <h2 class="text-content-color" style="color:#FF8F00;">{{MemberMoveAll || 0}}</h2>
               </v-list-tile-content>
             </v-list>
           </v-card>
@@ -114,7 +114,7 @@
                 >
               </v-list-item>
               <v-list-tile-content class="text-center">
-                <h2 class="text-content-color" style="color:#D32F2F;">{{memberRetireAll}}</h2>
+                <h2 class="text-content-color" style="color:#D32F2F;">{{memberRetireAll || 0}}</h2>
               </v-list-tile-content>
             </v-list>
           </v-card>

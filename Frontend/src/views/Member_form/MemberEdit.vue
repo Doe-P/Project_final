@@ -89,12 +89,12 @@
                           ></v-text-field>
                         </template>
                         <v-date-picker
-                          class="content"
                           ref="picker"
                           v-model="date"
                           :max="new Date().toISOString().substr(0, 10)"
                           min="1950-01-01"
                           locale="lao"
+                          class="content"
                         >
                         </v-date-picker>
                       </v-menu>
@@ -296,6 +296,8 @@
                           v-model="date_y"
                           :max="new Date().toISOString().substr(0, 10)"
                           min="1950-01-01"
+                           locale="lao"
+                          class="content"
                         >
                         </v-date-picker>
                       </v-menu>
@@ -333,6 +335,8 @@
                           v-model="date_start_nuol"
                           :max="new Date().toISOString().substr(0, 10)"
                           min="1950-01-01"
+                           locale="lao"
+                          class="content"
                         >
                         </v-date-picker>
                       </v-menu>
@@ -367,6 +371,8 @@
                           v-model="date_w"
                           :max="new Date().toISOString().substr(0, 10)"
                           min="1950-01-01"
+                           locale="lao"
+                          class="content"
                         >
                         </v-date-picker>
                       </v-menu>
@@ -407,6 +413,8 @@
                           v-model="date_k"
                           :max="new Date().toISOString().substr(0, 10)"
                           min="1950-01-01"
+                          locale="lao"
+                          class="content"
                         >
                         </v-date-picker>
                       </v-menu>
@@ -449,6 +457,8 @@
                           v-model="date_ps"
                           :max="new Date().toISOString().substr(0, 10)"
                           min="1950-01-01"
+                           locale="lao"
+                          class="content"
                         >
                         </v-date-picker>
                       </v-menu>
@@ -492,6 +502,8 @@
                           v-model="date_p"
                           :max="new Date().toISOString().substr(0, 10)"
                           min="1950-01-01"
+                           locale="lao"
+                          class="content"
                         >
                         </v-date-picker>
                       </v-menu>
@@ -1160,7 +1172,8 @@ export default {
     },
     //get unit items from api
     async getUnit_items() {
-      try {
+     if(this.$route.params.fund_id){
+        try {
         await axios
           .get(
             `${this.$store.getters.myHostname}/api/v1/getItem-units/${this.$route.params.fund_id}`
@@ -1174,6 +1187,7 @@ export default {
       } catch (err) {
         console.log(err);
       }
+     }
     },
     async get_unit() {
       this.section_items = [];
@@ -1191,7 +1205,7 @@ export default {
                   `${this.$store.getters.myHostname}/api/v1/allsections/${id}`
                 )
                 .then((response) => {
-                  this.section_items_all = response.data;
+                  this.section_items_all = response.data.filter(item => String(item.status_sect)==String('ບັນຈຸ'));
                   for (let a = 0; a <= this.section_items_all.length; a++) {
                     this.section_items.push(
                       this.section_items_all[a].sect_name

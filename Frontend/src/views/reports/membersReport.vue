@@ -7,13 +7,13 @@
         </v-card-title>
         <v-spacer></v-spacer>
         <v-card-subtitle>
-          <v-row class="table-content" v-model="valid">
+          <v-row class="table-content">
             <v-col cols="4">
               <v-select
                 :items="myData_foundation"
                 v-model="found_selected"
                 label="ລາຍງານຕາມຮາກຖານ"
-                @input="ValidateBtn()"
+                @input="ValidateBtn_Found($event)"
                 @change="Search_Foundation"
                 outlined
                 dense
@@ -24,7 +24,7 @@
                 :items="myData_unit"
                 v-model="unit_selected"
                 label="ເລືອກໜ່ວຍ"
-                @input="ValidateBtn()"
+                @input="ValidateBtn_Unit($event)"
                 outlined
                 dense
                 @change="Search_Unit"
@@ -35,7 +35,7 @@
                 :items="myData_section"
                 v-model="section_selected"
                 label="ເລືອກຈຸ"
-                @input="ValidateBtn()"
+                @input="ValidateBtn_Sect($event)"
                 outlined
                 dense
                 @change="Search_Section"
@@ -52,7 +52,7 @@
                 class="elevation-1 button-action"
                 v-on="on"
                 v-bind="attrs"
-                :disabled="valid"
+                :disabled="valid_Found"
               >
                 <v-icon color="teal lighten-1">assignment</v-icon>
                 <small color="primary" class="button-text">ຮາກຖານ</small>
@@ -69,7 +69,7 @@
                 class="elevation-1 button-action"
                 v-on="on"
                 v-bind="attrs"
-                :disabled="valid"
+                :disabled="valid_Unit"
               >
                 <v-icon color="teal lighten-1">assignment</v-icon>
                 <small class="button-text">ຕາມໜ່ວຍ</small>
@@ -86,7 +86,7 @@
                 class="elevation-1 button-action"
                 v-on="on"
                 v-bind="attrs"
-                :disabled="valid"
+                :disabled="valid_Sect"
               >
                 <v-icon color="teal lighten-1">assignment</v-icon>
                 <small class="button-text">ຕາມຈຸ</small>
@@ -103,7 +103,7 @@
                 class="elevation-1 button-action"
                 v-on="on"
                 v-bind="attrs"
-                :disabled="valid"
+                :disabled="valid_clear"
               >
                 <v-icon color="teal lighten-1">clear_all</v-icon>
                 <small class="button-text">ລ້າງຂໍ້ມູນ</small>
@@ -177,7 +177,10 @@ export default {
       mydataMember: [],
       myData_members: [],
       // valid form
-      valid: true,
+      valid_Found: true,
+      valid_Unit:true,
+      valid_Sect:true,
+      valid_clear:true,
       loading: true,
       //show Form
     };
@@ -201,7 +204,7 @@ export default {
 
         // table columns
         const columns = [
-           { title: "ລຳດັບ", dataKey: "index" },
+          { title: "ລ/ດ", dataKey: "index" },
           { title: "ຊື່", dataKey: "member_name" },
           { title: "ນາມສະກຸນ", dataKey: "surname" },
           { title: "ເພດ", dataKey: "gender" },
@@ -213,18 +216,18 @@ export default {
         ];
 
         let rows = [];
-        for(let i in this.myData_members){
-          rows[i]={
-            index:parseInt(i)+1,
-            member_name:this.myData_members[i].member_name,
-            surname:this.myData_members[i].surname,
-            gender:this.myData_members[i].gender,
-            typemember:this.myData_members[i].typemember,
-            responsible:this.myData_members[i].responsible,
-            status:this.myData_members[i].status,
-            sect_name:this.myData_members[i].sect_name,
-            unit_name:this.myData_members[i].unit_name
-          }
+        for (let i in this.myData_members) {
+          rows[i] = {
+            index: parseInt(i) + 1,
+            member_name: this.myData_members[i].member_name,
+            surname: this.myData_members[i].surname,
+            gender: this.myData_members[i].gender,
+            typemember: this.myData_members[i].typemember,
+            responsible: this.myData_members[i].responsible,
+            status: this.myData_members[i].status,
+            sect_name: this.myData_members[i].sect_name,
+            unit_name: this.myData_members[i].unit_name,
+          };
         }
 
         //set format PDF
@@ -237,28 +240,6 @@ export default {
         //set font and line
         doc.setFontSize(10);
         doc.setLineWidth(0.01).line(0.5, 3, 7.8, 3);
-
-        // Table
-        doc.autoTable({
-          columns,
-          body: rows,
-            bodyStyles: {
-            overflow: "linebreak",
-            tableWidth: "auto",
-            //fileColor: [0, 0, 0],
-            lineWidth: 0.01,
-          },
-          margin: { left: 0.2, top: 3.2, right: 0.2 },
-          styles: { font: "Saysettha OT" },
-          columnWidth: {
-            member_name: { columnWidth: 20 },
-            surname: { columnWidth: 20 },
-            gender: { columnWidth: 10 },
-            typemember: { columnWidth: 20 },
-            level_name: { columnWidth: 20 },
-            status: { columnWidth: 10 },
-          },
-        });
 
         //set font text header
         doc.addFont("Saysettha OT");
@@ -314,9 +295,36 @@ export default {
               maxWidth: "7.5",
             }
           );
-        doc.text("ຜູ້ສັງລວມ", 27 - 20, 35.5 - 25, null, null, "right");
         // save pdf
         // doc.autoPrint();
+        // Table
+        doc.autoTable({
+          columns,
+          body: rows,
+          bodyStyles: {
+            overflow: "linebreak",
+            tableWidth: "auto",
+            //fileColor: [0, 0, 0],
+            lineWidth: 0.01,
+          },
+          startY: 3.2,
+          showHead: "firstPage",
+          margin: { left: 0.2, right: 0.2 },
+          styles: { font: "Saysettha OT", overflow: "linebreak" },
+          columnStyles: {
+            index: { columnWidth: 0.4 },
+            member_name: { columnWidth: 1 },
+            surname: { columnWidth: 1 },
+            gender: { columnWidth: 0.4 },
+            typemember: { columnWidth: 0.8 },
+            responsible: { columnWidth: 0.8 },
+            status: { columnWidth: 0.7 },
+            sect_name: { columnWidth: 1.35 },
+            unit_name: { columnWidth: 1.4 },
+          },
+        });
+
+        doc.text("ຜູ້ສັງລວມ", 27 - 20, 35.5 - 25, null, null, "right");
         doc.save(
           `ລາຍງານລາຍຊື່ສະມາຊິກຮາກຖານ${this.found_selected}-${dateformat(
             Date.now(),
@@ -334,7 +342,7 @@ export default {
 
         // table columns
         const columns = [
-           { title: "ລຳດັບ", dataKey: "index" },
+          { title: "ລຳດັບ", dataKey: "index" },
           { title: "ຊື່", dataKey: "member_name" },
           { title: "ນາມສະກຸນ", dataKey: "surname" },
           { title: "ເພດ", dataKey: "gender" },
@@ -343,19 +351,19 @@ export default {
           { title: "ສະຖານະ", dataKey: "status" },
           { title: "ຈຸ", dataKey: "sect_name" },
         ];
-         
-          let rows = [];
-        for(let i in this.myData_members){
-          rows[i]={
-            index:parseInt(i)+1,
-            member_name:this.myData_members[i].member_name,
-            surname:this.myData_members[i].surname,
-            gender:this.myData_members[i].gender,
-            typemember:this.myData_members[i].typemember,
-            responsible:this.myData_members[i].responsible,
-            status:this.myData_members[i].status,
-            sect_name:this.myData_members[i].sect_name,
-          }
+
+        let rows = [];
+        for (let i in this.myData_members) {
+          rows[i] = {
+            index: parseInt(i) + 1,
+            member_name: this.myData_members[i].member_name,
+            surname: this.myData_members[i].surname,
+            gender: this.myData_members[i].gender,
+            typemember: this.myData_members[i].typemember,
+            responsible: this.myData_members[i].responsible,
+            status: this.myData_members[i].status,
+            sect_name: this.myData_members[i].sect_name,
+          };
         }
         //set format PDF
         const doc = new jsPDF({
@@ -367,28 +375,6 @@ export default {
         //set font and line
         doc.setFontSize(10);
         doc.setLineWidth(0.01).line(0.5, 3.3, 7.8, 3.3);
-
-        // Table
-        doc.autoTable({
-          columns,
-          body: rows,
-            bodyStyles: {
-            overflow: "linebreak",
-            tableWidth: "auto",
-            //fileColor: [0, 0, 0],
-            lineWidth: 0.01,
-          },
-          margin: { left: 0.5, top: 3.4, right: 0.5 },
-          styles: { font: "Saysettha OT" },
-          columnWidth: {
-            member_name: { columnWidth: 20 },
-            surname: { columnWidth: 20 },
-            gender: { columnWidth: 10 },
-            typemember: { columnWidth: 20 },
-            level_name: { columnWidth: 20 },
-            status: { columnWidth: 10 },
-          },
-        });
 
         //set font text header
         doc.addFont("Saysettha OT");
@@ -448,6 +434,30 @@ export default {
               maxWidth: "7.5",
             }
           );
+        // Table
+        doc.autoTable({
+          columns,
+          body: rows,
+          bodyStyles: {
+            overflow: "linebreak",
+            // tableWidth: "auto",
+            //fileColor: [0, 0, 0],
+            lineWidth: 0.01,
+          },
+          startY: 3.4,
+          showHead: "firstPage",
+          margin: { left: 0.5, right: 0.5 },
+          styles: { font: "Saysettha OT", overflow: "linebreak" },
+          // columnStyles: {
+          //   member_name: { columnWidth: 20 },
+          //   surname: { columnWidth: 20 },
+          //   gender: { columnWidth: 10 },
+          //   typemember: { columnWidth: 20 },
+          //   level_name: { columnWidth: 20 },
+          //   status: { columnWidth: 10 },
+          // },
+        });
+
         doc.text("ຜູ້ສັງລວມ", 27 - 20, 35.5 - 25, null, null, "right");
         // save pdf
         // doc.autoPrint();
@@ -477,18 +487,18 @@ export default {
           { title: "ສະຖານະ", dataKey: "status" },
         ];
 
-          let rows = [];
-        for(let i in this.myData_members){
-          rows[i]={
-            index:parseInt(i)+1,
-            member_name:this.myData_members[i].member_name,
-            surname:this.myData_members[i].surname,
-            gender:this.myData_members[i].gender,
-            typemember:this.myData_members[i].typemember,
-            responsible:this.myData_members[i].responsible,
-            status:this.myData_members[i].status,
-            sect_name:this.myData_members[i].sect_name,
-          }
+        let rows = [];
+        for (let i in this.myData_members) {
+          rows[i] = {
+            index: parseInt(i) + 1,
+            member_name: this.myData_members[i].member_name,
+            surname: this.myData_members[i].surname,
+            gender: this.myData_members[i].gender,
+            typemember: this.myData_members[i].typemember,
+            responsible: this.myData_members[i].responsible,
+            status: this.myData_members[i].status,
+            sect_name: this.myData_members[i].sect_name,
+          };
         }
 
         //set format PDF
@@ -504,16 +514,16 @@ export default {
 
         // Table
         doc.autoTable({
-          startY: false,
           columns,
           body: rows,
-            bodyStyles: {
+          bodyStyles: {
             overflow: "linebreak",
             tableWidth: "auto",
             //fileColor: [0, 0, 0],
             lineWidth: 0.01,
           },
-          margin: { left: 0.5, top: 3.6, bottom: 1, right: 0.5 },
+
+          margin: { left: 0.5, top: 3.6, right: 0.5 },
           styles: {
             font: "Saysettha OT",
           },
@@ -596,6 +606,7 @@ export default {
         doc.text("ຜູ້ສັງລວມ", 27 - 20, 35.5 - 25, null, null, "right");
         // save pdf
         // doc.autoPrint();
+
         doc.save(
           `ລາຍງານລາຍຊື່ສະມາຊິກຈຸ${this.section_selected}_${dateformat(
             Date.now(),
@@ -604,18 +615,42 @@ export default {
         );
       }
     },
-    ValidateBtn(value) {
+    ValidateBtn_Found(value) {
       if (value != "") {
-        this.valid = false;
+        this.valid_Found = false;
+        this.valid_clear = false;
+        this.valid_Unit = true;
+        this.valid_Sect = true;
       } else {
-        this.valid = true;
+        this.valid_Found = true;
+      }
+    },
+      ValidateBtn_Unit(value) {
+      if (value != "") {
+        this.valid_Unit = false;
+        this.valid_Found = true;
+        this.valid_Sect = true;
+      } else {
+        this.valid_Unit = true;
+      }
+    },
+    ValidateBtn_Sect(value) {
+      if (value != "") {
+        this.valid_Sect= false;
+        this.valid_Unit = true;
+        this.valid_Found = true;
+      } else {
+        this.valid_Sect = true;
       }
     },
     ClearData() {
       this.found_selected = null;
       this.unit_selected = null;
       this.section_selected = null;
-      this.valid = true;
+      this.valid_Found= true,
+      this.valid_Unit=true,
+      this.valid_Sect=true,
+      this.valid_clear=true,
       this.myData_members = [];
     },
     async dataMember() {

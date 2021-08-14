@@ -440,11 +440,7 @@ export default new Vuex.Store({
       commit("setLogout");
     },
     restoreLogin({ commit }) {
-      if (localStorage.getItem("accessToken") != null) {
-        commit("setLogin");
-      } else {
-        commit("setLogout");
-      }
+      commit("setLogin");
     },
     // action for foundation form add
     clickShow_found_formAdd({ commit }) {

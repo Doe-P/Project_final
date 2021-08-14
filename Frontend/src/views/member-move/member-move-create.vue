@@ -28,6 +28,8 @@
                         v-model="selected_found"
                         label="ເລືອກຮາກຖານ"
                         @input="get_units"
+                        outlined
+                        dense
                       ></v-select>
                     </v-col>
                     <v-col cols="4">
@@ -36,6 +38,8 @@
                         v-model="selected_unit"
                         label="ເລືອກໜ່ວຍ"
                         @input="get_sections"
+                        outlined
+                        dense
                       ></v-select>
                     </v-col>
                     <v-col cols="4">
@@ -44,6 +48,8 @@
                         v-model="selected_sect"
                         label="ເລືອກຈຸ"
                         @input="getData_member_byCondition($event)"
+                        outlined
+                        dense
                       ></v-select>
                     </v-col>
                   </v-row>
@@ -78,7 +84,7 @@
               <span>ຍົກເລີກ</span>
             </v-btn>
             <v-btn
-              @click="SaveData_move_detail"
+              @click.prevent="SaveData_move_detail"
               :disabled="checked"
               color="primary"
               dark
@@ -100,7 +106,6 @@ export default {
     return {
       search_member: "",
       headers: [
-        { text: "#ລຳດັບ", align: "Left", value: "index" },
         { text: "ຊື່", value: "member_name", sortable: false },
         { text: "ນາມສະກຸນ", value: "surname", sortable: false },
         { text: "ເພດ", value: "gender", sortable: true },
@@ -166,11 +171,11 @@ export default {
     },
     // save
     async SaveData_move_detail() {
-      const get_id = this.$route.params.id;
+      const get_id = this.$route.query.id;
       if (
         this.filter_member_id &&
-        this.$route.params.id &&
-        this.$route.params.move_NO
+        this.$route.query.id &&
+        this.$route.query.move_NO
       ) {
         for (let i = 0; i < this.filter_member_id.length; i++) {
           const member_id = this.filter_member_id[i];
@@ -190,7 +195,8 @@ export default {
           }
         }
         // check amount on section
-        try {
+       if(this.myData_member.length == this.member_selected.length){
+          try {
           await axios
             .put(
               `${this.$store.getters.myHostname}/api/v1/Update-Status/section/${this.get_sect_id}`
@@ -206,6 +212,7 @@ export default {
         } catch (err) {
           console.log(err);
         }
+       }
       }
     },
     // message done
@@ -298,10 +305,13 @@ export default {
                 `${this.$store.getters.myHostname}/api/v1/allsections/${get_unit_id}`
               )
               .then((response) => {
-                this.mySection_all = response.data;
-                for (let i = 0; i <= this.mySection_all.length; i++) {
-                  this.mySections.push(this.mySection_all[i].sect_name);
-                }
+                this.mySection_all = response.data.filter(
+                  (item) => String(item.status_sect) == String("ບັນຈຸ")
+                );
+
+                this.mySections = this.mySection_all.map(
+                  (item) => item.sect_name
+                );
               });
           } catch (err) {
             console.log(err);

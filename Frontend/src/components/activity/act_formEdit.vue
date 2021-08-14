@@ -26,9 +26,9 @@
                     :rules="[
                       required('ຫົວຂໍ້ກິດຈະກຳ'),
                       minLength('ຫົວຂໍ້ກິດຈະກຳ', 5),
-                      maxLength('ຫົວຂໍ້ກິດຈະກຳ', 30),
+                      maxLength('ຫົວຂໍ້ກິດຈະກຳ', 100),
                     ]"
-                    counter="30"
+                    counter="100"
                     required
                     v-model="txt_actTitle"
                   ></v-text-field>

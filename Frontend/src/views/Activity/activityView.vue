@@ -36,7 +36,7 @@
                 <td>{{ item.acti_title }}</td>
                 <td>{{ item.typeAct_name }}</td>
                 <td>{{ item.member_name }}</td>
-                <td>{{ item.member_surname }}</td>
+                <td>{{ item.surname }}</td>
                 <td>{{ item.gender }}</td>
                 <td>{{ item.typemember }}</td>
                 <td>{{ item.unit_name }}</td>

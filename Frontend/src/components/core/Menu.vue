@@ -92,7 +92,7 @@
               <v-icon medium>timeline</v-icon>
             </v-list-item-icon>
             <v-list-item-title @click="ClickMove">
-             <span class="text-menu">ສະມາຊິກຍົກຍ້າຍ</span>
+             <span class="text-menu">ຍົກຍ້າຍ</span>
             </v-list-item-title>
           </v-list-item>
 
@@ -102,7 +102,7 @@
               <v-icon medium>person_remove</v-icon>
             </v-list-item-icon>
             <v-list-item-title @click="ClickRetirement">
-              <span class="text-menu">ສະມາຊິກພົ້ນກະສຽນ</span>
+              <span class="text-menu">ພົ້ນກະສຽນ</span>
             </v-list-item-title>
           </v-list-item>
 
@@ -211,14 +211,19 @@ export default {
           router: "/register-view",
         },
       ],
+      // manageMember:[
+      //   {title:"ຈັດການຂໍ້ມູນສະມາຊິກ",icons:"",path:"/Member"},
+      //   {title:"ຍົກຍ້າຍ",icons:"",path:"/member-move"},
+      //   {title:"ພົ້ນກະສຽນ",icons:"",path:"/member-move"},
+      // ],
       myReports: [
         {
-          title: "ລາຍງານສະມາຊິກ",
+          title: "ລາຍງານຂໍ້ມູນສະມາຊິກຕາມຮາກຖານ",
           icons: "domain",
           router: "/members-report",
         },
         {
-          title: "ລາຍງານສະຖິຕິຊາວໜຸ່ມ",
+          title: "ລາຍງານສະຖິຕິສະມາຊິກຊາວໜຸ່ມ",
           icons: "insert_chart",
           router: "/members-statistics-report",
         },
@@ -233,17 +238,17 @@ export default {
           router: "/members-retirement-report",
         },
         {
-          title: "ລາຍງານການຮັບເງິນສະຕິ",
+          title: "ລາຍງານຂໍ້ມູນການຮັບເງິນສະຕິ",
           icons: "payments",
           router: "/receive-report",
         },
         {
-          title: "ລາຍງານການເຄື່ອນໄຫວກິດຈະກຳ",
+          title: "ລາຍງານຂໍ້ມູນການເຄື່ອນໄຫວກິດຈະກຳ",
           icons: "local_activity",
           router: "/activity-report",
         },
         {
-          title: "ລາຍງານການຍ້ອງຍໍ",
+          title: "ລາຍງານຂໍ້ມູນການຍ້ອງຍໍ",
           icons: "stars",
           router: "/certificate-report",
         },
@@ -324,14 +329,14 @@ export default {
     //   });
     //   this.$router.push("/register-view");
     // },
-    get_users() {
-      this.$store.dispatch({
-        type: "doget_users",
-        username: "dodo",
-        userstatus: "admin",
-        foundation: this.found_id,
-      });
-    },
+    // get_users() {
+    //   this.$store.dispatch({
+    //     type: "doget_users",
+    //     username: "dodo",
+    //     userstatus: "admin",
+    //     foundation: this.found_id,
+    //   });
+    // },
   },
 };
 </script>
