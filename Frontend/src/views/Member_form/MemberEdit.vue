@@ -693,7 +693,7 @@ export default {
       // },
       // valid form
       valid: true,
-      reponsibles: ["ນັກສຶກສາ","ຄູອາຈານ", "ຫົວໜ້າຈຸ","ຫົວໜ້າໜ່ວຍ","ຫົວໜ້າຮາກຖານ"],
+       reponsibles: ["ນັກສຶກສາ","ຄູອາຈານ", "ຫົວໜ້າຈຸ","ຫົວໜ້າໜ່ວຍ","ຫົວໜ້າຮາກຖານ","ເລ​ຂາ","ຮອງເລ​ຂາ","ປະທານກວດກາ"],
       member_status: "",
       get_Year: null,
       // isShow_woman_date: true,
@@ -1287,8 +1287,8 @@ export default {
             get_item_unit = response.data.unit_id;
             get_item_sect = response.data.sect_id;
             this.member_status = response.data.status;
-            this.select_reponsible = response.data.responsible;
             this.language_selected = response.data.language.split(",");
+            this.select_reponsible = response.data.responsible;
             this.selected_blood_Item = response.data.blood;
             this.getTypeMember_item(
               response.data.typemember_id,

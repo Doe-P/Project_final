@@ -77,53 +77,103 @@
           </v-list-group>
 
           <!-- ຈັດການຂໍ້ມູນສະມາຊິກ -->
-          <v-list-item link class="button-menu-action">
+           <v-list-group
+            :value="false"
+            prepend-icon="group_add"
+          >
+            <template v-slot:activator>
+              <v-list-item-title  >
+                <span class="text-menu">ຈັດການຂໍ້ມູນສະມາຊິກ</span>
+              </v-list-item-title>
+            </template>
+
+            <v-list-item
+              link
+              v-for="(item, index) in manageMember"
+              :key="index"
+               class="ml-10 pl-6 subButton-action"
+              @click="isClickmenu_Manage(item.router)"
+            >
+              <!-- <v-list-item-icon class="justify-end">
+                <v-icon small>{{ item.icons }}</v-icon>
+              </v-list-item-icon> -->
+              <v-list-item-title><span class="text-subtitle"> {{ item.title }}</span> </v-list-item-title>
+            </v-list-item>
+          </v-list-group>
+          <!--  -->
+          <!-- <v-list-item link class="button-menu-action">
             <v-list-item-icon>
               <v-icon  medium>group_add</v-icon>
             </v-list-item-icon>
             <v-list-item-title @click="ClickManageMember">
              <span class="text-menu">ຈັດການຂໍ້ມູນສະມາຊິກ</span>
             </v-list-item-title>
-          </v-list-item>
+          </v-list-item> -->
+          
+
+           <v-list-group
+            :value="false"
+            prepend-icon="verified"
+          >
+            <template v-slot:activator>
+              <v-list-item-title  >
+                <span class="text-menu">ບັນທຶກກິດຈະກຳຍ້ອງຍໍ</span>
+              </v-list-item-title>
+            </template>
+
+            <v-list-item
+              link
+              v-for="(item, index) in Activity_Certicicate"
+              :key="index"
+               class="ml-10 pl-6 subButton-action"
+              @click="isClickmenu_Activity(item.router)"
+            >
+              <!-- <v-list-item-icon class="justify-end">
+                <v-icon small>{{ item.icons }}</v-icon>
+              </v-list-item-icon> -->
+              <v-list-item-title><span class="text-subtitle"> {{ item.title }}</span> </v-list-item-title>
+            </v-list-item>
+          </v-list-group>
+
 
             <!-- ສະມາຊິກຍົກຍ້າຍ -->
-          <v-list-item link class="button-menu-action">
+          <!-- <v-list-item link class="button-menu-action">
             <v-list-item-icon>
               <v-icon medium>timeline</v-icon>
             </v-list-item-icon>
             <v-list-item-title @click="ClickMove">
              <span class="text-menu">ຍົກຍ້າຍ</span>
             </v-list-item-title>
-          </v-list-item>
+          </v-list-item> -->
 
             <!-- ສະມາຊິກກະສຽ່ນ -->
-          <v-list-item link class="button-menu-action">
+          <!-- <v-list-item link class="button-menu-action">
             <v-list-item-icon>
               <v-icon medium>person_remove</v-icon>
             </v-list-item-icon>
             <v-list-item-title @click="ClickRetirement">
               <span class="text-menu">ພົ້ນກະສຽນ</span>
             </v-list-item-title>
-          </v-list-item>
+          </v-list-item> -->
 
           <!-- ບັນທືກກິດຈະກຳ -->
 
-          <v-list-item link class="button-menu-action" >
+          <!-- <v-list-item link class="button-menu-action" >
             <v-list-item-icon>
               <v-icon medium>local_activity</v-icon>
             </v-list-item-icon>
             <v-list-item-title @click="ClickActivity">
               <span class="text-menu">ບັນທຶກກິດຈະກຳ</span>
             </v-list-item-title>
-          </v-list-item>
+          </v-list-item> -->
 
           <!-- ຍ້ອງຍໍ -->
-          <v-list-item link class="button-menu-action">
+          <!-- <v-list-item link class="button-menu-action">
             <v-list-item-icon>
               <v-icon medium>verified</v-icon>
             </v-list-item-icon>
             <v-list-item-title @click="certificate"> <span class="text-menu">ຍ້ອງຍໍ</span> </v-list-item-title>
-          </v-list-item>
+          </v-list-item> -->
 
         
         
@@ -211,11 +261,15 @@ export default {
           router: "/register-view",
         },
       ],
-      // manageMember:[
-      //   {title:"ຈັດການຂໍ້ມູນສະມາຊິກ",icons:"",path:"/Member"},
-      //   {title:"ຍົກຍ້າຍ",icons:"",path:"/member-move"},
-      //   {title:"ພົ້ນກະສຽນ",icons:"",path:"/member-move"},
-      // ],
+          manageMember:[
+            {title:"ຈັດການຂໍ້ມູນສະມາຊິກ",icons:"",router:"/Member"},
+            {title:"ຍົກຍ້າຍ",icons:"",router:"/member-move"},
+            {title:"ພົ້ນກະສຽນ",icons:"",router:"/member-retirement"},
+          ],
+           Activity_Certicicate:[
+            {title:"ບັນທຶກກິດຈະກຳ",icons:"",router:"/activity"},
+            {title:"ຍ້ອງຍໍ",icons:"",router:"/certificate-view"},
+          ],
       myReports: [
         {
           title: "ລາຍງານຂໍ້ມູນສະມາຊິກຕາມຮາກຖານ",
@@ -265,6 +319,24 @@ export default {
   },
   methods: {
     isClickmenu(path) {
+      this.$router.push(path).catch((err) => {
+        console.log(err);
+      });
+      this.$store.dispatch({
+        type: "doClickshow",
+      });
+    },
+
+    isClickmenu_Manage(path){
+      this.$router.push(path).catch((err) => {
+        console.log(err);
+      });
+      this.$store.dispatch({
+        type: "doClickshow",
+      });
+    },
+
+    isClickmenu_Activity(path){
       this.$router.push(path).catch((err) => {
         console.log(err);
       });

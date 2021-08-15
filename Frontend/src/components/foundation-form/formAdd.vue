@@ -38,9 +38,9 @@
                     :rules="[
                       required('ຊື່ຮາກຖານ'),
                       minLength('ຊື່ຮາກຖານ', 5),
-                      maxLength('ຊື່ຮາກຖານ', 30),
+                      maxLength('ຊື່ຮາກຖານ', 50),
                     ]"
-                    counter="20"
+                    counter="50"
                   ></v-text-field>
                   <template>
                     <v-menu

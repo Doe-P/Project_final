@@ -708,7 +708,7 @@ export default {
       show_alert: false,
       timeout: 2000,
       message: "Hello",
-      reponsibles: ["ນັກສຶກສາ","ຄູອາຈານ", "ຫົວໜ້າຈຸ","ຫົວໜ້າໜ່ວຍ","ຫົວໜ້າຮາກຖານ"],
+       reponsibles: ["ນັກສຶກສາ","ຄູອາຈານ", "ຫົວໜ້າຈຸ","ຫົວໜ້າໜ່ວຍ","ຫົວໜ້າຮາກຖານ","ເລ​ຂາ","ຮອງເລ​ຂາ","ປະທານກວດກາ"],
       member_status: "ສະມາຊິກ",
       // isShow_woman_date: true,
       //Birthday

@@ -35,7 +35,7 @@
                     :rules="[
                       required('ຊື່ຮາກຖານ'),
                       minLength('ຊື່ຮາກຖານ', 3),
-                      maxLength('ຊື່ຮາກຖານ', 30),
+                      maxLength('ຊື່ຮາກຖານ', 50),
                     ]"
                     v-model="txt_foundname_edit"
                   ></v-text-field>

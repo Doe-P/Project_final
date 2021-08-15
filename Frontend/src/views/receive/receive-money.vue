@@ -436,7 +436,8 @@ export default {
 
         doc
           .setFontSize(12)
-          .text("ຜູ້ສັງລວມ", 10.9, 32 - 25, null, null, "right");
+          .text("ເຊັນຜູ້ມອບ", 1.5, 6, null, null, "left")
+          .text("ເຊັນຜູ້ຮັບ", 7, 6, null, null, "right");
          
         // save pdf
         // doc.autoPrint();

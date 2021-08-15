@@ -79,10 +79,10 @@
 
             <!-------------->
           </v-data-table>
-          <v-card-actions class="justify-space-between table-content">
-            <v-btn color="primary" dark @click="$router.push('/member-move')">
+          <v-card-actions class="justify-end table-content">
+            <!-- <v-btn color="primary" dark @click="$router.push('/member-move')">
               <span>ຍົກເລີກ</span>
-            </v-btn>
+            </v-btn> -->
             <v-btn
               @click.prevent="SaveData_move_detail"
               :disabled="checked"

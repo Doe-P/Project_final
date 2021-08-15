@@ -26,9 +26,9 @@
                     :rules="[
                       required('ຊື່ຈຸ'),
                       minLength('ຊື່ຈຸ', 5),
-                      maxLength('ຊື່ຈຸ', 30),
+                      maxLength('ຊື່ຈຸ', 50),
                     ]"
-                    counter="30"
+                    counter="50"
                     required
                     v-model="txt_sectname_edit"
                   ></v-text-field>

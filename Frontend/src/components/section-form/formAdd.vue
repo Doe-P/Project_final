@@ -32,11 +32,11 @@
                   <v-text-field
                     label="ຊື່ຈຸ"
                     required
-                    counter="30"
+                    counter="50"
                     :rules="[
                       required('ຊື່ຈຸ'),
                       minLength('ຊື່ຈຸ', 5),
-                      maxLength('ຊື່ຈຸ', 30),
+                      maxLength('ຊື່ຈຸ', 50),
                     ]"
                     v-model="txt_sectname"
                   ></v-text-field>
